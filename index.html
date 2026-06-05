@@ -12,32 +12,32 @@
 ═══════════════════════════════════════════════ */
 :root {
   /* === Dataspace AI 디자인 토큰 (Figma 5LZ47…) === */
-  /* Surface */
-  --bg-page:         #F0F2F4;   /* Gray-02 */
-  --bg-sidebar:      #F9FAFB;   /* Gray-01 */
+  /* Surface — 중립 뉴트럴 (ChatGPT 레퍼런스) */
+  --bg-page:         #F4F4F4;
+  --bg-sidebar:      #F9F9F9;
   --bg-canvas:       #ffffff;
   --bg-card:         #ffffff;
-  --bg-hover:        #F0F2F4;   /* Gray-02 */
-  --bg-active:       #F0F5FF;   /* Blue-01 */
-  --bg-input:        #F9FAFB;   /* Gray-01 */
+  --bg-hover:        #F3F3F3;
+  --bg-active:       #F0F5FF;   /* Blue-01 — 메인 컬러는 자사 DS 유지 */
+  --bg-input:        #ffffff;
 
-  /* Border */
-  --border:          #E4E6EC;   /* Gray-03 */
-  --border-strong:   #BEC4D0;   /* Gray-05 */
+  /* Border — 뉴트럴 그레이 */
+  --border:          #ECECEC;
+  --border-strong:   #D9D9D9;
   --border-focus:    #4781FF;   /* Blue-07 */
 
-  /* Text */
-  --text-primary:    #15181F;   /* Gray-13 */
-  --text-secondary:  #5C677F;   /* Gray-09 */
-  --text-tertiary:   #959EB2;   /* Gray-07 */
+  /* Text — 고대비 뉴트럴 */
+  --text-primary:    #0D0D0D;
+  --text-secondary:  #5D5D5D;
+  --text-tertiary:   #8F8F8F;
   --text-accent:     #4781FF;   /* Blue-07 */
   --text-white:      #ffffff;
 
-  /* Gray scale (full) */
-  --gray-08:         #717D98;
-  --gray-10:         #4B566C;
-  --gray-12:         #282D39;
-  --grayop-02:       #606E90;
+  /* Gray scale (full) — 뉴트럴 */
+  --gray-08:         #6E6E6E;
+  --gray-10:         #424242;
+  --gray-12:         #2A2A2A;
+  --grayop-02:       #5D5D5D;
 
   /* Brand (Blue) */
   --blue:            #4781FF;   /* Blue-07 */
@@ -59,21 +59,21 @@
   --chart-blue:      #4781FF;
   --chart-green:     #40B08E;
 
-  /* Shadows (Figma Flat/Blur) */
-  --shadow-sm:  0 1px 4px rgba(41,47,61,.16), 0 2px 4px rgba(41,47,61,.08);          /* Flat-02 */
-  --shadow-md:  0 1px 8px rgba(41,47,61,.04), 0 4px 12px rgba(41,47,61,.04);         /* Blur-01 */
-  --shadow-lg:  0 2px 20px rgba(41,47,61,.08), 0 4px 12px rgba(41,47,61,.16);        /* Blur-03 */
+  /* Shadows — 플랫 최소화 (보더·면 대비 위주) */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:  0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,.10);
 
-  /* Radius */
-  --r-xs:  3px;
-  --r-sm:  6px;
-  --r-md:  10px;
-  --r-lg:  14px;
+  /* Radius — 크고 부드럽게 */
+  --r-xs:  6px;
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
   --r-xl:  20px;
   --r-pill:9999px;
 
   /* Motion */
-  --t-fast:   140ms ease;
+  --t-fast:   150ms ease;
   --t-normal: 200ms ease;
 
   /* Font */
@@ -131,7 +131,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .page-nav {
-  width: 100%; max-width: 1140px;
+  width: 100%; max-width: 1480px;
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 56px;
 }
@@ -185,7 +185,7 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .frame {
   position: relative; z-index: 10;
-  width: min(1140px, 100%);
+  width: min(1480px, 100%);
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.90);
@@ -245,52 +245,21 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .app {
   display: grid;
-  grid-template-columns: 220px 1fr 0px;
-  grid-template-rows: 40px 1fr;
+  grid-template-columns: 232px 1fr 0px;
+  grid-template-rows: 1fr;
   grid-template-areas:
-    "topbar topbar topbar"
     "sidebar canvas artifact";
-  height: 680px;
+  height: 740px;
   background: var(--bg-canvas);
   transition: grid-template-columns 240ms ease;
 }
 .app.artifact-open {
-  grid-template-columns: 220px 1fr 344px;
+  grid-template-columns: 232px 1fr minmax(420px, 44%);
 }
 
 /* ═══════════════════════════════════════════════
    TOPBAR
 ═══════════════════════════════════════════════ */
-.topbar {
-  grid-area: topbar;
-  display: flex;
-  align-items: center;
-  padding: 0 14px 0 12px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-canvas);
-  gap: 8px;
-  user-select: none;
-  height: 40px;
-}
-.topbar-menu {
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: var(--r-sm); color: var(--text-secondary);
-  transition: background var(--t-fast);
-  flex-shrink: 0;
-}
-.topbar-menu:hover { background: var(--bg-hover); }
-.topbar-menu span { display: none; } /* 기존 3-bar span 숨김 */
-.breadcrumb {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 500; color: var(--text-secondary);
-  flex: 1;
-}
-.breadcrumb-sep { color: var(--border-strong); font-size: 13px; }
-.breadcrumb-current { color: var(--text-primary); font-weight: 600; }
-.topbar-actions {
-  display: flex; align-items: center; gap: 6px;
-}
 .icon-btn {
   width: 32px; height: 32px;
   border-radius: var(--r-pill);
@@ -314,39 +283,89 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .sidebar {
   grid-area: sidebar;
-  background: var(--bg-sidebar);
+  background: var(--bg-sidebar);    /* 뉴트럴 #F9F9F9 (ChatGPT 사이드바) */
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   overflow: hidden;
-  padding: 6px 0;
+  padding: 10px 0 8px;
 }
-.sidebar-new-btn {
-  display: flex; align-items: center; gap: 7px;
-  padding: 6px 12px;
-  margin: 0 6px 4px;
-  border-radius: var(--r-sm);
-  font-size: 12px; font-weight: 500; color: var(--text-secondary);
-  transition: background var(--t-fast), color var(--t-fast);
+
+/* ── GNB — 뉴트럴 재설계 (구성은 제품, 톤은 ChatGPT) ── */
+.gnb-space {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 10px 10px;
+  padding: 4px 8px;
+}
+.gnb-space-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.gnb-space-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gnb-space-tier { font-size: 10px; font-weight: 500; color: var(--text-tertiary); }
+.gnb-space > i { font-size: 14px; color: var(--text-tertiary); flex-shrink: 0; }
+
+.gnb-menu {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0 8px 1px; padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12.5px; font-weight: 500;
+  color: var(--text-secondary);
+  cursor: default;
+  white-space: nowrap;
+}
+.gnb-menu i { font-size: 15px; flex-shrink: 0; color: var(--text-tertiary); }
+.gnb-menu.active {
+  background: #ECECEC;              /* ChatGPT 활성: 뉴트럴 면 */
+  color: var(--text-primary);
+  font-weight: 600;
   cursor: pointer;
 }
-.sidebar-new-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-.sidebar-new-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.7; flex-shrink: 0; }
+.gnb-menu.active i { color: var(--blue); }   /* 포인트는 메인 컬러 하나만 */
+.gnb-menu-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.gnb-badge {
+  font-size: 9px; font-weight: 600;
+  color: #E1740F; background: #FCE7D4;
+  border-radius: 999px; padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+.gnb-history { flex: 1; overflow-y: auto; padding: 0 0 6px; }
+.gnb-history::-webkit-scrollbar { width: 4px; }
+.gnb-history-label {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 12px 18px 5px;
+}
+
+.gnb-profile {
+  display: flex; align-items: center; gap: 8px;
+  margin: 8px 10px 2px; padding: 4px 8px;
+  border-radius: 8px;
+}
+.gnb-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--blue-light); color: var(--blue);
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.gnb-profile-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.gnb-profile-name { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.3; }
+.gnb-profile-role { font-size: 10px; font-weight: 500; color: var(--text-tertiary); }
+.gnb-profile > i { font-size: 14px; color: var(--text-tertiary); }
 
 .sidebar-divider { height: 1px; background: var(--border); margin: 2px 0 4px; }
 
 .chat-item {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 5px 6px 5px 12px;
-  margin: 0 3px;
-  border-radius: 5px;
-  font-size: 12px; color: var(--text-secondary);
+  padding: 6px 10px;
+  margin: 0 8px 1px;
+  border-radius: 8px;
+  font-size: 12.5px; color: var(--text-secondary);
   cursor: pointer;
   transition: background var(--t-fast), color var(--t-fast);
-  gap: 6px;
+  gap: 8px;
 }
-.chat-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+.chat-item:hover { background: #EFEFEF; color: var(--text-primary); }
 .chat-item.active {
-  background: var(--bg-active);
+  background: #ECECEC;
   color: var(--text-primary); font-weight: 500;
 }
 .chat-item-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
@@ -410,8 +429,8 @@ a { text-decoration: none; color: inherit; }
 }
 .home-input-wrap {
   width: 100%; max-width: 600px;
-  border: 1px solid var(--border-strong);   /* Gray-05 #BEC4D0 */
-  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;            /* ChatGPT 컴포저 라운드 */
   background: var(--bg-canvas);
   padding: 12px 14px 10px;
   transition: border-color var(--t-fast), box-shadow var(--t-fast);
@@ -436,7 +455,7 @@ a { text-decoration: none; color: inherit; }
 }
 .send-btn {
   width: 32px; height: 32px;
-  border-radius: 8px;
+  border-radius: var(--r-pill);   /* ChatGPT 원형 전송 버튼 */
   background: var(--blue);
   display: flex; align-items: center; justify-content: center;
   transition: background var(--t-fast), transform var(--t-fast);
@@ -459,13 +478,11 @@ a { text-decoration: none; color: inherit; }
   color: var(--text-primary);
   background: var(--bg-canvas);
   cursor: pointer;
-  transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
-  box-shadow: var(--shadow-sm);
+  transition: border-color var(--t-fast), background var(--t-fast);
 }
 .home-chip:hover {
   border-color: var(--blue);
   background: var(--bg-active);
-  box-shadow: var(--shadow-md);
 }
 .chip-icon {
   width: 20px; height: 20px;
@@ -500,11 +517,10 @@ a { text-decoration: none; color: inherit; }
   margin-top: 16px;
 }
 .user-bubble {
-  background: #282D39;            /* Gray-12 */
-  color: var(--text-white);
+  background: #F1F1F1;            /* ChatGPT 유저 버블: 라이트 그레이 */
+  color: var(--text-primary);
   padding: 10px 16px;
-  border-radius: 16px;
-  border-bottom-right-radius: 4px;
+  border-radius: 18px;            /* 균일 라운드, 꼬리 없음 */
   font-size: 14px; line-height: 22px;   /* KR/Body-14 */
   max-width: 72%;
   letter-spacing: -0.4px;
@@ -558,10 +574,10 @@ a { text-decoration: none; color: inherit; }
 .cite {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 4px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(10, 30, 76, 0.06); /* Grayop-02 */
-  color: #5C677F; /* Gray/Gray-09 */
+  padding: 3px 9px;
+  border-radius: var(--r-pill);   /* ChatGPT 인용 뱃지: 필 */
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-secondary);
   font-size: 11px; font-weight: 500;
   margin-left: 3px; margin-right: 1px;
   vertical-align: middle;
@@ -772,9 +788,10 @@ a { text-decoration: none; color: inherit; }
   flex-shrink: 0;
 }
 .chat-input-wrap {
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
   background: var(--bg-input);
+  box-shadow: var(--shadow-sm);
   display: flex; align-items: flex-end; gap: 8px;
   padding: 12px 10px 10px 14px;
   transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
@@ -872,7 +889,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  width: 280px;
+  width: 100%;
   opacity: 0;
   transform: translateX(20px);
   transition: opacity 200ms ease, transform 200ms ease;
@@ -1049,21 +1066,12 @@ a { text-decoration: none; color: inherit; }
 /* ═══ SCENARIO ENGINE ADDITIONS ═══ */
 /* sidebar scenario status */
 .chat-item { display: flex; align-items: center; gap: 8px; }
-.sc-status { width: 15px; height: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.sc-spinner { width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--blue-light); border-top-color: var(--blue); animation: sc-spin .8s linear infinite; }
-.sc-check { width: 15px; height: 15px; border-radius: 50%; background: var(--chart-green); color: #fff; font-size: 9px; display: flex; align-items: center; justify-content: center; }
-.sc-idle { width: 13px; height: 13px; border-radius: 50%; border: 1.6px solid var(--border-strong); }
-.chat-item.done { opacity: 0.6; }
-.chat-item-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chat-item.active .chat-item-sub { color: var(--blue); }
+.sc-status { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.sc-spinner { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--blue-light); border-top-color: var(--blue); animation: sc-spin .8s linear infinite; }
+.sc-done { font-size: 12px; color: var(--text-tertiary); }
+.chat-item-sub { font-size: 11px; color: var(--blue); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
 .chat-item-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 @keyframes sc-spin { 100% { transform: rotate(360deg); } }
-
-/* scene progress dots in topbar */
-.scene-dots { display: flex; gap: 5px; align-items: center; margin-right: 4px; }
-.scene-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-strong); transition: all .25s; }
-.scene-dot.done { background: var(--blue-light); }
-.scene-dot.active { width: 18px; border-radius: 3px; background: var(--blue); }
 
 /* chat: enter animation + system + teammate */
 .msg-enter { animation: msgUp .4s cubic-bezier(.4,0,.2,1) both; }
@@ -1074,7 +1082,7 @@ a { text-decoration: none; color: inherit; }
 .tm-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; max-width: 72%; }
 .tm-name { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding-left: 2px; }
 .tm-avatar { width: 17px; height: 17px; border-radius: 50%; background: #7C3AED; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.user-bubble.teammate { background: var(--bg-hover); color: var(--text-primary); border-radius: 18px; border-bottom-left-radius: 4px; }
+.user-bubble.teammate { background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border); border-radius: 18px; }
 .ai-source-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-tertiary); }
 .ai-source-line .system-dot { background: var(--blue); }
 .ai-prose table.mini { border-collapse: collapse; width: 100%; font-size: 12px; margin: 8px 0; }
@@ -1208,15 +1216,15 @@ a { text-decoration: none; color: inherit; }
 .cta-btn {
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--blue); color: #fff; font-size: 12.5px; font-weight: 600;
-  padding: 8px 14px; border-radius: 8px; text-decoration: none;
-  transition: background var(--t-fast), transform var(--t-fast);
+  padding: 8px 16px; border-radius: var(--r-pill); text-decoration: none;
+  transition: background var(--t-fast);
 }
-.cta-btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
-.cta-btn.lg { font-size: 14px; padding: 11px 20px; border-radius: 10px; margin-top: 4px; }
+.cta-btn:hover { background: var(--blue-hover); }
+.cta-btn.lg { font-size: 14px; padding: 11px 22px; margin-top: 4px; }
 .end-cta-card {
-  margin: 18px 0 8px; padding: 22px 20px; text-align: center;
-  background: linear-gradient(135deg, #EEF3FF, #F9FAFB);
-  border: 1px solid var(--blue-light); border-radius: 14px;
+  margin: 18px 0 8px; padding: 24px 20px; text-align: center;
+  background: var(--blue-soft);
+  border: none; border-radius: 16px;
 }
 .end-cta-title { font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.2px; }
 .end-cta-sub { font-size: 12.5px; color: var(--text-secondary); margin: 6px 0 14px; }
@@ -1225,7 +1233,7 @@ a { text-decoration: none; color: inherit; }
 .av-hi { color:var(--red); font-weight:700; }
 .av-lo { color:var(--blue-deep); font-weight:700; }
 .av-sig-note { font-size:10px; color:var(--text-tertiary); margin-top:8px; }
-.av-proj { display:flex; gap:10px; align-items:center; padding:12px; background:#F9FAFB; border:1px solid var(--border); border-radius:10px; }
+.av-proj { display:flex; gap:10px; align-items:center; padding:12px; background:#F9F9F9; border:1px solid var(--border); border-radius:12px; }
 .av-proj-ic { width:34px; height:34px; border-radius:8px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .av-proj-t { font-size:12px; font-weight:600; color:var(--text-primary); }
 .av-proj-s { font-size:11px; color:var(--text-tertiary); margin-top:2px; }
@@ -1240,7 +1248,7 @@ a { text-decoration: none; color: inherit; }
 .fig-src-label { font-size:13px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin-bottom:2px; }
 .fig-src-row { display:flex; align-items:center; gap:8px; }
 .fig-src-num { flex-shrink:0; min-width:26px; height:24px; padding:3px 8px; display:inline-flex; align-items:center; justify-content:center;
-  background:rgba(96,110,144,0.10); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:13px; color:#5C677F; }
+  background:rgba(0,0,0,0.05); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:13px; color:var(--text-secondary); }
 .fig-src-card { flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:8px 12px;
   background:rgba(159,163,173,0.07); border:1px solid rgba(96,110,144,0.10); border-radius:12px; transition:background var(--t-fast); }
 .fig-src-card.clickable { cursor:pointer; }
@@ -1270,7 +1278,7 @@ a { text-decoration: none; color: inherit; }
 .cb-bullets { margin:2px 0 14px; padding-left:18px; }
 .cb-bullets li { font-size:13.5px; color:var(--text-primary); line-height:22px; margin-bottom:3px; letter-spacing:-0.3px; }
 .cb-bullets strong { font-weight:600; }
-.cb-callout { background:var(--bg-page); border-radius:8px; padding:12px 14px; font-size:13px; color:var(--text-secondary); line-height:20px; margin-bottom:14px; letter-spacing:-0.3px; }
+.cb-callout { background:#F9F9F9; border-radius:12px; padding:12px 16px; font-size:13px; color:var(--text-secondary); line-height:20px; margin-bottom:14px; letter-spacing:-0.3px; }
 .cb-callout strong { color:var(--text-primary); font-weight:600; }
 .cb-table { border-collapse:collapse; width:100%; font-size:13px; margin:4px 0; }
 .cb-table th { text-align:right; color:var(--text-secondary); font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; letter-spacing:-0.3px; line-height:1.35; vertical-align:bottom; }
@@ -1327,41 +1335,41 @@ a { text-decoration: none; color: inherit; }
 </div>
 <div class="app">
 
-  <!-- ── TOPBAR ─────────────────────────────────── -->
-  <header class="topbar">
-    <button class="topbar-menu" aria-label="메뉴">
-      <i class="ph-light ph-list" style="font-size:16px"></i>
-    </button>
-    <nav class="breadcrumb" aria-label="현재 위치">
-      <span>AI에게 묻기</span>
-      <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-current" id="breadcrumb-title">K-뷰티 트렌드 분석</span>
-    </nav>
-    <div class="topbar-actions">
-      <div class="scene-dots" id="scene-dots"></div>
-      <button class="icon-btn artifact-toggle-btn" id="artifact-toggle-btn" aria-label="결과물 보기" title="결과물 패널" style="display:none" onclick="toggleArtifact()">
-        <i class="ph-light ph-layout" style="font-size:16px"></i>
-      </button>
-      <button class="icon-btn" aria-label="도움말">
-        <i class="ph-light ph-question" style="font-size:16px"></i>
-      </button>
-      <button class="avatar-btn" aria-label="내 계정">김</button>
-    </div>
-  </header>
-
   <!-- ── SIDEBAR ────────────────────────────────── -->
-  <nav class="sidebar" aria-label="대화 목록">
-    <div style="padding: 0 8px 2px;">
-      <button class="sidebar-new-btn" aria-label="새 채팅" onclick="goHome()">
-        <i class="ph-light ph-note-pencil" style="font-size:15px"></i>
-        새 채팅
-      </button>
+  <nav class="sidebar" aria-label="사이드바">
+    <!-- 스페이스 정보 (제품 GNB) -->
+    <div class="gnb-space">
+      <div class="gnb-space-info">
+        <span class="gnb-space-name">오픈서베이 스페이스</span>
+        <span class="gnb-space-tier">Enterprise</span>
+      </div>
+      <i class="ph-light ph-gear-six"></i>
     </div>
 
-    <div class="sidebar-divider"></div>
+    <!-- AI에게 묻기 (활성) + 기록 = 시나리오 목록 -->
+    <div class="gnb-menu active" role="button" aria-label="AI에게 묻기 — 새 채팅" onclick="goHome()">
+      <i class="ph-fill ph-chat-circle-dots"></i>
+      <span class="gnb-menu-label">AI에게 묻기</span>
+    </div>
+    <div class="gnb-history-label">기록</div>
+    <div class="gnb-history" id="scenario-list" aria-label="대화 기록"></div>
 
-    <div class="sc-section-label" style="font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.06em;padding:2px 16px 6px;">진행 중</div>
-    <div id="scenario-list"></div>
+    <!-- 나머지 제품 메뉴 (비활성) -->
+    <div class="gnb-menu dim"><i class="ph-light ph-squares-four"></i><span class="gnb-menu-label">프로젝트</span><span class="gnb-badge">NEW</span></div>
+    <div class="gnb-menu dim"><i class="ph-light ph-chart-bar"></i><span class="gnb-menu-label">대시보드</span></div>
+    <div class="gnb-menu dim"><i class="ph-light ph-book-open"></i><span class="gnb-menu-label">라이브러리</span></div>
+    <div class="gnb-menu dim"><i class="ph-light ph-storefront"></i><span class="gnb-menu-label">마켓플레이스</span></div>
+    <div class="gnb-menu dim"><i class="ph-light ph-user-rectangle"></i><span class="gnb-menu-label">MY패널</span></div>
+
+    <!-- 프로필 (제품 GNB) -->
+    <div class="gnb-profile">
+      <span class="gnb-avatar">김</span>
+      <span class="gnb-profile-info">
+        <span class="gnb-profile-name">김오픈</span>
+        <span class="gnb-profile-role">Viewer</span>
+      </span>
+      <i class="ph-light ph-question"></i>
+    </div>
   </nav>
 
   <!-- ── ARTIFACT PANEL ───────────────────────── -->
@@ -1444,18 +1452,14 @@ function renderSidebar(){
   const wrap=$('scenario-list'); let h='';
   SCENARIOS.forEach((s,i)=>{
     const st=statuses[i], on=i===sIdx;
-    const ico=st==='done'?'<span class="sc-check">✓</span>':st==='active'?'<span class="sc-spinner"></span>':'<span class="sc-idle"></span>';
-    const sub=on?s.scenes[scIdx].hl:st==='done'?'완료':(s.persona||s.tagline.slice(0,18)+'…');
-    h+=`<div class="chat-item${on?' active':''}${st==='done'?' done':''}" onclick="playScenario(${i})">
-      <span class="sc-status">${ico}</span>
-      <span class="chat-item-main"><span class="chat-item-label">${s.label}</span><span class="chat-item-sub">${sub}</span></span>
+    const right=st==='active'?'<span class="sc-status"><span class="sc-spinner"></span></span>':st==='done'?'<span class="sc-status"><i class="ph-bold ph-check sc-done"></i></span>':'';
+    const sub=on?`<span class="chat-item-sub">${s.scenes[scIdx].hl}</span>`:'';
+    h+=`<div class="chat-item${on?' active':''}" onclick="playScenario(${i})">
+      <span class="chat-item-main"><span class="chat-item-label">${s.label}</span>${sub}</span>
+      ${right}
     </div>`;
   });
   wrap.innerHTML=h;
-}
-function renderDots(){
-  const sc=SCENARIOS[sIdx];
-  $('scene-dots').innerHTML=sc.scenes.map((_,i)=>`<span class="scene-dot${i===scIdx?' active':i<scIdx?' done':''}"></span>`).join('');
 }
 
 /* ── 채팅 인라인 분석 블록 (제품: 답변 안 테이블/유의차) ── */
@@ -1700,19 +1704,18 @@ function openPanel(type){
   pauseForUser();
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   $('artifact-body').innerHTML=previewHTML(type);
-  document.querySelector('.app').classList.add('artifact-open'); $('artifact-toggle-btn').style.display='';
+  document.querySelector('.app').classList.add('artifact-open');
   if(type==='chart') setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(bb=>{bb.style.width=bb.dataset.w+'%';}),60);
 }
-function openArtifact(){ document.querySelector('.app').classList.add('artifact-open'); $('artifact-toggle-btn').style.display=''; }
+function openArtifact(){ document.querySelector('.app').classList.add('artifact-open'); }
 function closeArtifact(){ document.querySelector('.app').classList.remove('artifact-open'); }
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 
 /* ── playback ── */
 function showScene(){
   const sc=SCENARIOS[sIdx], scene=sc.scenes[scIdx];
-  $('breadcrumb-title').textContent=sc.label;
-  renderSidebar(); renderDots();
-  if(sc.panel===false){ closeArtifact(); $('artifact-toggle-btn').style.display='none'; }   // 제품: 분석은 인라인, 패널 없음
+  renderSidebar();
+  if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
   else updateArtifact(scene);
   playSceneMessages(scene, ()=>{ if(playing){ clearTimeout(timer); timer=setTimeout(advance, DWELL_MS); } });
 }
@@ -1743,8 +1746,7 @@ function playScenario(i){
 function askIntro(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   $('chat-home').classList.add('active');
-  $('breadcrumb-title').textContent='Ask';
-  $('scene-dots').innerHTML=''; closeArtifact(); $('artifact-toggle-btn').style.display='none';
+  closeArtifact();
   const hi=$('home-input-el');
   setTimeout(()=>{
     if(userTyping) return;
