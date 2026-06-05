@@ -245,16 +245,23 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .app {
   display: grid;
-  grid-template-columns: 232px 1fr 0px;
+  grid-template-columns: 52px 200px 1fr 0px;
   grid-template-rows: 1fr;
   grid-template-areas:
-    "sidebar canvas artifact";
+    "rail sidebar canvas artifact";
   height: 740px;
   background: var(--bg-canvas);
   transition: grid-template-columns 240ms ease;
 }
 .app.artifact-open {
-  grid-template-columns: 232px 1fr minmax(420px, 44%);
+  grid-template-columns: 52px 200px 1fr minmax(420px, 42%);
+}
+/* 레일 호버 → 밀어내기(push): 시나리오 패널과 나란히 펼침 */
+.app:has(.rail:hover), .app:has(.rail.flyout-open) {
+  grid-template-columns: 200px 200px 1fr 0px;
+}
+.app.artifact-open:has(.rail:hover), .app.artifact-open:has(.rail.flyout-open) {
+  grid-template-columns: 200px 200px 1fr minmax(420px, 42%);
 }
 
 /* ═══════════════════════════════════════════════
@@ -281,77 +288,87 @@ a { text-decoration: none; color: inherit; }
 /* ═══════════════════════════════════════════════
    SIDEBAR
 ═══════════════════════════════════════════════ */
-.sidebar {
-  grid-area: sidebar;
-  background: var(--bg-sidebar);    /* 뉴트럴 #F9F9F9 (ChatGPT 사이드바) */
+/* ── 레일 — 평소 아이콘만(52px), 호버 시 우측으로 확장(218px) ── */
+.rail {
+  grid-area: rail;
+  background: #F3F3F3;
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
+  padding: 10px 0;
+  gap: 2px;
   overflow: hidden;
-  padding: 10px 0 8px;
 }
-
-/* ── GNB — 뉴트럴 재설계 (구성은 제품, 톤은 ChatGPT) ── */
-.gnb-space {
-  display: flex; align-items: center; gap: 6px;
-  margin: 0 10px 10px;
-  padding: 4px 8px;
-}
-.gnb-space-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-.gnb-space-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gnb-space-tier { font-size: 10px; font-weight: 500; color: var(--text-tertiary); }
-.gnb-space > i { font-size: 14px; color: var(--text-tertiary); flex-shrink: 0; }
-
-.gnb-menu {
-  display: flex; align-items: center; gap: 8px;
-  margin: 0 8px 1px; padding: 7px 10px;
+.rail-row {
+  display: flex; align-items: center; gap: 10px;
+  height: 34px;
+  margin: 0 8px; padding: 0 9px;
   border-radius: 8px;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
   font-size: 12.5px; font-weight: 500;
-  color: var(--text-secondary);
-  cursor: default;
   white-space: nowrap;
+  cursor: default;
+  text-align: left;
 }
-.gnb-menu i { font-size: 15px; flex-shrink: 0; color: var(--text-tertiary); }
-.gnb-menu.active {
-  background: #ECECEC;              /* ChatGPT 활성: 뉴트럴 면 */
-  color: var(--text-primary);
-  font-weight: 600;
+.rail-row i { font-size: 16px; width: 16px; flex-shrink: 0; display: flex; justify-content: center; }
+.rail-row svg { width: 16px; height: 16px; flex-shrink: 0; }
+.rail-row.active {
+  background: #E5E5E5;
+  color: var(--blue);               /* 포인트는 메인 컬러 하나만 */
   cursor: pointer;
 }
-.gnb-menu.active i { color: var(--blue); }   /* 포인트는 메인 컬러 하나만 */
-.gnb-menu-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.gnb-badge {
-  font-size: 9px; font-weight: 600;
-  color: #E1740F; background: #FCE7D4;
-  border-radius: 999px; padding: 1px 6px;
-  flex-shrink: 0;
+/* 나머지 메뉴: 호버 피드백만, 클릭 액션 없음 */
+.rail-row:not(.active):hover { background: #EAEAEA; color: var(--text-secondary); transition: background var(--t-fast); }
+.rail { user-select: none; }
+.rail-label {
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  color: var(--text-secondary);
+  opacity: 0; transition: opacity 150ms ease;
 }
+.rail-row.active .rail-label { color: var(--text-primary); font-weight: 600; }
+.rail-side {
+  font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 1px;
+  opacity: 0; transition: opacity 150ms ease;
+}
+.rail-side i { font-size: 11px; width: auto; }
+.rail:hover .rail-label, .rail:hover .rail-side,
+.rail.flyout-open .rail-label, .rail.flyout-open .rail-side { opacity: 1; }
 
-.gnb-history { flex: 1; overflow-y: auto; padding: 0 0 6px; }
-.gnb-history::-webkit-scrollbar { width: 4px; }
-.gnb-history-label {
-  font-size: 10.5px; font-weight: 600;
-  color: var(--text-tertiary);
-  padding: 12px 18px 5px;
+/* 스페이스 헤더 — 접힘 시 0, 확장 시 펼쳐짐 */
+.rail-space {
+  display: flex; align-items: center; gap: 6px;
+  height: 0; opacity: 0; overflow: hidden;
+  margin: 0 12px;
+  transition: height 200ms ease, opacity 150ms ease, margin 200ms ease;
 }
+.rail:hover .rail-space, .rail.flyout-open .rail-space { height: 44px; opacity: 1; margin: 0 12px 6px; }
+.rail-space-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rail-space-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rail-space-tier { font-size: 10px; font-weight: 500; color: var(--text-tertiary); white-space: nowrap; }
+.rail-space > i { font-size: 14px; color: var(--text-tertiary); flex-shrink: 0; }
 
-.gnb-profile {
-  display: flex; align-items: center; gap: 8px;
-  margin: 8px 10px 2px; padding: 4px 8px;
-  border-radius: 8px;
-}
-.gnb-avatar {
+.rail-spacer { flex: 1; }
+.rail-profile { padding: 0 5px; }
+.rail-avatar {
   width: 26px; height: 26px; border-radius: 50%;
   background: var(--blue-light); color: var(--blue);
   font-size: 10px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.gnb-profile-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.gnb-profile-name { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.3; }
-.gnb-profile-role { font-size: 10px; font-weight: 500; color: var(--text-tertiary); }
-.gnb-profile > i { font-size: 14px; color: var(--text-tertiary); }
 
-.sidebar-divider { height: 1px; background: var(--border); margin: 2px 0 4px; }
+/* ── 시나리오 패널 — 데모 내비 전용 칼럼 ── */
+.sidebar {
+  grid-area: sidebar;
+  background: var(--bg-sidebar);    /* 뉴트럴 #F9F9F9 */
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  padding: 10px 0 8px;
+}
+.gnb-history { flex: 1; overflow-y: auto; padding: 2px 0 6px; }
+.gnb-history::-webkit-scrollbar { width: 4px; }
 
 .chat-item {
   display: flex; align-items: center; justify-content: space-between;
@@ -368,7 +385,13 @@ a { text-decoration: none; color: inherit; }
   background: #ECECEC;
   color: var(--text-primary); font-weight: 500;
 }
-.chat-item-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+.chat-item-label {
+  flex: 1; font-size: 12px; line-height: 1.45;
+  white-space: normal;
+  display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;             /* 질문 요약 — 최대 2줄 */
+  overflow: hidden;
+}
 .chat-item-more {
   width: 22px; height: 22px;
   border-radius: var(--r-xs);
@@ -530,17 +553,23 @@ a { text-decoration: none; color: inherit; }
 .msg-ai { margin-bottom: 2px; }
 
 .ai-header {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 3px;
   margin-bottom: 10px;
 }
 .ai-avatar {
-  width: 26px; height: 26px;
-  border-radius: var(--r-pill);
-  background: var(--blue);
+  width: 16px; height: 16px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.ai-avatar svg { width: 14px; height: 14px; fill: white; }
+.ai-ind {
+  display: inline-block;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  background: url(ai-indicator-poster.png) center/contain no-repeat;  /* 로드 전 fallback */
+}
+.ai-ind.ind-live { background: none; }
+.ai-ind canvas { display: block; width: 100% !important; height: 100% !important; }
+.rail-row .ai-ind { width: 18px; height: 18px; flex-shrink: 0; }
 .thinking-toggle {
   display: flex; align-items: center; gap: 5px;
   font-size: 12px; color: var(--text-tertiary);
@@ -871,6 +900,7 @@ a { text-decoration: none; color: inherit; }
   margin-top: 1px;
 }
 .file-meta {
+  display: none;
   font-size: 11px;
   font-weight: 600;
   background: #E0EAFF;
@@ -1067,8 +1097,8 @@ a { text-decoration: none; color: inherit; }
 /* sidebar scenario status */
 .chat-item { display: flex; align-items: center; gap: 8px; }
 .sc-status { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-.sc-spinner { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--blue-light); border-top-color: var(--blue); animation: sc-spin .8s linear infinite; }
-.sc-done { font-size: 12px; color: var(--text-tertiary); }
+.sc-spinner { display: none; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--blue-light); border-top-color: var(--blue); animation: sc-spin .8s linear infinite; }
+.sc-done { display: none; font-size: 12px; color: var(--text-tertiary); }
 .chat-item-sub { font-size: 11px; color: var(--blue); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
 .chat-item-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 @keyframes sc-spin { 100% { transform: rotate(360deg); } }
@@ -1336,40 +1366,28 @@ a { text-decoration: none; color: inherit; }
 <div class="app">
 
   <!-- ── SIDEBAR ────────────────────────────────── -->
-  <nav class="sidebar" aria-label="사이드바">
-    <!-- 스페이스 정보 (제품 GNB) -->
-    <div class="gnb-space">
-      <div class="gnb-space-info">
-        <span class="gnb-space-name">오픈서베이 스페이스</span>
-        <span class="gnb-space-tier">Enterprise</span>
+  <!-- 레일: 평소 아이콘만, 호버 시 우측으로 확장 -->
+  <nav class="rail" aria-label="제품 메뉴">
+    <span class="rail-row"><i class="ph-light ph-list"></i></span>
+    <div class="rail-space">
+      <div class="rail-space-info">
+        <span class="rail-space-name">오픈서베이 스페이스</span>
+        <span class="rail-space-tier">Enterprise</span>
       </div>
-      <i class="ph-light ph-gear-six"></i>
     </div>
+    <button class="rail-row active" aria-label="AI에게 묻기 — 새 채팅" onclick="goHome()"><span class="ai-ind"></span><span class="rail-label">Dataspace AI</span></button>
+    <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path d="M3.23178 0.950521C3.33677 0.950521 3.42188 0.865408 3.42188 0.760417C3.42188 0.655425 3.33677 0.570312 3.23178 0.570312H1.33074C1.22575 0.570312 1.14063 0.655425 1.14063 0.760417C1.14063 0.865408 1.22575 0.950521 1.33074 0.950521H3.23178Z" fill="currentColor"/><path d="M3.61199 1.52083C3.71698 1.52083 3.80209 1.43572 3.80209 1.33073C3.80209 1.22574 3.71698 1.14063 3.61199 1.14063H0.950529C0.845537 1.14063 0.760425 1.22574 0.760425 1.33073C0.760425 1.43572 0.845537 1.52083 0.950529 1.52083H3.61199Z" fill="currentColor"/><path d="M3.9922 1.71094C4.04764 1.71094 4.10033 1.73514 4.13644 1.77721C4.17255 1.81928 4.18846 1.87502 4.18007 1.92982L3.90884 3.69849C3.86613 3.97681 3.6266 4.18229 3.34502 4.18229H1.21749C0.935917 4.18229 0.696384 3.97681 0.653677 3.69849L0.382444 1.92982C0.374051 1.87502 0.389966 1.81928 0.426071 1.77721C0.462187 1.73514 0.514873 1.71094 0.57032 1.71094H3.9922ZM1.02962 3.64075C1.04385 3.73353 1.12363 3.80208 1.21749 3.80208H3.34502C3.43888 3.80208 3.51867 3.73353 3.5329 3.64075L3.77072 2.09115H0.791799L1.02962 3.64075Z" fill="currentColor"/></svg><span class="rail-label">프로젝트</span></span>
+    <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path d="M3.61198 0.570312H0.950521C0.741406 0.570312 0.570312 0.741406 0.570312 0.950521V3.61198C0.570312 3.82109 0.741406 3.99219 0.950521 3.99219H3.61198C3.82109 3.99219 3.99219 3.82109 3.99219 3.61198V0.950521C3.99219 0.741406 3.82109 0.570312 3.61198 0.570312ZM3.61198 3.61198H0.950521V0.950521H3.61198V3.61198ZM1.33073 1.90104H1.71094V3.23177H1.33073V1.90104ZM2.09115 1.33073H2.47135V3.23177H2.09115V1.33073ZM2.85156 2.47135H3.23177V3.23177H2.85156V2.47135Z" fill="currentColor"/></svg><span class="rail-label">대시보드</span></span>
+    <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path d="M2.56626 0.834809C2.94044 0.735728 3.33308 0.735728 3.70726 0.834809L4.18233 0.960622V3.80216L3.70726 3.67635C3.33308 3.57727 2.94044 3.57727 2.56626 3.67635L2.28129 3.75173L1.99632 3.67635C1.62214 3.57727 1.2295 3.57727 0.855324 3.67635L0.380249 3.80216V0.960622L0.855324 0.834809C1.2295 0.735728 1.62214 0.735728 1.99632 0.834809L2.28129 0.910182L2.56626 0.834809ZM1.90127 1.21225C1.58946 1.12968 1.26219 1.12968 0.950376 1.21225L0.760457 1.2625V3.29872C1.19684 3.18321 1.6548 3.18321 2.09119 3.29872V1.2625L1.90127 1.21225ZM3.61221 1.21225C3.30039 1.12968 2.97312 1.12968 2.66131 1.21225L2.47139 1.2625V3.29872C2.90778 3.18321 3.36574 3.18321 3.80212 3.29872V1.2625L3.61221 1.21225Z" fill="currentColor"/></svg><span class="rail-label">라이브러리</span></span>
+    <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path d="M3.04163 0.570312C3.25161 0.570312 3.42183 0.740538 3.42183 0.950521V1.98495C3.51644 2.04662 3.59379 2.14216 3.63459 2.27197C3.66645 2.3734 3.75519 2.43623 3.84883 2.43627C4.36807 2.43627 4.55399 3.104 4.15867 3.40108C4.07894 3.46104 4.04261 3.57086 4.07476 3.67324C4.15071 3.91519 4.0532 4.14179 3.8867 4.26695C3.71921 4.39278 3.47276 4.42157 3.267 4.26695C3.18886 4.20825 3.08449 4.20823 3.00635 4.26695C2.80059 4.42154 2.55413 4.3928 2.38666 4.26695C2.22019 4.14178 2.12267 3.91516 2.1986 3.67324C2.20858 3.64145 2.21201 3.60895 2.20955 3.57745C2.00044 3.83055 1.68467 3.99219 1.33069 3.99219C0.700739 3.99219 0.190063 3.48151 0.190063 2.85156C0.190063 2.22161 0.700739 1.71094 1.33069 1.71094V0.950521C1.33069 0.740538 1.50091 0.570312 1.7109 0.570312H3.04163ZM3.27183 2.38596C3.22795 2.24636 3.04539 2.24635 3.00153 2.38596C2.92201 2.63906 2.69129 2.81647 2.42453 2.81647C2.35913 2.81651 2.30972 2.85643 2.28938 2.92118C2.26892 2.98637 2.28592 3.0539 2.34322 3.09699C2.55502 3.25617 2.64055 3.5349 2.56135 3.78705C2.53778 3.86214 2.56602 3.92606 2.61519 3.96304C2.66344 3.99928 2.723 4.00435 2.77801 3.96304C2.99143 3.80266 3.28191 3.80268 3.49535 3.96304C3.55035 4.00437 3.60991 3.99926 3.65817 3.96304C3.70737 3.92606 3.7356 3.86218 3.712 3.78705C3.63283 3.53492 3.71838 3.25618 3.93014 3.09699C3.98748 3.0539 4.00445 2.98639 3.98398 2.92118C3.96363 2.85642 3.91426 2.81648 3.84883 2.81647C3.58208 2.81644 3.35133 2.63905 3.27183 2.38596ZM1.33069 2.09115C0.910722 2.09115 0.570272 2.4316 0.570272 2.85156C0.570272 3.27153 0.910722 3.61198 1.33069 3.61198C1.60443 3.61198 1.84413 3.46718 1.97805 3.25015C1.86722 3.06601 1.88203 2.83147 1.99531 2.66146H1.7109C1.50091 2.66146 1.33069 2.49123 1.33069 2.28125V2.09115ZM1.7109 2.28125H2.63561C2.63671 2.27819 2.63778 2.2751 2.63877 2.27197C2.70468 2.06219 2.86599 1.94159 3.04163 1.90977V0.950521H1.7109V2.28125Z" fill="currentColor"/></svg><span class="rail-label">마켓플레이스</span></span>
+    <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.02458 1.71086C3.02458 1.97334 2.8118 2.18612 2.54932 2.18612C2.28684 2.18612 2.07406 1.97334 2.07406 1.71086C2.07406 1.44838 2.28684 1.2356 2.54932 1.2356C2.8118 1.2356 3.02458 1.44838 3.02458 1.71086ZM2.73942 1.71086C2.73942 1.81585 2.65431 1.90096 2.54932 1.90096C2.44433 1.90096 2.35922 1.81585 2.35922 1.71086C2.35922 1.60586 2.44433 1.52075 2.54932 1.52075C2.65431 1.52075 2.73942 1.60586 2.73942 1.71086Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.38797 3.04257C3.40674 3.14587 3.31979 3.23169 3.2148 3.23169H1.88407C1.77908 3.23169 1.69213 3.14587 1.7109 3.04257C1.78982 2.60822 2.13525 2.28117 2.54943 2.28117C2.96361 2.28117 3.30905 2.60822 3.38797 3.04257ZM3.06499 2.94653C2.96896 2.70999 2.76178 2.56632 2.54943 2.56632C2.33708 2.56632 2.1299 2.70999 2.03388 2.94653H3.06499Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0.47522 0.570231C0.47522 0.46524 0.560332 0.380127 0.665324 0.380127H3.51689C3.83186 0.380127 4.0872 0.635465 4.0872 0.950439V3.6119C4.0872 3.92687 3.83186 4.18221 3.51689 4.18221H0.665324C0.560332 4.18221 0.47522 4.0971 0.47522 3.99211V0.570231ZM0.855428 3.802V0.760335H1.14058V3.802H0.855428ZM1.46376 3.802H3.51689C3.62188 3.802 3.70699 3.71689 3.70699 3.6119V0.950439C3.70699 0.845448 3.62188 0.760335 3.51689 0.760335H1.46376V3.802Z" fill="currentColor"/></svg><span class="rail-label">MY패널</span></span>
+    <span class="rail-spacer"></span>
+    <div class="rail-row rail-profile"><span class="rail-avatar">김</span><span class="rail-label">김오픈</span></div>
+  </nav>
 
-    <!-- AI에게 묻기 (활성) + 기록 = 시나리오 목록 -->
-    <div class="gnb-menu active" role="button" aria-label="AI에게 묻기 — 새 채팅" onclick="goHome()">
-      <i class="ph-fill ph-chat-circle-dots"></i>
-      <span class="gnb-menu-label">AI에게 묻기</span>
-    </div>
-    <div class="gnb-history-label">기록</div>
-    <div class="gnb-history" id="scenario-list" aria-label="대화 기록"></div>
-
-    <!-- 나머지 제품 메뉴 (비활성) -->
-    <div class="gnb-menu dim"><i class="ph-light ph-squares-four"></i><span class="gnb-menu-label">프로젝트</span><span class="gnb-badge">NEW</span></div>
-    <div class="gnb-menu dim"><i class="ph-light ph-chart-bar"></i><span class="gnb-menu-label">대시보드</span></div>
-    <div class="gnb-menu dim"><i class="ph-light ph-book-open"></i><span class="gnb-menu-label">라이브러리</span></div>
-    <div class="gnb-menu dim"><i class="ph-light ph-storefront"></i><span class="gnb-menu-label">마켓플레이스</span></div>
-    <div class="gnb-menu dim"><i class="ph-light ph-user-rectangle"></i><span class="gnb-menu-label">MY패널</span></div>
-
-    <!-- 프로필 (제품 GNB) -->
-    <div class="gnb-profile">
-      <span class="gnb-avatar">김</span>
-      <span class="gnb-profile-info">
-        <span class="gnb-profile-name">김오픈</span>
-        <span class="gnb-profile-role">Viewer</span>
-      </span>
-      <i class="ph-light ph-question"></i>
-    </div>
+  <!-- 시나리오 패널: 데모 내비 전용 칼럼 -->
+  <nav class="sidebar" aria-label="시나리오">
+    <div class="gnb-history" id="scenario-list" aria-label="시나리오 목록"></div>
   </nav>
 
   <!-- ── ARTIFACT PANEL ───────────────────────── -->
@@ -1428,13 +1446,24 @@ a { text-decoration: none; color: inherit; }
 
 </div><!-- /page-wrapper -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
 <script src="scenarios.js"></script>
 <script>
 /* ═══════════════════════════════════════════════
    SCENARIO ENGINE — opensurvey-redesign
    레퍼런스(opensurvey-hero) 시나리오를 우리 디자인에 매핑
 ═══════════════════════════════════════════════ */
-const STAR='<svg viewBox="0 0 14 14"><path d="M7 1.5l1.3 3.6 3.8.3-2.8 2.5.85 3.8L7 9.8l-3.15 1.9.85-3.8L1.9 5.4l3.8-.3z" fill="white"/></svg>';
+/* Dataspace AI 브랜딩 인디케이터 — Lottie 프레임 시퀀스 (handoff 2026-06) */
+const STAR='<span class="ai-ind" aria-label="Generating"></span>';
+let AI_IND_DATA=null;
+fetch('ai-indicator-frames.json').then(r=>r.json()).then(d=>{ AI_IND_DATA=d; hydrateInds(); }).catch(()=>{});
+function hydrateInds(){
+  if(!AI_IND_DATA || typeof lottie==='undefined') return;
+  document.querySelectorAll('.ai-ind:not(.ind-live)').forEach(el=>{
+    el.classList.add('ind-live');
+    lottie.loadAnimation({ container: el, renderer: 'canvas', loop: true, autoplay: true, animationData: AI_IND_DATA });
+  });
+}
 const CHART_BARS=[{label:'10대',value:55},{label:'20대',value:78},{label:'30대',value:71},{label:'40대',value:58},{label:'50대+',value:41}];
 
 
@@ -1445,7 +1474,7 @@ let lastArtifact=null;
 
 function md(t){ return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
 function $(id){ return document.getElementById(id); }
-function scrollChat(){ const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
+function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
 
 /* ── sidebar scenario list ── */
 function renderSidebar(){
@@ -1809,6 +1838,7 @@ function wireInputs(){
 renderSidebar();
 wireInputs();
 askIntro();
+if(location.hash==='#flyout') document.querySelector('.rail').classList.add('flyout-open'); // QA: 플라이아웃 강제 표시
 </script>
 </body>
 </html>
