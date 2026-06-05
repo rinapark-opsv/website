@@ -32,13 +32,25 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'system',text:'팀원에게 공유되었습니다.'},{role:'user',text:'일본만 따로 보면 어떻게 돼?',avatar:'J',name:'지연 (팀원)'},{role:'ai',text:'**Japan only | key findings**\n\n일본 응답자의 ChatGPT 시도율은 **14.8%**로 3개국 중 가장 낮습니다. 만족도(TOP2: 55.4%)는 중간 수준이나, 중립 응답이 상대적으로 높습니다.'}],preview:'collaborate',hl:'팀 협업 채팅'},
  ]},
  /* ① 설계 — 김민정 팀장(리서치 수행자) · media1 */
- {id:'design',label:'건강 스낵 브랜드 론치 타당성 검증 리서치 기획',persona:'김민정 팀장 · 리서치 수행',tagline:'브리프 한 줄이 검증된 설문 문항으로, 10분 만에',scenes:[
-   {chat:[{role:'system',text:'프로젝트가 선택되었습니다.'},{role:'file',name:'건강 스낵 브랜드 론치 타당성 검토',sub:'프로젝트 · 식음료 제조사 A',badge:'Project',open:'project'}],preview:'project',hl:'프로젝트 선택'},
-   {chat:[{role:'user',text:'이 프로젝트로 리서치 기획서 작성해줘'}],preview:'prompt',hl:'리서치 기획 요청'},
-   {chat:[{role:'ai',text:'**리서치 기획서 완료**\n신규 건강 스낵 브랜드 시장 진입 타당성 검증 조사 브리프를 작성했습니다.\n- **회사**: 식음료 제조사 A\n- **목적**: 건강 스낵 카테고리 수요·구매 맥락 + 신규 컨셉 수용성 검증\n- **타깃**: 전국 20~59세 일반인\n\n이어서 누구에게 물어볼지·어떻게 조사할지도 정리해드릴까요?',source:'프로젝트 브리프',sources:[{n:1,title:'신규 건강 스낵 브랜드 타당성 검증 브리프',type:'프로젝트 문서',kind:'doc',emoji:'📋',open:'brief'}]}],preview:'designbrief',hl:'브리프 자동 생성'},
-   {chat:[{role:'user',text:'이번엔 정량조사만 할게요. 핵심 질문 4개로 한정 — ①Size of opportunity ②Source of business ③Brand concept acceptance ④Product evaluation'}],preview:'prompt',hl:'조사 범위 한정'},
-   {chat:[{role:'ai',text:'**리서치 설계서 완료**\n정량조사 단독, 4개 핵심 질문으로 범위를 좁혀 다시 설계했습니다.\n- **표본**: 총 1,200명 (기본 800 + 부스터 400)\n- **방법**: 온라인 정량조사 (U&A · 성장성/장벽 · 컨셉 수용도 · 후보 제품 평가)\n\n이어서 이 설계서대로 **설문**까지 생성해드릴까요?',source:'프로젝트 브리프'}],preview:'briefv2',hl:'설계서 갱신'},
-   {chat:[{role:'user',text:'응, 설문 문항까지 만들어줘'},{role:'ai',text:'**설문 문항 (초안)**\n검증된 문항뱅크를 기반으로 스크리닝~본문항을 설계했습니다.',source:'검증된 문항뱅크',sources:[{n:1,title:'검증된 문항뱅크 (Question Bank)',type:'라이브러리',kind:'doc',emoji:'📚',open:'survey'}]}],preview:'designsurvey',hl:'설문 문항 자동 설계'},
+ {id:'design',label:'MZ세대 브랜드 인식 조사 — 설문 설계·생성',persona:'김민정 팀장 · 리서치 수행',panel:false,tagline:'질문 한 줄이 검증된 설문으로, 10분 만에',scenes:[
+   {chat:[{role:'user',text:'우리 브랜드 인식이 어떤지 알고 싶어요'},
+          {role:'ai',text:'브랜드 인식 조사는 크게 두 가지 방향으로 접근할 수 있어요. **인지도·이미지 조사**라면 주요 연령대별로 브랜드를 어떻게 떠올리는지 측정하고, **경쟁사 대비 포지셔닝**도 함께 확인할 수 있어요. 어떤 타겟 세그먼트가 특히 궁금하신가요?'}],preview:'prompt',hl:'접근 방향 제안'},
+   {chat:[{role:'user',text:'MZ세대 중심으로 설문 만들어줄 수 있어?'},
+          {role:'ai',cardproj:true,text:'물론이죠! **MZ세대(18–39세) 대상 브랜드 인식 설문**을 설계해드릴게요. 보통 15–20문항으로 구성되며, 브랜드 인지·연상·선호도·경쟁 비교 순서로 구성하면 분석이 용이합니다.'}],preview:'prompt',hl:'설문 설계 제안'},
+   {chat:[{role:'user',text:"'2026 브랜드 인식 조사' 프로젝트 선택"},
+          {role:'ai',process:[
+            {t:'리서치 목표 정리 중...',b:['AI가 입력하신 내용을 바탕으로 리서치의 목표, 알아내야 할 것들, 의사결정 포인트를 정리하고 있어요.',"전문 리서처가 프로젝트 시작 전에 하는 '프로젝트 브리프' 작성 과정이에요."]},
+            {t:'설문 개요 정리 중...',sub:'이런 것들을 결정하고 있어요',b:['어떤 질문들로 구성해야 분석까지 잘 진행될지','질문 순서는 어떻게 구성해야 응답에 편향이 없을지','어떤 응답자에게 수집하는 것이 좋을지']},
+            {t:'설문지에 문항 작성 중...',b:['바로 편집하실 수 있도록 문항을 채워넣고 로직을 검수하고 있어요.','10분 이상 걸릴 수 있으니 이 탭만 열어두시면 다른 곳에 다녀오셔도 괜찮아요.']}]}],preview:'designsurvey',hl:'설문 자동 생성'},
+   {chat:[{role:'ai',done:[
+            {t:'프로젝트 브리프 완료',open:'designbriefdoc',title:'MZ세대 대상 자사 및 경쟁 브랜드 인지도·이용·충성도 정량 조사 프로젝트 브리프',sec:'1. 프로젝트 배경',b:['자사와 주요 경쟁 브랜드 간 인지도와 이용 경험, 충성도 수준을 객관적으로 비교하여 향후 마케팅 및 브랜딩 전략의 방향성을 정립할 필요가 있습니다.','특히 주요 소비층인 만 19~34세 MZ세대는 브랜드 인식 및 구매 태도가 빠르게 변화하며, SNS·디지털 경험을 통해 브랜드 호감과 충성도가 형성되는 경향이 강합니다.']},
+            {t:'설문 설계서 완료',open:'designplandoc',title:'MZ세대 대상 자사 및 경쟁 브랜드 인지도·이용·충성도 정량 조사 정량조사 설계서',sec:'1. 조사 목적',b:['전반적 만족도와 몰입 수준의 계량적 파악','실행 과제 도출']},
+            {t:'문항 작성 완료',collapsed:true}
+          ],datarow:{name:'MZ세대 브랜드 인식 조사',meta:'설문 · 2026-06-05 생성됨'},text:'설문이 생성되었어요!\n설문 편집 화면에서 확인하고 수정하실 수 있어요.'}],preview:'designsurvey',hl:'설문 생성 완료'},
+   {chat:[{role:'user',text:"3번 문항에 '가격이 비싸서' 보기를 추가해줘"},
+          {role:'ai',datarow:{name:'MZ세대 브랜드 인식 조사',meta:'설문 · 방금 수정됨'},text:"3번 문항 보기에 **'가격이 비싸서'**를 추가하면서, 연결된 로직도 같이 수정했어요. 바로 수집하러 가시죠!"}],preview:'designsurvey',hl:'문항 수정 반영'},
+   {chat:[{role:'user',text:'좋아, 바로 수집 시작할게'},
+          {role:'ai',collect:true,text:'**누구에게 물어볼까요?** 브랜드 인식 조사는 탐색적 조사이기 때문에 빠르게 인사이트를 얻을 수 있는 **합성 패널**을 추천해요.'}],preview:'collectdoc',hl:'수집 대상 선택'},
  ]},
  /* ② 분석 — 박준호 PM(결과 활용자) · media2 · 디폴트 */
  {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'교차분석·세그먼트 유의차까지, 리서처처럼 답합니다',scenes:[

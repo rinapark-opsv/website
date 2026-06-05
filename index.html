@@ -366,7 +366,7 @@ a { text-decoration: none; color: inherit; }
   overflow: hidden;
   padding: 10px 0 8px;
 }
-.gnb-history { flex: 1; overflow-y: auto; padding: 2px 0 6px; }
+.gnb-history { flex: 1; overflow-y: auto; padding: 2px 0 6px; background: var(--bg-canvas); }
 .gnb-history::-webkit-scrollbar { width: 4px; }
 
 .chat-item {
@@ -376,10 +376,12 @@ a { text-decoration: none; color: inherit; }
   border-radius: 8px;
   font-size: 12.5px; color: var(--text-secondary);
   cursor: pointer;
-  transition: background var(--t-fast), color var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast), box-shadow var(--t-fast);
   gap: 8px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
-.chat-item:hover { background: #EFEFEF; color: var(--text-primary); }
+.chat-item:hover { background: #ffffff; color: var(--text-primary); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04); }
 .chat-item.active {
   background: #ECECEC;
   color: var(--text-primary); font-weight: 500;
@@ -442,9 +444,11 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-canvas);
 }
 .home-greeting {
+  width: 100%;
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  font-size: 26px; font-weight: 600;   /* KR/Heading-26 */
-  line-height: 40px;
+  text-align: center;
+  font-size: 22px; font-weight: 600;   /* KR/Heading-26 */
+  line-height: 34px;
   color: var(--text-primary);
   margin-bottom: 20px;
   text-align: center;
@@ -586,6 +590,9 @@ a { text-decoration: none; color: inherit; }
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
+.ai-avatar svg { width: 100%; height: 100%; display: block; }
+/* 챗 아바타 기준 내용 인덴트 (아바타 16 + 갭 8) */
+.msg-ai > *:not(.ai-header) { margin-left: 24px; }
 .ai-ind {
   display: inline-block;
   width: 100%; height: 100%;
@@ -1132,7 +1139,7 @@ a { text-decoration: none; color: inherit; }
 .msg-enter { animation: msgUp .4s cubic-bezier(.4,0,.2,1) both; }
 @keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 .msg-system { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-tertiary); font-weight: 500; margin: 14px 0 4px; }
-.msg-system .system-dot { background: var(--blue); }
+.msg-system .system-dot { display: none; }
 .msg-user.teammate { justify-content: flex-start; }
 .tm-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; max-width: 72%; }
 .tm-name { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding-left: 2px; }
@@ -1245,6 +1252,94 @@ a { text-decoration: none; color: inherit; }
 /* ── input typing caret ── */
 .chat-input.is-typing { caret-color: var(--blue); }
 .chat-input-wrap:has(.is-typing) { border-color: var(--border-strong); box-shadow: 0 2px 4px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.08); background: var(--bg-canvas); }
+
+/* ── Figma 챗 카드 (DX 시연 컴포넌트: 프로젝트 선택/생성 과정/설문 데이터) ── */
+.cc-stack { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+.cc-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:13px 16px; width:100%; max-width:440px; }
+.msg-ai > .cc-card { margin-bottom:12px; }
+.cc-head { display:flex; align-items:center; gap:8px; }
+.cc-title { font-size:13.5px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.5; }
+.cc-sub { font-size:12px; color:#717D98; margin-top:4px; line-height:1.55; letter-spacing:-0.2px; }
+.cc-bullets { margin:6px 0 0; padding-left:16px; }
+.cc-bullets li { font-size:12px; color:#717D98; line-height:1.6; letter-spacing:-0.2px; margin-bottom:2px; }
+.cc-spinner { width:13px; height:13px; border-radius:50%; border:2px solid var(--blue-light); border-top-color:var(--blue); animation:sc-spin .8s linear infinite; flex-shrink:0; }
+.cc-btn-row { display:flex; gap:8px; margin-top:12px; }
+.btn-blue { display:inline-flex; align-items:center; justify-content:center; background:var(--blue); color:#fff; font-size:12px; font-weight:600; height:30px; padding:0 14px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); text-decoration:none; cursor:pointer; }
+.btn-blue:hover { background:var(--blue-hover); }
+.btn-blue.soft { background:#CCDCFF; }
+.btn-blue.soft:hover { background:#B3CBFF; }
+.btn-blue-outline { display:inline-flex; align-items:center; justify-content:center; background:#fff; border:1px solid #8FB2FF; color:var(--blue); font-size:12px; font-weight:600; height:30px; padding:0 13px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); cursor:pointer; }
+.btn-blue-outline:hover { background:var(--blue-soft); }
+.cc-data { background:var(--blue-soft); border:1px solid #CCDCFF; border-radius:10px; padding:8px 10px 8px 12px; display:flex; align-items:center; gap:10px; width:100%; max-width:560px; margin-bottom:12px; }
+.cc-data-icon { font-size:16px; flex-shrink:0; }
+.cc-data-info { flex:1; min-width:0; display:flex; flex-direction:column; }
+.cc-data-title { font-size:13px; font-weight:500; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cc-data-meta { font-size:11px; color:var(--text-tertiary); letter-spacing:-0.2px; }
+
+/* ── 프로젝트 데이터 테이블 (아티팩트 — Figma 685:4833) ── */
+.pd-sec { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:10px; }
+.pd-toolbar { display:flex; gap:6px; margin-bottom:10px; }
+.pd-search { flex:1; min-width:0; display:flex; align-items:center; gap:6px; height:28px; border:1px solid var(--border); border-radius:7px; padding:0 10px; font-size:11.5px; color:var(--text-tertiary); background:#fff; white-space:nowrap; overflow:hidden; }
+.pd-filter { display:flex; align-items:center; gap:4px; height:28px; border:1px solid var(--border); border-radius:7px; padding:0 9px; font-size:11.5px; color:var(--text-secondary); background:#fff; white-space:nowrap; flex-shrink:0; }
+.pd-row { display:flex; align-items:center; gap:8px; padding:9px 0; border-bottom:1px solid #F3F3F3; }
+.pd-row.head { border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:6px 0; font-size:11px; color:var(--text-secondary); font-weight:600; }
+.pd-cell-main { flex:1; min-width:0; display:flex; align-items:center; gap:9px; }
+.pd-file-ico { width:26px; height:26px; border-radius:6px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.pd-file-ico.xls { background:#D6F0E8; }
+.pd-name { font-size:12.5px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:-0.3px; }
+.pd-meta { font-size:11px; color:var(--text-tertiary); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pd-ai-btn { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border-radius:6px; color:#fff; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0;
+  background: radial-gradient(120% 220% at 72% 0%, #75BCFF 0%, #6893FF 28%, #707CFF 54%, #426DFF 75%, #2B65FF 86%, #145EFF 96%); }
+.pd-ai-btn img { width:12px; height:12px; display:block; }
+.pd-badge { display:inline-flex; align-items:center; gap:2px; height:22px; padding:0 8px; border-radius:6px; font-size:11px; font-weight:500; color:rgba(1,14,45,0.7); white-space:nowrap; flex-shrink:0; }
+.pd-badge.blue { background:var(--blue-light); }
+.pd-badge.gray { background:rgba(96,110,144,0.1); }
+.pd-act { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border:1px solid #D3D7DF; border-radius:6px; font-size:11px; font-weight:500; color:var(--text-secondary); white-space:nowrap; flex-shrink:0; background:#fff; }
+
+/* ── 생성 완료 카드 (Figma 657:6556 — 문서 미리보기 + 더 보기) ── */
+.cc-done { position:relative; max-height:238px; overflow:hidden; padding-bottom:30px; }
+.cc-done.collapsed { max-height:none; padding-bottom:13px; }
+.cc-check { font-size:15px; color:var(--blue); flex-shrink:0; }
+.cc-hr { height:1px; background:var(--border); margin:10px 0; }
+.cc-doc-title { font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; margin-bottom:6px; }
+.cc-doc-sec { font-size:12.5px; font-weight:600; color:var(--text-primary); margin:8px 0 4px; }
+.cc-doc-ul { margin:0; padding-left:16px; }
+.cc-doc-ul li { font-size:12px; color:var(--text-primary); line-height:1.6; letter-spacing:-0.2px; margin-bottom:3px; }
+.cc-fade { position:absolute; left:1px; right:1px; bottom:28px; height:54px; background:linear-gradient(rgba(255,255,255,0), #fff); pointer-events:none; }
+.cc-more { position:absolute; bottom:8px; left:0; right:0; display:flex; align-items:center; justify-content:center; gap:3px; font-size:11px; font-weight:500; color:var(--text-secondary); cursor:pointer; }
+
+/* ── 수집 대상 선택 카드 (Figma CollectGroup/SelectOption) ── */
+.co-card { background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px 18px 16px; width:100%; max-width:520px; display:flex; flex-direction:column; gap:12px; margin-bottom:12px; }
+.co-option { position:relative; background:#fff; border:1px solid var(--border); border-radius:14px; padding:13px 15px; display:flex; gap:13px; align-items:flex-start; }
+.co-option.selected { border:2px solid var(--blue); padding:12px 14px; }
+.co-ico { width:32px; height:32px; border-radius:6px; background:#BEC4D0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.co-option.selected .co-ico { background:linear-gradient(125deg, #A86BF6 0%, #005CFF 100%); }
+.co-body { flex:1; min-width:0; }
+.co-head { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+.co-title { font-size:14px; font-weight:600; color:var(--text-primary); letter-spacing:-0.4px; }
+.co-pill { display:inline-flex; align-items:center; height:18px; padding:0 7px; border-radius:999px; font-size:10.5px; font-weight:500; background:rgba(96,110,144,0.1); color:#5C677F; white-space:nowrap; }
+.co-pill.mint { background:#D9F9FC; color:#0E9CAA; }
+.co-desc { font-size:12px; color:#4B566C; line-height:1.55; letter-spacing:-0.3px; margin-top:4px; }
+.co-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.co-rec { position:absolute; top:-9px; right:-7px; background:var(--blue); color:#fff; font-size:11px; font-weight:500; height:22px; padding:0 10px; border-radius:999px; display:flex; align-items:center; }
+.co-start { width:100%; height:34px; border-radius:7px; background:#CCDCFF; color:#fff; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:background var(--t-fast); }
+.co-start:hover { background:#B3CBFF; }
+
+/* ── 설문 미리보기 문서 (아티팩트) ── */
+.sv-sec { font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:.04em; margin:16px 0 8px; }
+.sv-sec:first-child { margin-top:0; }
+.sv-divider { height:1px; background:var(--border); margin:14px 0; }
+.sv-q { font-size:12.5px; color:var(--text-primary); line-height:1.55; letter-spacing:-0.2px; margin-bottom:6px; }
+.sv-q strong { font-weight:700; }
+.sv-opts { font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px; letter-spacing:-0.2px; }
+.sv-logic { color:var(--blue); font-size:11px; }
+.sv-quote { border-left:2px solid #CCDCFF; background:#F9F9F9; border-radius:0 8px 8px 0; padding:7px 10px; font-size:11.5px; color:#717D98; line-height:1.55; margin:8px 0 4px; letter-spacing:-0.2px; }
+.sv-table { border-collapse:collapse; width:100%; font-size:11px; margin:6px 0 8px; }
+.sv-table th { color:var(--text-secondary); font-weight:600; border-bottom:1px solid var(--border); padding:5px 4px; text-align:center; white-space:nowrap; }
+.sv-table th:first-child, .sv-table td:first-child { text-align:left; }
+.sv-table td { padding:6px 4px; text-align:center; color:var(--text-secondary); border-bottom:1px solid #F3F3F3; }
+.sv-radio { display:inline-block; width:9px; height:9px; border-radius:50%; border:1.5px solid var(--border-strong); }
+.sv-cap { font-size:10.5px; color:var(--text-tertiary); margin:2px 0 8px; }
 
 /* 데모 안내 링크 (유저 직접 질문 응답) */
 .demo-link { color: var(--blue); font-weight: 600; }
@@ -1411,7 +1506,7 @@ a { text-decoration: none; color: inherit; }
     <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path d="M3.04163 0.570312C3.25161 0.570312 3.42183 0.740538 3.42183 0.950521V1.98495C3.51644 2.04662 3.59379 2.14216 3.63459 2.27197C3.66645 2.3734 3.75519 2.43623 3.84883 2.43627C4.36807 2.43627 4.55399 3.104 4.15867 3.40108C4.07894 3.46104 4.04261 3.57086 4.07476 3.67324C4.15071 3.91519 4.0532 4.14179 3.8867 4.26695C3.71921 4.39278 3.47276 4.42157 3.267 4.26695C3.18886 4.20825 3.08449 4.20823 3.00635 4.26695C2.80059 4.42154 2.55413 4.3928 2.38666 4.26695C2.22019 4.14178 2.12267 3.91516 2.1986 3.67324C2.20858 3.64145 2.21201 3.60895 2.20955 3.57745C2.00044 3.83055 1.68467 3.99219 1.33069 3.99219C0.700739 3.99219 0.190063 3.48151 0.190063 2.85156C0.190063 2.22161 0.700739 1.71094 1.33069 1.71094V0.950521C1.33069 0.740538 1.50091 0.570312 1.7109 0.570312H3.04163ZM3.27183 2.38596C3.22795 2.24636 3.04539 2.24635 3.00153 2.38596C2.92201 2.63906 2.69129 2.81647 2.42453 2.81647C2.35913 2.81651 2.30972 2.85643 2.28938 2.92118C2.26892 2.98637 2.28592 3.0539 2.34322 3.09699C2.55502 3.25617 2.64055 3.5349 2.56135 3.78705C2.53778 3.86214 2.56602 3.92606 2.61519 3.96304C2.66344 3.99928 2.723 4.00435 2.77801 3.96304C2.99143 3.80266 3.28191 3.80268 3.49535 3.96304C3.55035 4.00437 3.60991 3.99926 3.65817 3.96304C3.70737 3.92606 3.7356 3.86218 3.712 3.78705C3.63283 3.53492 3.71838 3.25618 3.93014 3.09699C3.98748 3.0539 4.00445 2.98639 3.98398 2.92118C3.96363 2.85642 3.91426 2.81648 3.84883 2.81647C3.58208 2.81644 3.35133 2.63905 3.27183 2.38596ZM1.33069 2.09115C0.910722 2.09115 0.570272 2.4316 0.570272 2.85156C0.570272 3.27153 0.910722 3.61198 1.33069 3.61198C1.60443 3.61198 1.84413 3.46718 1.97805 3.25015C1.86722 3.06601 1.88203 2.83147 1.99531 2.66146H1.7109C1.50091 2.66146 1.33069 2.49123 1.33069 2.28125V2.09115ZM1.7109 2.28125H2.63561C2.63671 2.27819 2.63778 2.2751 2.63877 2.27197C2.70468 2.06219 2.86599 1.94159 3.04163 1.90977V0.950521H1.7109V2.28125Z" fill="currentColor"/></svg><span class="rail-label">마켓플레이스</span></span>
     <span class="rail-row"><svg viewBox="0 0 4.5625 4.5625" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.02458 1.71086C3.02458 1.97334 2.8118 2.18612 2.54932 2.18612C2.28684 2.18612 2.07406 1.97334 2.07406 1.71086C2.07406 1.44838 2.28684 1.2356 2.54932 1.2356C2.8118 1.2356 3.02458 1.44838 3.02458 1.71086ZM2.73942 1.71086C2.73942 1.81585 2.65431 1.90096 2.54932 1.90096C2.44433 1.90096 2.35922 1.81585 2.35922 1.71086C2.35922 1.60586 2.44433 1.52075 2.54932 1.52075C2.65431 1.52075 2.73942 1.60586 2.73942 1.71086Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.38797 3.04257C3.40674 3.14587 3.31979 3.23169 3.2148 3.23169H1.88407C1.77908 3.23169 1.69213 3.14587 1.7109 3.04257C1.78982 2.60822 2.13525 2.28117 2.54943 2.28117C2.96361 2.28117 3.30905 2.60822 3.38797 3.04257ZM3.06499 2.94653C2.96896 2.70999 2.76178 2.56632 2.54943 2.56632C2.33708 2.56632 2.1299 2.70999 2.03388 2.94653H3.06499Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0.47522 0.570231C0.47522 0.46524 0.560332 0.380127 0.665324 0.380127H3.51689C3.83186 0.380127 4.0872 0.635465 4.0872 0.950439V3.6119C4.0872 3.92687 3.83186 4.18221 3.51689 4.18221H0.665324C0.560332 4.18221 0.47522 4.0971 0.47522 3.99211V0.570231ZM0.855428 3.802V0.760335H1.14058V3.802H0.855428ZM1.46376 3.802H3.51689C3.62188 3.802 3.70699 3.71689 3.70699 3.6119V0.950439C3.70699 0.845448 3.62188 0.760335 3.51689 0.760335H1.46376V3.802Z" fill="currentColor"/></svg><span class="rail-label">MY패널</span></span>
     <span class="rail-spacer"></span>
-    <div class="rail-row rail-profile"><span class="rail-avatar">김</span><span class="rail-label">김오픈</span></div>
+    <div class="rail-row rail-profile"><span class="rail-avatar">오</span><span class="rail-label">오현서</span></div>
   </nav>
 
   <!-- 시나리오 패널: 데모 내비 전용 칼럼 -->
@@ -1435,7 +1530,7 @@ a { text-decoration: none; color: inherit; }
 
     <!-- HOME SCREEN -->
     <div class="screen home-screen" id="chat-home">
-      <p class="home-greeting"><span class="ai-ind home-hex" aria-hidden="true"></span>어떤 인사이트를 찾아볼까요?</p>
+      <p class="home-greeting">어떤 인사이트를 찾아볼까요?</p>
       <div class="home-composer-card">
         <div class="home-input-wrap">
           <textarea class="home-input" id="home-input-el" rows="2"
@@ -1493,8 +1588,8 @@ a { text-decoration: none; color: inherit; }
    SCENARIO ENGINE — opensurvey-redesign
    레퍼런스(opensurvey-hero) 시나리오를 우리 디자인에 매핑
 ═══════════════════════════════════════════════ */
-/* Dataspace AI 브랜딩 인디케이터 — Lottie 프레임 시퀀스 (handoff 2026-06) */
-const STAR='<span class="ai-ind" aria-label="Generating"></span>';
+/* Dataspace AI 심볼 (생성 과정 표시 — 공식 헥사곤 로고) */
+const STAR='<svg viewBox="0 0 116 128" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.0176 1.57229C55.7192 -0.524098 60.2808 -0.524098 63.9824 1.57229L110.021 27.6465C113.721 29.7418 116 33.6135 116 37.8028V90.1494C116 94.3351 113.725 98.2033 110.03 100.3L63.9902 126.423C60.2845 128.525 55.7155 128.525 52.0098 126.423L5.96973 100.3C2.27517 98.2033 9.39905e-05 94.3351 0 90.1494V37.8028C0 33.6135 2.27888 29.7418 5.97852 27.6465L52.0176 1.57229ZM59.5146 16.9004C59.3841 15.7001 57.6159 15.7001 57.4854 16.9004L53.6289 52.3662C53.4711 53.8164 51.9507 55.7981 50.5938 55.2364L21.4248 42.0567C20.3112 41.5952 19.4515 43.0885 20.4229 43.7969L46.8721 61.1924C48.0508 62.052 48.0709 64.8836 46.9121 65.7696L23.2705 83.0049C22.3272 83.7264 23.1893 85.1857 24.29 84.7305L50.5947 73.8516C51.9516 73.2907 53.4713 74.1823 53.6289 75.6319L57.4854 111.1C57.6159 112.3 59.3841 112.3 59.5146 111.1L63.3711 75.6338C63.5291 74.1835 66.1497 72.2013 67.5068 72.7637L95.5752 85.9434C96.6888 86.4049 97.5485 84.9116 96.5771 84.2032L70.1045 66.7901C68.9329 65.9357 70.0044 63.1182 71.1475 62.2266L91.6885 46.2032C92.6148 45.4806 91.7661 44.0409 90.6719 44.4785L65.2852 56.375C63.9317 56.9162 62.4318 56.024 62.2754 54.585L59.5146 16.9004Z" fill="url(#dsxstar)"/><defs><radialGradient id="dsxstar" cx="0" cy="0" r="1" gradientTransform="matrix(110.65 -32.9094 27.5603 94.2847 14.3222 96.9124)" gradientUnits="userSpaceOnUse"><stop stop-color="#BFC4F5"/><stop offset="0.465722" stop-color="#80A3FB"/><stop offset="1" stop-color="#0050FF"/></radialGradient></defs></svg>';
 let AI_IND_DATA=null;
 fetch('ai-indicator-frames.json').then(r=>r.json()).then(d=>{ AI_IND_DATA=d; hydrateInds(); }).catch(()=>{});
 function hydrateInds(){
@@ -1512,6 +1607,73 @@ let sIdx=ANALYSIS_IDX, scIdx=0, playing=true, timer=null, typingTimer=null, user
 let statuses=SCENARIOS.map(()=>'waiting');
 let lastArtifact=null;
 
+/* ── Figma 챗 카드 렌더러 (DX 시연 컴포넌트) ── */
+function ccProject(){
+  return `<div class="cc-card">
+    <div class="cc-title">어느 프로젝트에 저장할까요?</div>
+    <div class="cc-sub">결과물을 저장할 프로젝트를 선택해 주세요.</div>
+    <div class="cc-btn-row"><button class="btn-blue soft" style="flex:1" onclick="openPanel('projectdata')">프로젝트 선택</button></div>
+  </div>`;
+}
+function ccProcess(items){
+  return '<div class="cc-stack">'+items.map(it=>`<div class="cc-card">
+    <div class="cc-head"><span class="cc-spinner"></span><span class="cc-title">${it.t}</span></div>
+    ${it.sub?`<div class="cc-sub">${it.sub}</div>`:''}
+    ${it.b?`<ul class="cc-bullets">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+  </div>`).join('')+'</div>';
+}
+function ccData(d){
+  return `<div class="cc-data">
+    <span class="cc-data-icon">📋</span>
+    <span class="cc-data-info"><span class="cc-data-title">${d.name}</span><span class="cc-data-meta">${d.meta}</span></span>
+    <button class="btn-blue-outline" onclick="openPanel('designsurvey')">미리보기</button>
+    <a class="btn-blue" href="https://opensurvey.io" target="_blank" rel="noreferrer">바로 수집하기</a>
+  </div>`;
+}
+function ccCollect(){
+  const pill=(t,m)=>`<span class="co-pill${m?' mint':''}">${t}</span>`;
+  return `<div class="co-card">
+    <div class="co-option selected">
+      <span class="co-rec">추천</span>
+      <span class="co-ico"><i class="ph-fill ph-sparkle"></i></span>
+      <span class="co-body">
+        <span class="co-head"><span class="co-title">합성패널</span>${pill('약 5만원',1)}${pill('10분 내외',1)}</span>
+        <div class="co-desc">AI가 타겟 페르소나를 시뮬레이션해서 빠르게 인사이트를 얻어요.</div>
+        <div class="co-tags">${pill('탐색적 조사에 적합')}${pill('가설 검증')}${pill('빠른 시장 확인')}</div>
+      </span>
+    </div>
+    <div class="co-option">
+      <span class="co-ico"><i class="ph-fill ph-users-three"></i></span>
+      <span class="co-body">
+        <span class="co-head"><span class="co-title">소비자 패널</span>${pill('약 120만원')}${pill('2~3일')}</span>
+        <div class="co-desc">실제 응답자에게 설문을 진행하고 확신을 얻으세요. AI가 꼭 맞는 응답자를 추천해 드려요.</div>
+        <div class="co-tags">${pill('정량적 검증 필요시')}${pill('의사결정용')}${pill('신중하고 확실한')}</div>
+      </span>
+    </div>
+    <div class="co-option">
+      <span class="co-ico"><i class="ph-fill ph-envelope-simple"></i></span>
+      <span class="co-body">
+        <span class="co-head"><span class="co-title">내 고객한테 보내기</span></span>
+        <div class="co-desc">이미 응답할 대상자가 있다면 바로 수집해 보세요.<br>URL 링크, 이메일, SMS, 알림톡, QR 코드 등 다양한 방법이 준비되어 있어요.</div>
+      </span>
+    </div>
+    <div class="co-start" onclick="openPanel('collectdoc')">수집 시작</div>
+  </div>`;
+}
+function ccDone(items){
+  return '<div class="cc-stack">'+items.map(it=>{
+    if(it.collapsed) return `<div class="cc-card cc-done collapsed"><div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div></div>`;
+    return `<div class="cc-card cc-done">
+      <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div>
+      <div class="cc-hr"></div>
+      <div class="cc-doc-title">${it.title}</div>
+      ${it.sec?`<div class="cc-doc-sec">${it.sec}</div>`:''}
+      ${it.b?`<ul class="cc-doc-ul">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+      <div class="cc-fade"></div>
+      <div class="cc-more"${it.open?` onclick="openPanel('${it.open}')"`:''}>더 보기 <i class="ph ph-caret-down" style="font-size:10px"></i></div>
+    </div>`;
+  }).join('')+'</div>';
+}
 function md(t){ return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
 function $(id){ return document.getElementById(id); }
 function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
@@ -1590,12 +1752,12 @@ function msgHTML(m, skipBody=false){
         <tbody><tr><td>Naver</td><td>44.4%</td><td>0.0%</td><td class="sig">⚡ p&lt;0.001</td></tr>
         <tr><td>LINE</td><td>30.4%</td><td>0.0%</td><td class="sig">⚡ p&lt;0.001</td></tr>
         <tr><td>Google</td><td>42.0%</td><td>64.4%</td><td class="sig">⚡ p&lt;0.01</td></tr></tbody></table>`;
-    } else { body=md(m.text); }
+    } else { body=m.text?md(m.text):''; }
   }
   return `<div class="msg-ai msg-enter">
     <div class="ai-header"><div class="ai-avatar">${STAR}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
-    <div class="ai-prose">${body}</div>
+    ${m.cardproj?ccProject():''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}
     ${m.block?chatBlock(m.block):''}
     ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}
   </div>`;
@@ -1616,21 +1778,19 @@ function typeInto(el, text, cb){
 function clearInput(){ const el=$('live-input'); if(el){ el.value=''; el.style.height='auto'; } }
 
 /* ── play a scene's messages in order (user prompts type into the input) ── */
-function playSceneMessages(scene, done){
-  const inner=$('live-chat'); let idx=0; const myGen=gen;
+function playSceneMessages(scene, done, skipFirstTyping=false){
+  const inner=$('live-chat'); let idx=0; const myGen=gen; let isFirstUserMsg=true;
   (function next(){
     if(!playing || myGen!==gen) return;   // 시나리오 전환 시 이전 타이머 차단
     if(idx>=scene.chat.length){ done&&done(); return; }
     const m=scene.chat[idx++];
+    if(m.done){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
     if(m.role==='user' && !m.name){
-      typeInto($('live-input'), m.text, ()=>{
-        setTimeout(()=>{
-          if(!playing || myGen!==gen) return;
-          clearInput();
-          inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
-          setTimeout(next, 430);
-        }, 320);
-      });
+      /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
+      isFirstUserMsg=false;
+      clearInput();
+      inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
+      setTimeout(next, 650);
     } else {
       inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
       setTimeout(next, m.role==='ai'?640:420);
@@ -1715,9 +1875,132 @@ function previewHTML(type){
       <div class="av-doc-li">② Source of business</div>
       <div class="av-doc-li">③ Brand concept acceptance</div>
       <div class="av-doc-li">④ Product evaluation</div></div>`;
-    case 'designsurvey': { const qsD=['Q1. 최근 1개월 내 건강 스낵을 구매한 경험이 있으신가요?','Q2. 건강 스낵 구매 시 가장 중요하게 보는 요소는?','Q3. 주로 어떤 채널에서 구매하시나요?','Q4. 다음 신규 컨셉에 대한 구매 의향은? (5점)','Q5. 향후 6개월 내 구매 의향이 있으신가요?'];
-      return `<div class="av"><div class="av-sv-head">📝 설문 문항 초안 <span class="av-sv-count">${qsD.length}문항</span></div>
-      ${qsD.map(q=>`<div class="av-sv-q">${q}</div>`).join('')}<div class="av-sv-time">⏱ 예상 완성: <strong>10분</strong></div></div>`; }
+    case 'collectdoc': return `<div class="av">
+      <div class="cc-doc-sec" style="margin-top:0">스크리닝</div>
+      <ul class="cc-doc-ul">
+        <li><strong>성별</strong>: 남녀 전체</li>
+        <li><strong>연령</strong>: 만 19–34세 (MZ세대)</li>
+        <li><strong>거주지</strong>: 전국</li>
+      </ul>
+      <div class="sv-divider"></div>
+      <div class="cc-doc-sec">조건별 목표</div>
+      <div class="sv-opts">아래 표와 같이 조건별 목표를 채워드릴 거예요.</div>
+      <table class="sv-table"><thead><tr><th>조건</th><th>목표 응답</th><th>비율</th></tr></thead><tbody>
+      <tr><td>남성 · 19–24세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>남성 · 25–29세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>남성 · 30–34세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>여성 · 19–24세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>여성 · 25–29세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>여성 · 30–34세</td><td>100</td><td>12.5%</td></tr>
+      <tr><td>자사 이용자 부스터</td><td>200</td><td>25.0%</td></tr>
+      <tr><td><strong>합계</strong></td><td><strong>800</strong></td><td>100%</td></tr>
+      </tbody></table>
+      <div class="sv-quote">조건별 목표가 채워지면 수집이 자동으로 종료돼요.</div>
+      </div>`;
+    case 'designbriefdoc': return `<div class="av">
+      <div class="cc-doc-title" style="font-size:13.5px">MZ세대 대상 자사 및 경쟁 브랜드 인지도·이용·충성도 정량 조사 프로젝트 브리프</div>
+      <div class="sv-divider"></div>
+      <div class="cc-doc-sec">1. 프로젝트 배경</div>
+      <ul class="cc-doc-ul">
+        <li>자사와 주요 경쟁 브랜드 간 인지도와 이용 경험, 충성도 수준을 객관적으로 비교하여 향후 마케팅 및 브랜딩 전략의 방향성을 정립할 필요가 있습니다.</li>
+        <li>특히 주요 소비층인 만 19~34세 MZ세대는 브랜드 인식 및 구매 태도가 빠르게 변화하며, SNS·디지털 경험을 통해 브랜드 호감과 충성도가 형성되는 경향이 강합니다. 이러한 소비자군을 중심으로 자사 브랜드의 현재 포지션을 진단하고, 경쟁 브랜드 대비 기회 영역을 식별하는 것이 이번 조사의 출발점입니다.</li>
+        <li>브랜드 간 시장 점유율이 치열한 상황에서 단순 인지도뿐 아니라 "주 이용 브랜드를 중심으로 한 체험/만족/이미지/충성도(NPS, 재구매의향)"를 정량적으로 파악하는 것이 중요합니다. 이를 통해 브랜드 선호도 형성 요인과 전환 요인을 식별함으로써, 향후 신규 고객 확보 및 충성도 제고 전략 수립에 활용할 수 있을 것입니다.</li>
+      </ul>
+      <div class="cc-doc-sec">2. 알아내야 할 것들</div>
+      <ul class="cc-doc-ul">
+        <li>자사·경쟁 브랜드의 보조/비보조 인지도 및 최초 상기율</li>
+        <li>주 이용 브랜드 기준 만족도·이미지·충성도(NPS, 재구매 의향)</li>
+        <li>브랜드 전환 의향과 전환 요인</li>
+      </ul>
+      <div class="cc-doc-sec">3. 의사결정 포인트</div>
+      <ul class="cc-doc-ul">
+        <li>마케팅 타깃 세그먼트 우선순위</li>
+        <li>브랜딩 메시지 방향 (기능 vs 정서)</li>
+      </ul>
+      </div>`;
+    case 'designplandoc': return `<div class="av">
+      <div class="cc-doc-title" style="font-size:13.5px">MZ세대 대상 자사 및 경쟁 브랜드 인지도·이용·충성도 정량 조사 정량조사 설계서</div>
+      <div class="sv-divider"></div>
+      <div class="cc-doc-sec">1. 조사 목적</div>
+      <ul class="cc-doc-ul">
+        <li>전반적 만족도와 몰입 수준의 계량적 파악</li>
+        <li>실행 과제 도출</li>
+      </ul>
+      <div class="cc-doc-sec">2. 조사 설계</div>
+      <ul class="cc-doc-ul">
+        <li><strong>타깃</strong>: 전국 만 19–34세 남녀 (MZ세대)</li>
+        <li><strong>표본</strong>: 총 800명 (자사 이용자 400 / 경쟁 브랜드 이용자 400)</li>
+        <li><strong>방법</strong>: 온라인 정량조사, 약 15–20문항, 응답 5분 내외</li>
+      </ul>
+      <div class="cc-doc-sec">3. 분석 계획</div>
+      <ul class="cc-doc-ul">
+        <li>연령대·이용 브랜드별 교차분석, 신뢰수준 80% 유의차 검정</li>
+        <li>NPS·재구매 의향 기반 충성도 세그먼트 도출</li>
+      </ul>
+      </div>`;
+    case 'projectdata': return `<div class="av">
+      <div class="pd-sec"><i class="ph-light ph-database" style="font-size:15px"></i>리서치 데이터</div>
+      <div class="pd-toolbar">
+        <span class="pd-search"><i class="ph ph-magnifying-glass" style="font-size:12px"></i>데이터 이름 검색</span>
+        <span class="pd-filter">유형 <i class="ph ph-caret-down" style="font-size:10px"></i></span>
+        <span class="pd-filter">상태 <i class="ph ph-caret-down" style="font-size:10px"></i></span>
+      </div>
+      <div class="pd-row">
+        <span class="pd-cell-main"><span class="pd-file-ico">📋</span>
+          <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">MZ세대 브랜드 인식 조사</span><span class="pd-meta" style="display:block">김오픈 · 2026-06-05 · 설문</span></span></span>
+        <span class="pd-ai-btn"><img src="ai-indicator-poster.png" alt="">Dataspace AI</span>
+        <span class="pd-badge blue">수집 중 (2)</span>
+        <span class="pd-badge gray">162 / 250 ›</span>
+      </div>
+      <div class="pd-row">
+        <span class="pd-cell-main"><span class="pd-file-ico">📋</span>
+          <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">2025 1인가구 트렌드리포트 (보고서작업용)</span><span class="pd-meta" style="display:block">권유리 · 2025-08-15 · 설문</span></span></span>
+        <span class="pd-badge gray">수집 완료</span>
+        <span class="pd-badge gray">250 / 250 ›</span>
+        <span class="pd-act"><i class="ph-light ph-chart-line" style="font-size:12px"></i>결과 분석</span>
+      </div>
+      <div class="pd-row">
+        <span class="pd-cell-main"><span class="pd-file-ico xls">📊</span>
+          <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">브랜드 트래킹 로데이터.xlsx</span><span class="pd-meta" style="display:block">김오픈 · 2026-05-28 · 파일</span></span></span>
+        <span class="pd-badge gray">연동됨</span>
+        <span class="pd-act"><i class="ph-light ph-chart-line" style="font-size:12px"></i>결과 분석</span>
+      </div>
+      </div>`;
+    case 'designsurvey': { const r5='<td><span class="sv-radio"></span></td>'.repeat(5);
+      const npsH=Array.from({length:11},(_,i)=>`<th>${i}</th>`).join('');
+      const npsR='<td><span class="sv-radio"></span></td>'.repeat(11);
+      return `<div class="av">
+      <div class="sv-sec">시작 페이지</div>
+      <div class="sv-q">안녕하세요! 브랜드 인식에 대한 짧은 설문입니다. 약 5분 정도 소요됩니다.</div>
+      <div class="sv-divider"></div>
+      <div class="sv-sec">스크리닝</div>
+      <div class="sv-q"><strong>SQ1.</strong> 최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?</div>
+      <div class="sv-opts">① 있다&nbsp;&nbsp;② 없다 <span class="sv-logic">→ ② 응답 시 설문 종료</span></div>
+      <div class="sv-quote">구매 경험이 없는 응답자를 걸러 데이터 품질을 높여요.</div>
+      <div class="sv-divider"></div>
+      <div class="sv-sec">본 문항</div>
+      <div class="sv-q"><strong>Q1.</strong> 다음 중 알고 계신 브랜드를 모두 선택해 주세요.</div>
+      <div class="sv-opts">① 브랜드 A&nbsp;&nbsp;② 브랜드 B&nbsp;&nbsp;③ 브랜드 C&nbsp;&nbsp;④ 브랜드 D&nbsp;&nbsp;⑤ 모두 모름</div>
+      <div class="sv-quote">보조 인지도를 측정해 연령대별 인지 격차를 파악해요.</div>
+      <div class="sv-q"><strong>Q3.</strong> 이 브랜드를 구매하지 않은 이유는 무엇인가요?</div>
+      <div class="sv-opts">① 품질이 낮아 보여서&nbsp;&nbsp;② 디자인이 마음에 들지 않아서&nbsp;&nbsp;③ 익숙하지 않아서&nbsp;&nbsp;<span class="sv-logic">⑤ 가격이 비싸서 — 방금 추가됨</span>&nbsp;&nbsp;④ 기타</div>
+      <div class="sv-quote">비구매 장벽을 확인해요 — 보기 추가 시 연결 로직도 자동 검수돼요.</div>
+      <div class="sv-divider"></div>
+      <div class="sv-q"><strong>Q4.</strong> 이 브랜드에 대한 인상을 평가해 주세요.</div>
+      <table class="sv-table"><thead><tr><th>속성</th><th>전혀</th><th>별로</th><th>보통</th><th>다소</th><th>매우</th></tr></thead><tbody>
+      <tr><td>트렌디하다</td>${r5}</tr>
+      <tr><td>신뢰감 있다</td>${r5}</tr>
+      <tr><td>가성비 있다</td>${r5}</tr></tbody></table>
+      <div class="sv-quote">브랜드 이미지 속성을 측정해 경쟁사 대비 포지셔닝 근거를 만들어요.</div>
+      <div class="sv-divider"></div>
+      <div class="sv-sec">NPS</div>
+      <div class="sv-q"><strong>Q11.</strong> 이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?</div>
+      <table class="sv-table"><thead><tr>${npsH}</tr></thead><tbody><tr>${npsR}</tr></tbody></table>
+      <div class="sv-cap">0: 전혀 추천 안 함 — 10: 적극 추천</div>
+      <div class="sv-divider"></div>
+      <div class="sv-sec">완료 페이지</div>
+      <div class="sv-q">참여해 주셔서 감사합니다!</div>
+      </div>`; }
     case 'conceptds': return `<div class="av"><div class="av-label">데이터셋 연동</div>
       <div class="av-ds active"><span class="av-ds-dot"></span>2026 K뷰티 신제품 컨셉 테스트<span class="av-ds-badge">n=1,164</span></div>
       <div class="av-ds"><span class="av-ds-dot off"></span>2025 K뷰티 트렌드 데이터<span class="av-ds-badge muted">n=2,400</span></div></div>`;
@@ -1770,7 +2053,7 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트'};
+const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트'};
 /* 채팅 아티팩트 클릭 → 제품처럼 사이드 패널 오픈 */
 function openPanel(type){
   pauseForUser();
@@ -1784,12 +2067,12 @@ function closeArtifact(){ document.querySelector('.app').classList.remove('artif
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 
 /* ── playback ── */
-function showScene(){
+function showScene(skipFirstTyping=false){
   const sc=SCENARIOS[sIdx], scene=sc.scenes[scIdx];
   renderSidebar();
   if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
   else updateArtifact(scene);
-  playSceneMessages(scene, ()=>{ if(playing){ clearTimeout(timer); timer=setTimeout(advance, DWELL_MS); } });
+  playSceneMessages(scene, ()=>{ if(playing){ clearTimeout(timer); timer=setTimeout(advance, DWELL_MS); } }, skipFirstTyping);
 }
 function advance(){
   if(!playing) return;
@@ -1799,22 +2082,25 @@ function advance(){
     statuses[sIdx]='done'; renderSidebar();
     let nx=SCENARIOS.findIndex((_,i)=>statuses[i]!=='done');
     if(nx===-1){ playing=false; showEndCTA(); return; }
-    setTimeout(()=>{ if(playing||statuses.some(s=>s!=='done')) playScenario(nx); }, 800);
+    setTimeout(()=>{ if(playing||statuses.some(s=>s!=='done')) playScenario(nx, true); }, 800);
   }
 }
-function playScenario(i){
+function playScenario(i, skipFirstTyping=false){
   gen++; clearTimeout(timer); clearInterval(typingTimer); userTyping=false; hideCTA();
   sIdx=i; scIdx=0; lastArtifact=null;
   if(statuses[i]!=='done') statuses[i]='active';
   playing=true;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   $('chat-live').classList.add('active');
-  $('live-chat').innerHTML=''; clearInput();
+  if(!skipFirstTyping){ 
+    $('live-chat').innerHTML=''; 
+    clearInput();
+  }
   closeArtifact();
-  showScene();
+  showScene(skipFirstTyping);
 }
 
-/* ── Ask 인트로 → 분석 자동 진입 ── */
+/* ── Ask 인트로 → 첫번째 시나리오 자동 진입 ── */
 function askIntro(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   $('chat-home').classList.add('active');
@@ -1822,8 +2108,8 @@ function askIntro(){
   const hi=$('home-input-el');
   setTimeout(()=>{
     if(userTyping) return;
-    typeInto(hi, '이 설문 데이터의 주요 인사이트를 요약해줘', ()=>{
-      setTimeout(()=>{ if(!userTyping) playScenario(ANALYSIS_IDX); }, 850);
+    typeInto(hi, '미국 MZ 여성 대상 K뷰티 구매 의향 조사 브리프 써줘', ()=>{
+      setTimeout(()=>{ if(!userTyping) playScenario(0); }, 850);
     });
   }, 700);
 }
@@ -1888,6 +2174,7 @@ function wireInputs(){
 renderSidebar();
 wireInputs();
 askIntro();
+{ const m=location.hash.match(/^#play(\d+)$/); if(m) setTimeout(()=>playScenario(+m[1]), 900); } // QA: 특정 시나리오 바로 재생
 </script>
 </body>
 </html>
