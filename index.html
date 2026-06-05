@@ -245,7 +245,7 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .app {
   display: grid;
-  grid-template-columns: 52px 200px 1fr 0px;
+  grid-template-columns: 200px 200px 1fr 0px;   /* 디폴트: 레일 펼침 */
   grid-template-rows: 1fr;
   grid-template-areas:
     "rail sidebar canvas artifact";
@@ -253,14 +253,12 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-canvas);
   transition: grid-template-columns 240ms ease;
 }
+/* 아티팩트 열림 → 레일을 아이콘(52px)으로 접어 공간 양보 */
 .app.artifact-open {
   grid-template-columns: 52px 200px 1fr minmax(420px, 42%);
 }
-/* 레일 호버 → 밀어내기(push): 시나리오 패널과 나란히 펼침 */
-.app:has(.rail:hover), .app:has(.rail.flyout-open) {
-  grid-template-columns: 200px 200px 1fr 0px;
-}
-.app.artifact-open:has(.rail:hover), .app.artifact-open:has(.rail.flyout-open) {
+/* 접힌 상태에서 레일 호버 → 다시 밀어내며 펼침 */
+.app.artifact-open:has(.rail:hover) {
   grid-template-columns: 200px 200px 1fr minmax(420px, 42%);
 }
 
@@ -323,26 +321,27 @@ a { text-decoration: none; color: inherit; }
 .rail-label {
   flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
   color: var(--text-secondary);
-  opacity: 0; transition: opacity 150ms ease;
+  opacity: 1; transition: opacity 150ms ease;   /* 디폴트: 라벨 표시 */
 }
 .rail-row.active .rail-label { color: var(--text-primary); font-weight: 600; }
 .rail-side {
   font-size: 11px; font-weight: 500; color: var(--text-tertiary);
   display: flex; align-items: center; gap: 1px;
-  opacity: 0; transition: opacity 150ms ease;
+  opacity: 1; transition: opacity 150ms ease;
 }
 .rail-side i { font-size: 11px; width: auto; }
-.rail:hover .rail-label, .rail:hover .rail-side,
-.rail.flyout-open .rail-label, .rail.flyout-open .rail-side { opacity: 1; }
+/* 아티팩트 열림 → 라벨 숨김 (호버 시 다시 표시) */
+.app.artifact-open .rail:not(:hover) .rail-label,
+.app.artifact-open .rail:not(:hover) .rail-side { opacity: 0; }
 
-/* 스페이스 헤더 — 접힘 시 0, 확장 시 펼쳐짐 */
+/* 스페이스 헤더 — 디폴트 펼침, 아티팩트 열림 시 접힘 */
 .rail-space {
   display: flex; align-items: center; gap: 6px;
-  height: 0; opacity: 0; overflow: hidden;
-  margin: 0 12px;
+  height: 44px; opacity: 1; overflow: hidden;
+  margin: 0 12px 6px;
   transition: height 200ms ease, opacity 150ms ease, margin 200ms ease;
 }
-.rail:hover .rail-space, .rail.flyout-open .rail-space { height: 44px; opacity: 1; margin: 0 12px 6px; }
+.app.artifact-open .rail:not(:hover) .rail-space { height: 0; opacity: 0; margin: 0 12px; }
 .rail-space-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .rail-space-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rail-space-tier { font-size: 10px; font-weight: 500; color: var(--text-tertiary); white-space: nowrap; }
@@ -450,14 +449,20 @@ a { text-decoration: none; color: inherit; }
   text-align: center;
   letter-spacing: -1px;
 }
+/* 제품 컴포저: 회색 카드가 입력창 + 추천 칩을 감쌈 */
+.home-composer-card {
+  width: 100%; max-width: 780px;
+  background: rgba(240, 242, 244, 0.7);
+  border-radius: 16px;
+  padding: 8px 8px 16px;
+}
 .home-input-wrap {
-  width: 100%; max-width: 600px;
-  border: 1px solid var(--border-strong);
-  border-radius: 20px;            /* ChatGPT 컴포저 라운드 */
+  width: 100%;
+  border: 1px solid #BEC4D0;      /* 제품 보더 (Gray-05) */
+  border-radius: 12px;
   background: var(--bg-canvas);
-  padding: 12px 14px 10px;
+  padding: 14px 16px 12px;
   transition: border-color var(--t-fast), box-shadow var(--t-fast);
-  box-shadow: var(--shadow-sm);
   position: relative;
 }
 .home-input-wrap:focus-within {
@@ -473,31 +478,46 @@ a { text-decoration: none; color: inherit; }
 }
 .home-input::placeholder { color: var(--text-tertiary); }
 .home-input-footer {
-  display: flex; align-items: center; justify-content: flex-end;
+  display: flex; align-items: center; justify-content: space-between;
   margin-top: 8px;
 }
+.composer-attach {
+  width: 30px; height: 30px;
+  border-radius: var(--r-pill);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  transition: background var(--t-fast);
+}
+.composer-attach:hover { background: var(--bg-hover); }
 .send-btn {
   width: 32px; height: 32px;
-  border-radius: var(--r-pill);   /* ChatGPT 원형 전송 버튼 */
+  border-radius: 8px;                 /* 제품: 사각 라운드 */
   background: var(--blue);
+  color: #fff;
   display: flex; align-items: center; justify-content: center;
-  transition: background var(--t-fast), transform var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast);
   flex-shrink: 0;
 }
-.send-btn:hover { background: var(--blue-hover); transform: scale(1.04); }
+.send-btn:hover { background: var(--blue-hover); }
+.send-btn.idle { background: var(--blue-soft); color: #CCDCFF; }  /* 입력 전 비활성 (제품) */
+.send-btn.idle:hover { background: var(--blue-soft); }
 .send-btn svg { width: 14px; height: 14px; fill: none; }
 
-.home-chips {
-  display: flex; gap: 8px; margin-top: 14px;
-  flex-wrap: wrap; justify-content: center;
-  max-width: 640px;
+/* ── 추천 질문 칩 — 컬러 서클 아이콘 + 대시 커넥터 (제품 컴포저) ── */
+.home-suggest {
+  display: flex; gap: 7px; margin-top: 13px;
+  flex-wrap: wrap; align-items: center;
+  padding: 0 12px;
 }
+.suggest-label { font-size: 12px; font-weight: 500; color: var(--text-tertiary); margin-right: 6px; }
+.chip-dash { width: 12px; height: 2px; background: #B3CBFF; flex-shrink: 0; }
 .home-chip {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 14px;
+  display: flex; align-items: center; gap: 7px;
+  height: 32px;
+  padding: 0 14px 0 6px;
   border: 1px solid var(--border);
   border-radius: var(--r-pill);
-  font-size: 12px; font-weight: 500;
+  font-size: 12.5px; font-weight: 500;
   color: var(--text-primary);
   background: var(--bg-canvas);
   cursor: pointer;
@@ -509,14 +529,15 @@ a { text-decoration: none; color: inherit; }
 }
 .chip-icon {
   width: 20px; height: 20px;
-  border-radius: 6px;
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; flex-shrink: 0;
 }
-.chip-icon.blue   { background: #DBEAFE; }
-.chip-icon.yellow { background: #FEF3C7; }
-.chip-icon.green  { background: #D1FAE5; }
-.chip-icon.orange { background: #FFEDD5; }
+.chip-icon.yellow { background: #FCF0CA; color: #EDB90C; }
+.chip-icon.green  { background: #D6F0E8; color: #40B08E; }
+.chip-icon.orange { background: #FCE7D4; color: #F18C2D; }
+.chip-icon.cyan   { background: #D9F9FC; color: #11BFD0; }
+.chip-icon.blue   { background: #E0EAFF; color: #4781FF; }
 
 /* ═══════════════════════════════════════════════
    CHAT SCREEN
@@ -1407,19 +1428,30 @@ a { text-decoration: none; color: inherit; }
     <!-- HOME SCREEN -->
     <div class="screen home-screen" id="chat-home">
       <p class="home-greeting">김오픈님, 어떤 인사이트를 찾아볼까요?</p>
-      <div class="home-input-wrap">
-        <textarea class="home-input" id="home-input-el" rows="3"
-          placeholder="무엇이든 질문하거나, 데이터를 올려보세요."></textarea>
-        <div class="home-input-footer">
-          <button class="send-btn" aria-label="전송" onclick="playScenario(1)">
-            <i class="ph ph-arrow-up" style="font-size:16px; color:white"></i>
-          </button>
+      <div class="home-composer-card">
+        <div class="home-input-wrap">
+          <textarea class="home-input" id="home-input-el" rows="3"
+            placeholder="수정하고 싶은 부분을 알려 주세요.
+(예: 예산을 고려해 주세요. / 경영진 보고용으로 작성해 주세요.)"></textarea>
+          <div class="home-input-footer">
+            <button class="composer-attach" aria-label="파일 첨부"><i class="ph ph-plus" style="font-size:18px"></i></button>
+            <button class="send-btn" id="home-send" aria-label="전송" onclick="playScenario(1)">
+              <i class="ph ph-arrow-up" style="font-size:16px"></i>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="home-chips">
-        <button class="home-chip" onclick="playScenario(0)"><span class="chip-icon yellow">📋</span> 리서치 설계</button>
-        <button class="home-chip" onclick="playScenario(1)"><span class="chip-icon green">📊</span> 로데이터 분석</button>
-        <button class="home-chip" onclick="playScenario(2)"><span class="chip-icon blue">🤝</span> 공유 · 협업</button>
+        <div class="home-suggest">
+          <span class="suggest-label">질문으로 시작</span>
+          <button class="home-chip" onclick="playScenario(0)"><span class="chip-icon yellow"><i class="ph ph-clipboard-text"></i></span>설문 설계</button>
+          <span class="chip-dash"></span>
+          <button class="home-chip" onclick="playScenario(3)"><span class="chip-icon orange"><i class="ph ph-user"></i></span>패널 추천</button>
+          <span class="chip-dash"></span>
+          <button class="home-chip" onclick="playScenario(1)"><span class="chip-icon green"><i class="ph ph-chart-bar"></i></span>분석 / 시각화</button>
+          <span class="chip-dash"></span>
+          <button class="home-chip" onclick="playScenario(4)"><span class="chip-icon cyan"><i class="ph ph-file-text"></i></span>보고서 작성</button>
+          <span class="chip-dash"></span>
+          <button class="home-chip" onclick="playScenario(5)"><span class="chip-icon blue"><i class="ph ph-magnifying-glass"></i></span>데이터 탐색</button>
+        </div>
       </div>
     </div>
 
@@ -1566,6 +1598,7 @@ function typeInto(el, text, cb){
   typingTimer=setInterval(()=>{
     if(userTyping){ clearInterval(typingTimer); el.classList.remove('is-typing'); return; }
     i++; el.value=text.slice(0,i);
+    updateSendState();
     el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,96)+'px';
     if(i>=text.length){ clearInterval(typingTimer); el.classList.remove('is-typing'); cb&&cb(); }
   }, TYPE_MS);
@@ -1819,7 +1852,13 @@ function hideEndCTA(){ const c=$('live-chat'); const e=c&&c.querySelector('.end-
 function goHome(){ pauseForUser(); askIntro(); document.querySelectorAll('.chat-item').forEach(i=>i.classList.remove('active')); }
 
 /* ── wire manual input ── */
+/* 전송 버튼: 입력 전 비활성(연파랑) ↔ 입력 시 활성(블루) — 제품 컴포저 */
+function updateSendState(){
+  const hi=$('home-input-el'), hs=$('home-send');
+  if(hi&&hs) hs.classList.toggle('idle', !hi.value.trim());
+}
 function wireInputs(){
+  updateSendState();
   const li=$('live-input');
   if(li){
     li.addEventListener('focus', ()=>{ userTyping=true; pauseForUser(); showCTA(); });
@@ -1831,14 +1870,14 @@ function wireInputs(){
   }
   const ls=$('live-send'); if(ls) ls.addEventListener('click', ()=>{ const v=$('live-input').value.trim(); if(v) userSend(v); });
   const hi=$('home-input-el');
-  if(hi){ hi.addEventListener('focus', ()=>{ userTyping=true; clearInterval(typingTimer); hi.value=''; });
+  if(hi){ hi.addEventListener('focus', ()=>{ userTyping=true; clearInterval(typingTimer); hi.value=''; updateSendState(); });
+          hi.addEventListener('input', updateSendState);
           hi.addEventListener('keydown',(e)=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); userTyping=false; playScenario(ANALYSIS_IDX); } }); }
 }
 
 renderSidebar();
 wireInputs();
 askIntro();
-if(location.hash==='#flyout') document.querySelector('.rail').classList.add('flyout-open'); // QA: 플라이아웃 강제 표시
 </script>
 </body>
 </html>
