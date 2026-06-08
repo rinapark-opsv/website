@@ -9,10 +9,21 @@
    ════════════════════════════════════════════════════ */
 const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  {id:'C',label:'미국 MZ 여성 K뷰티 구매 의향 조사 브리프·설문 설계',tagline:'브리프 한 줄이 검증된 설문 문항으로, 10분 만에',scenes:[
-   {chat:[{role:'user',text:'미국 MZ 여성 대상 K뷰티 구매 의향 조사 브리프 써줘'}],preview:'prompt',hl:'리서치 목적 입력'},
-   {chat:[{role:'ai',text:'**Research Brief**\n\n**목적**: 미국 MZ 여성(18–35세)의 K뷰티 제품 구매 의향 및 채널 선호 파악\n**타겟**: 미국 거주 여성, 18–35세, 뷰티 제품 월 1회 이상 구매\n**핵심 질문**: 브랜드 인지 경로 / 구매 장벽 / 선호 채널 / 재구매 의향',source:'Source 1'}],preview:'brief',hl:'브리프 자동 생성'},
-   {chat:[{role:'system',text:'다음 단계를 선택하세요'},{role:'choices',choices:['설문 문항 설계','타겟 패널 추천','경쟁 브랜드 분석']}],preview:'nextstep',hl:'Next Step 선택'},
-   {chat:[{role:'ai',text:'**설문 문항 (초안)**\n\nQ1. 다음 중 알고 있는 K뷰티 브랜드를 모두 선택해주세요.\nQ2. K뷰티 제품을 구매한 경험이 있으신가요?\nQ3. 주로 어떤 채널에서 K뷰티 제품을 구매하시나요?\nQ4. K뷰티 제품 구매 시 가장 중요하게 생각하는 요소는?\nQ5. 향후 6개월 내 K뷰티 제품을 구매할 의향이 있으신가요?',source:'검증된 문항 뱅크'}],preview:'survey',hl:'설문 문항 자동 설계'},
+   {chat:[{role:'user',text:'미국 MZ 여성 대상 K뷰티 구매 의향 조사 브리프 써줘'}],preview:'prompt',hl:'리서치 목적 입력',dwell:200},
+   {chat:[{role:'ai',process:[{t:'리서치 목표 정리 중...',b:['AI가 입력하신 내용을 바탕으로 리서치의 목표, 알아내야 할 것들, 의사결정 포인트를 정리하고 있어요.',"전문 리서처가 프로젝트 시작 전에 하는 '리서치 기획서' 작성 과정이에요."]}]}],preview:'prompt',hl:'리서치 목표 정리 중',dwell:700},
+   {chat:[{role:'ai',briefcard:{t:'리서치 기획서 완료',open:'briefdocC',
+        intro:'리서치 기획서가 작성되었습니다.',
+        title:"K뷰티 미국 MZ 여성 '향후 3개월 구매 의향·구매 결정 요인' 정량조사 프로젝트 브리프",
+        bullets:['회사: 가상의 K뷰티 브랜드 (미국 진출/성장 가정)','목적: 미국 MZ 여성의 향후 3개월 구매 의향을 측정하고, 구매 결정 요인(가격·성분·효능·브랜드 신뢰·리뷰·인플루언서·채널 접근성)을 규명','타겟: 미국 거주 여성 18–35세 (권장: 최근 6개월 내 K뷰티 카테고리 구매자 포함)']},
+      text:"이어서 리서치 설계서(누구에게 물어볼지, 어떻게 조사할지)도 정리해드릴까요?",
+      followups:['리서치 설계서 만들어줘','이 기획서로 설문 문항 구성(초안) 만들어줘','표본 설계(패널/표본수)부터 먼저 추천해줘','구매 결정 요인 분석을 위해 어떤 문항/척도 쓰면 좋을지 추천해줘']}],
+    preview:'briefdocC',hl:'리서치 기획서 완료',open:'briefdocC',press:'.cc-brief-preview',chipAfter:'.cc-follow-chip.primary'},
+   {chat:[{role:'user',text:'리서치 설계서 만들어줘'},
+      {role:'ai',text:"가능합니다. 우선 유사 레퍼런스로 **미국 K뷰티 트렌드 데이터**, **미국 뷰티 트렌드 데이터(2023)** 등이 확인됩니다.\n\n다음 내용으로 설문을 설계해 생성하겠습니다 (약 25–30문항, 7–9분 내외).\n- **스크리닝/프로필**: 미국 거주, 성별/연령(18–35), 최근 6–12개월 내 구매 여부\n- **K뷰티 인지·태도**: 인지, 사용/구매 경험, 최근 구매 카테고리\n- **구매행동**: 향후 3개월 구매의향, 카테고리(스킨케어/메이크업) 의향\n- **채널 선호도**: 주 구매 채널, 첫 구매 vs 재구매 패턴\n- **채널 선택 요인**: 정품 신뢰·배송·가격/프로모션·리뷰·체험·멤버십\n- **전환 트리거/장벽**: 구매 촉진/저해 요인\n- **정보원/콘텐츠**: TikTok/Instagram/YouTube/리뷰/지인 추천 영향도\n\n이 골자로 바로 설문을 생성해도 될까요?",source:'Source 1',sources:[{n:1,title:'[Eat Buy Play] 2025 Buy_미국 K뷰티 트렌드 데이터',type:'트렌드 데이터',kind:'trend',emoji:'📊'}]}],
+    hl:'설문 골자 설계'},
+   {chat:[{role:'user',text:'응, 이 골자로 설문 생성해줘'},{role:'ai',process:[{t:'설문 설계 중...',b:['검증된 문항뱅크에서 스크리닝·본문항을 구성하고, 보기 파이핑·제시 로직·척도를 자동 설계하고 있어요.','약 33문항 규모로 작성 중 — 잠시만 기다려 주세요.']}]}],hl:'설문 설계 중',dwell:1800},
+   {chat:[{role:'ai',datarow:{name:'K-beauty 미국 MZ 여성 U&A 설문',meta:'설문 · 33문항 · 방금 생성됨',open:'surveydoc'},text:"검증된 문항뱅크 기반으로 **33문항 설문**을 생성했어요. 스크리닝 통과 조건·보기 파이핑·척도까지 자동 설계했습니다. 우측에서 전체 설문을 확인하세요."}],
+    preview:'surveydoc',hl:'설문 생성 완료',open:'surveydoc',press:'.cc-data .btn-blue-outline'},
  ]},
  /* ② 분석 (was A) — 리서치 흐름: 수집 → 분석 · 디폴트 자동재생 */
  {id:'A',label:'설문 로데이터 주요 인사이트 요약·연령대별 분석',tagline:'로데이터를 올리면, 가공 없이 바로 분석이 시작됩니다',scenes:[
@@ -69,4 +80,75 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'ai',text:'**30대 핵심 인사이트**\n- **속성**: 효능·성분·후기를 최우선 (효능 48.8%)\n- **제형**: 알약/캡슐 79.8%, ‘먹기 편함’으로 소형 캡슐·스틱 보조\n- **채널**: 네이버 46.2% · 쿠팡 44.9% + 약국/대형마트(신뢰)\n- **가격**: 5~10만원 25%가 최다',source:'출처 1',sources:[{n:1,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'trendins',hl:'세그먼트 인사이트'},
  ]},
 ];
+
+/* ── 시나리오 C 풀 설문 (33문항) — 메인 뷰 ── */
+const SURVEY_C = {
+ title:'K-beauty Purchase Intent & Channel U&A — US MZ Women',
+ meta:'33문항 · 약 7–9분 · English (US) · 검증된 문항뱅크 기반',
+ sections:[
+  {name:'스크리닝 블록', note:"통과 조건: Q1에서 Skincare·Makeup 선택 그리고 Q2에서 '최근 12개월 내 구매' 선택 시에만 통과", qs:[
+   {n:'Q1', type:'객관식 다중', cons:'최소1~최대9', q:'In the past 12 months, which have you personally purchased for yourself?',
+     opts:['Hair care','Fragrance','Skincare (cleanser, moisturizer, SPF, serum)','Makeup/cosmetics','Body care','Grooming tools','Supplements/vitamins','Apparel/shoes','Electronics/accessories']},
+   {n:'Q2', type:'객관식 단일', q:'When did you last purchase skincare and/or makeup?',
+     opts:['Within past 1 month','1–3 months ago','4–6 months ago','7–12 months ago','More than 12 months ago','Never purchased'], logic:['Q1에서 Skincare·Makeup 선택 시에만 제시']},
+  ]},
+  {name:'B1. K-beauty 컨셉/카테고리 구매의향', qs:[
+   {n:'Q3', type:'객관식 단일', q:'Before today, how familiar were you with the term "K-beauty"?',
+     opts:['Very familiar','Somewhat familiar','Not very familiar','Not familiar at all','Not sure']},
+   {n:'Q4', type:'객관식 단일', q:'Which best describes your experience with K-beauty products?',
+     opts:['Have purchased before','Used but did not purchase myself','Not used, but interested','Not used, not interested','Not sure']},
+   {n:'Q5', type:'객관식 다중', cons:'최소1~최대19', q:'Which types of K-beauty products have you purchased?',
+     opts:['Cleanser','Toner/essence','Serum/ampoule','Moisturizer/cream','Sunscreen/SPF','Exfoliator','Masks','Eye care','Lip care','Acne treatment','Cushion foundation','Foundation/concealer','Setting powder/spray','Blush/bronzer','Eye makeup','Lip makeup','Makeup remover','Tools/accessories','Other'], logic:['Q4에서 \'구매 경험 있음\' 선택 시에만 제시']},
+   {n:'Q6', type:'평가형 5점', q:'In the next 3 months, how likely to purchase a K-beauty skincare product?', scale:['Not at all (1)','2','Neither (3)','4','Extremely (5)']},
+   {n:'Q7', type:'평가형 5점', q:'In the next 3 months, how likely to purchase a K-beauty makeup product?', scale:['Not at all (1)','2','Neither (3)','4','Extremely (5)']},
+  ]},
+  {name:'B2. 브랜드 퍼널 + K사 퍼널/구매의향', qs:[
+   {n:'Q8', type:'주관식', q:'When you think of K-beauty brands, what is the FIRST brand that comes to mind?', text:true},
+   {n:'Q9', type:'주관식', q:'What other K-beauty brands can you think of?', text:true},
+   {n:'Q10', type:'객관식 다중', cons:'최소1~최대20', q:'Which of the following K-beauty brands have you heard of?',
+     opts:['K Company Brand','Laneige','Innisfree','COSRX','Beauty of Joseon','Dr. Jart+','Sulwhasoo','Etude','MISSHA','Banila Co','TONYMOLY','The Face Shop','SKIN1004','Round Lab','Some By Mi','Dear Klairs','Mediheal','Neogen','Pyunkang Yul','Other']},
+   {n:'Q11', type:'객관식 다중', q:'Which of those have you ever purchased or used?', ref:'Q10에서 선택한 보기만 제시 (보기 파이핑)'},
+   {n:'Q12', type:'객관식 다중', q:'Which have you purchased/used in the past 12 months?', ref:'Q11에서 선택한 보기만 제시 (보기 파이핑)'},
+   {n:'Q13', type:'객관식 단일', q:'Which ONE brand do you purchase/use most often nowadays?', ref:'Q12에서 선택한 보기만 제시'},
+   {n:'Q14', type:'평가형 5점', q:'Overall, how favorable is your opinion of [K Company Brand]?', scale:['Very unfavorable (1)','2','Neutral (3)','4','Very favorable (5)'], logic:['Q10에서 K사 인지 시에만 제시']},
+   {n:'Q15', type:'평가형 5점', q:'How likely to purchase [K Company Brand] for the FIRST time in next 3 months?', scale:['Not at all (1)','2','Neither (3)','4','Extremely (5)'], logic:['Q10 인지 AND Q11 미구매 시에만 제시']},
+   {n:'Q16', type:'평가형 5점', q:'How likely to repurchase [K Company Brand] in next 3 months?', scale:['Not at all (1)','2','Neither (3)','4','Extremely (5)'], logic:['Q11에서 K사 구매 경험 시에만 제시']},
+  ]},
+  {name:'B3. 구매 채널 이용/선호 (첫 구매 vs 재구매)', qs:[
+   {n:'Q17', type:'객관식 다중', cons:'최소1~최대16', q:'In the past 12 months, where have you purchased skincare and/or makeup?',
+     opts:['Sephora','Ulta Beauty','Amazon','Brand website (DTC)','Brand store (physical)','TikTok Shop','Walmart','Target','Drugstore (CVS/Walgreens)','Department store','K-beauty specialty (Soko Glam)','Asian marketplace (YesStyle 등)','Olive Young Global','Subscription box','Local beauty supply','Other']},
+   {n:'Q18', type:'객관식 순위', cons:'TOP 3', q:'Rank your TOP 3 channels you use most often.', ref:'Q17에서 선택한 보기만 제시'},
+   {n:'Q19', type:'객관식 다중', cons:'최소1~최대16', q:'For a FIRST-TIME K-beauty purchase, which channels would you consider?', ref:'채널 보기 동일 (Q17)'},
+   {n:'Q20', type:'객관식 단일', q:'Which ONE channel is most likely for that first-time purchase?', ref:'Q19에서 선택한 보기만 제시'},
+   {n:'Q21', type:'객관식 다중', cons:'최소1~최대16', q:'For repurchasing K-beauty, which channels would you consider?', ref:'채널 보기 동일 (Q17)', logic:['Q4에서 구매 경험 시에만 제시']},
+   {n:'Q22', type:'객관식 단일', q:'Which ONE channel is most likely for repurchase?', ref:'Q21에서 선택한 보기만 제시', logic:['Q4 구매경험 AND Q21 응답 시 제시']},
+  ]},
+  {name:'B4. 채널 선택 요인 / 전환 장벽·트리거', qs:[
+   {n:'Q23', type:'객관식 순위', cons:'TOP 5 (1=most)', q:'When choosing WHERE to buy K-beauty, what matters most?',
+     opts:['Authentic (not counterfeit)','Lower price/deals','Promotions','Fast delivery','Low/free shipping','Easy returns','Trusted reviews','Try in person','Wide selection','Convenience','Loyalty rewards','Customer service','Clear product info','Other']},
+   {n:'Q24', type:'객관식 다중', cons:'최소1~최대14', q:'What could stop you from buying K-beauty in the next 3 months?',
+     opts:['Nothing would stop me','Too expensive','Unsure what suits my skin','Worry about irritation','Counterfeit concerns','Hard to find in US','Slow shipping','High shipping cost','Difficult returns','Not enough reviews','Prefer non-K brands','Ingredient concerns','Shade range','Too complicated','Other']},
+   {n:'Q25', type:'객관식 다중', cons:'최소1~최대15', q:'What would make you MORE likely to buy K-beauty?',
+     opts:['Nothing in particular','Discounts/sale','Free shipping','Faster delivery','Free samples','Gift/bundle','Trustworthy reviews','Influencer rec','Friend/family rec','Dermatologist rec','Clear skin-type guidance','Easier returns','Sold at retailer I shop','Authentic/verified','Try in store','Other']},
+  ]},
+  {name:'B5. 정보원 / 콘텐츠 영향', qs:[
+   {n:'Q26', type:'객관식 다중', cons:'최소1~최대17', q:'In the past 3 months, where have you gotten beauty info/inspiration?',
+     opts:['None','TikTok','Instagram','YouTube','Pinterest','Facebook','Reddit','Google/search','Sephora/Ulta reviews','Amazon reviews','Brand websites','Beauty blogs','Friends/family','Dermatologist','In-store advisors','Online communities','Email/text alerts','Other']},
+   {n:'Q27', type:'객관식 순위', cons:'TOP 3 (1=most)', q:'Rank your TOP 3 most influential sources.', ref:'Q26에서 선택한 보기만 제시'},
+   {n:'Q28', type:'평가형 5점', q:'How much do social media/online content influence your K-beauty interest & purchases?', scale:['Not at all (1)','2','Somewhat (3)','4','A great deal (5)']},
+  ]},
+  {name:'B6. 세그먼트 분석용 프로필', qs:[
+   {n:'Q29', type:'객관식 단일', q:'Approximate annual household income (USD)?',
+     opts:['Prefer not to answer','Under $25k','$25–35k','$35–50k','$50–75k','$75–100k','$100–125k','$125–150k','$150–200k','$200–250k','$250k+']},
+   {n:'Q30', type:'평가형 5점', q:'How involved are you in beauty (enjoy, follow trends, spend time/money)?', scale:['Not at all (1)','2','Moderately (3)','4','Very involved (5)']},
+   {n:'Q31', type:'객관식 다중', cons:'최소1~최대15', q:'Which skin concerns are relevant to you?',
+     opts:['No specific concerns','Acne/breakouts','Dark spots','Uneven tone','Dryness','Oiliness','Redness/rosacea','Visible pores','Blackheads','Fine lines/wrinkles','Loss of firmness','Dullness','Dehydration','Under-eye concerns','Sun damage','Other']},
+   {n:'Q32', type:'객관식 단일', q:'Which best describes your skin sensitivity?', opts:['Very sensitive','Somewhat sensitive','Not very sensitive','Not sensitive at all','Not sure']},
+   {n:'Q33', type:'객관식 단일', q:'Which best describes your race/ethnicity?',
+     opts:['Prefer not to answer','White','Black/African American','Hispanic/Latina','East Asian','Southeast Asian','South Asian','MENA','Native American','Pacific Islander','Multiracial','Other']},
+  ]},
+  {name:'종료 페이지', end:true},
+ ]
+};
+
 const ANALYSIS_IDX=4;          // 디폴트 자동재생 = 컨셉 테스트 결과 분석(신규·인라인)

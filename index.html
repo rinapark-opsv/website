@@ -15,6 +15,7 @@
   /* Surface — 중립 뉴트럴 (ChatGPT 레퍼런스) */
   --bg-page:         #F4F4F4;
   --bg-sidebar:      #F9F9F9;
+  --bg-rail:         #F1F2F4;   /* 레일·시나리오 패널 통일 회색 */
   --bg-canvas:       #ffffff;
   --bg-card:         #ffffff;
   --bg-hover:        #F3F3F3;
@@ -245,7 +246,7 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 .app {
   display: grid;
-  grid-template-columns: 200px 200px 1fr 0px;   /* 디폴트: 레일 펼침 */
+  grid-template-columns: 52px 200px 1fr 0px;   /* 디폴트: 레일 닫힘(아이콘만) */
   grid-template-rows: 1fr;
   grid-template-areas:
     "rail sidebar canvas artifact";
@@ -253,11 +254,14 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-canvas);
   transition: grid-template-columns 240ms ease;
 }
-/* 아티팩트 열림 → 레일을 아이콘(52px)으로 접어 공간 양보 */
+/* 레일 호버 → 펼침 */
+.app:has(.rail:hover) {
+  grid-template-columns: 200px 200px 1fr 0px;
+}
+/* 아티팩트 열림 */
 .app.artifact-open {
   grid-template-columns: 52px 200px 1fr minmax(420px, 42%);
 }
-/* 접힌 상태에서 레일 호버 → 다시 밀어내며 펼침 */
 .app.artifact-open:has(.rail:hover) {
   grid-template-columns: 200px 200px 1fr minmax(420px, 42%);
 }
@@ -289,7 +293,7 @@ a { text-decoration: none; color: inherit; }
 /* ── 레일 — 평소 아이콘만(52px), 호버 시 우측으로 확장(218px) ── */
 .rail {
   grid-area: rail;
-  background: #F3F3F3;
+  background: var(--bg-rail);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   padding: 10px 0;
@@ -321,27 +325,26 @@ a { text-decoration: none; color: inherit; }
 .rail-label {
   flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
   color: var(--text-secondary);
-  opacity: 1; transition: opacity 150ms ease;   /* 디폴트: 라벨 표시 */
+  opacity: 0; transition: opacity 150ms ease;   /* 디폴트: 숨김(레일 닫힘) */
 }
 .rail-row.active .rail-label { color: var(--text-primary); font-weight: 600; }
 .rail-side {
   font-size: 11px; font-weight: 500; color: var(--text-tertiary);
   display: flex; align-items: center; gap: 1px;
-  opacity: 1; transition: opacity 150ms ease;
+  opacity: 0; transition: opacity 150ms ease;
 }
 .rail-side i { font-size: 11px; width: auto; }
-/* 아티팩트 열림 → 라벨 숨김 (호버 시 다시 표시) */
-.app.artifact-open .rail:not(:hover) .rail-label,
-.app.artifact-open .rail:not(:hover) .rail-side { opacity: 0; }
+/* 레일 호버 시에만 라벨 표시 */
+.rail:hover .rail-label, .rail:hover .rail-side { opacity: 1; }
 
 /* 스페이스 헤더 — 디폴트 펼침, 아티팩트 열림 시 접힘 */
 .rail-space {
   display: flex; align-items: center; gap: 6px;
-  height: 44px; opacity: 1; overflow: hidden;
-  margin: 0 12px 6px;
+  height: 0; opacity: 0; overflow: hidden;
+  margin: 0 12px;
   transition: height 200ms ease, opacity 150ms ease, margin 200ms ease;
 }
-.app.artifact-open .rail:not(:hover) .rail-space { height: 0; opacity: 0; margin: 0 12px; }
+.rail:hover .rail-space { height: 44px; opacity: 1; margin: 0 12px 6px; }
 .rail-space-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .rail-space-name { font-size: 13px; font-weight: 600; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rail-space-tier { font-size: 10px; font-weight: 500; color: var(--text-tertiary); white-space: nowrap; }
@@ -360,31 +363,29 @@ a { text-decoration: none; color: inherit; }
 /* ── 시나리오 패널 — 데모 내비 전용 칼럼 ── */
 .sidebar {
   grid-area: sidebar;
-  background: var(--bg-sidebar);    /* 뉴트럴 #F9F9F9 */
+  background: var(--bg-rail);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   overflow: hidden;
   padding: 10px 0 8px;
 }
-.gnb-history { flex: 1; overflow-y: auto; padding: 2px 0 6px; background: var(--bg-canvas); }
+.gnb-history { flex: 1; overflow-y: auto; padding: 8px 0 6px; background: transparent; }
 .gnb-history::-webkit-scrollbar { width: 4px; }
 
 .chat-item {
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px 10px;
   margin: 0 8px 5px;
-  border-radius: 8px;
-  font-size: 12.5px; color: var(--text-secondary);
+  font-size: 12.5px;
+  color: rgba(0,0,0,0.5);          /* 미선택: 블랙 50% */
   cursor: pointer;
-  transition: background var(--t-fast), color var(--t-fast), box-shadow var(--t-fast);
   gap: 8px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
-.chat-item:hover { background: #ffffff; color: var(--text-primary); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04); }
+.chat-item:hover { background: none; color: rgba(0,0,0,0.5); }   /* 호버 액션 없음 */
 .chat-item.active {
-  background: #ECECEC;
-  color: var(--text-primary); font-weight: 500;
+  background: none;
+  color: #000;                     /* 선택: 블랙 */
+  font-weight: 600;
 }
 .chat-item-label {
   flex: 1; font-size: 12px; line-height: 1.45;
@@ -586,7 +587,7 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 10px;
 }
 .ai-avatar {
-  width: 16px; height: 16px;
+  width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -946,16 +947,26 @@ a { text-decoration: none; color: inherit; }
 /* ═══ ARTIFACT PANEL ═══ */
 .artifact-panel {
   grid-area: artifact;
-  border-left: 1px solid var(--border);
-  background: var(--bg-canvas);
+  background: var(--bg-canvas);        /* 흰색 배경 */
   display: flex;
   flex-direction: column;
   overflow: hidden;
   width: 100%;
+  padding: 12px 14px 14px 6px;
   opacity: 0;
   transform: translateX(20px);
   transition: opacity 200ms ease, transform 200ms ease;
   pointer-events: none;
+  z-index: 5;
+}
+.artifact-inner {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: none;
 }
 .app.artifact-open .artifact-panel {
   opacity: 1;
@@ -1266,8 +1277,8 @@ a { text-decoration: none; color: inherit; }
 .cc-btn-row { display:flex; gap:8px; margin-top:12px; }
 .btn-blue { display:inline-flex; align-items:center; justify-content:center; background:var(--blue); color:#fff; font-size:12px; font-weight:600; height:30px; padding:0 14px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); text-decoration:none; cursor:pointer; }
 .btn-blue:hover { background:var(--blue-hover); }
-.btn-blue.soft { background:#CCDCFF; }
-.btn-blue.soft:hover { background:var(--blue); color:#fff; }
+.btn-blue.soft { background:var(--blue); color:#fff; }   /* 디폴트: 메인 블루 */
+.btn-blue.soft:hover { background:var(--blue-hover); color:#fff; }   /* 호버: 딥 블루 */
 .btn-blue-outline { display:inline-flex; align-items:center; justify-content:center; background:#fff; border:1px solid #8FB2FF; color:var(--blue); font-size:12px; font-weight:600; height:30px; padding:0 13px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); cursor:pointer; }
 .btn-blue-outline:hover { background:var(--blue-soft); }
 .cc-data { background:var(--blue-soft); border:1px solid #CCDCFF; border-radius:10px; padding:8px 10px 8px 12px; display:flex; align-items:center; gap:10px; width:100%; max-width:560px; margin-bottom:12px; }
@@ -1312,6 +1323,64 @@ a { text-decoration: none; color: inherit; }
 
 /* 자동 시연 버튼 눌림 효과 */
 .pressing { box-shadow: 0 0 0 3px rgba(71,129,255,.28) !important; transform: scale(.97); transition: transform 180ms ease, box-shadow 180ms ease; }
+
+/* 브리프 완료 카드 — 미리보기 버튼 우측 */
+.cc-briefcard .cc-head { width:100%; }
+.cc-brief-preview { margin-left:auto; flex-shrink:0; display:inline-flex; align-items:center; gap:2px; background:none; border:none; padding:4px 4px; font-size:12px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:color var(--t-fast); }
+.cc-brief-preview:hover { color:var(--blue); }
+.cc-brief-preview i { color:inherit; }
+/* 오픈서베이 출처 아이콘 */
+.fig-src-ico.os { background:none; padding:0; }
+.fig-src-ico.os svg { width:20px; height:20px; display:block; }
+/* 인라인 아티팩트 느낌 — 챗 안에서 카드 위아래 분할 */
+.cc-card, .cc-stack, .co-card, .cc-data { margin:14px 0; }
+.msg-ai > .cc-card:first-of-type, .msg-ai > .cc-stack:first-of-type { margin-top:6px; }
+.cc-brief-intro { font-size:12.5px; color:var(--text-secondary); margin-bottom:8px; letter-spacing:-0.2px; }
+
+/* 꼬리물기 질문 칩 (우리 강점) */
+.cc-follow { display:flex; flex-direction:column; gap:1px; margin-top:10px; max-width:460px; }
+.cc-follow-chip { display:flex; align-items:center; gap:8px; text-align:left; width:100%; padding:7px 8px; border:none; border-radius:8px; background:none; font-size:13px; color:var(--text-primary); letter-spacing:-0.2px; cursor:pointer; transition:background var(--t-fast); }
+.cc-follow-chip span { flex:1; min-width:0; }
+.cc-follow-chip .cc-fi { font-size:14px; color:var(--text-tertiary); flex-shrink:0; }
+.cc-follow-chip .cc-fa { font-size:13px; color:var(--text-tertiary); flex-shrink:0; }
+.cc-follow-chip:hover { background:var(--blue-soft); }
+.cc-follow-chip:hover .cc-fi, .cc-follow-chip:hover .cc-fa { color:var(--blue); }
+
+/* 순차 리빌 (생성되는 듯) */
+@keyframes itemUp { from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.rv-hide { opacity:0 !important; }
+.rv-in { animation: itemUp .34s ease both; }
+
+/* 클릭 affordance — 모든 인터랙티브 요소 */
+.file-chip.clickable { cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
+.file-chip.clickable:hover { border-color:var(--blue); background:var(--bg-active); }
+.choice-btn { cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
+.choice-btn:hover { border-color:var(--blue); background:var(--bg-active); }
+.co-option { cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
+.co-option:hover { border-color:var(--blue); box-shadow:0 2px 8px rgba(71,129,255,.12); }
+.co-option.selected:hover { box-shadow:0 2px 10px rgba(71,129,255,.18); }
+
+/* 풀 설문 문서 (메인 뷰) */
+.bd-p { font-size:12px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.2px; margin:4px 0 8px; }
+.sd-title { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.4px; line-height:1.45; }
+.sd-meta { font-size:11.5px; color:var(--text-tertiary); margin:4px 0 4px; }
+.sd-sec { font-size:12px; font-weight:700; color:var(--blue); letter-spacing:-0.2px; margin:18px 0 4px; padding-top:12px; border-top:1px solid var(--border); }
+.sd-secnote { font-size:11px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:6px 9px; margin-bottom:6px; line-height:1.5; }
+.sd-q { padding:10px 0 11px; border-bottom:1px solid #F3F3F3; }
+.sd-qhead { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:5px; }
+.sd-qn { font-size:11.5px; font-weight:700; color:var(--text-primary); }
+.sd-type { font-size:10px; font-weight:600; color:var(--blue); background:var(--blue-soft); border-radius:4px; padding:1px 6px; }
+.sd-cons { font-size:10px; color:var(--text-tertiary); }
+.sd-qtext { font-size:12px; color:var(--text-primary); line-height:1.5; letter-spacing:-0.2px; margin-bottom:6px; }
+.sd-opts { margin:0; padding-left:18px; }
+.sd-opts li { font-size:11px; color:var(--text-secondary); line-height:1.55; }
+.sd-scale { display:flex; gap:4px; margin:2px 0 2px; }
+.sd-sc { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; color:var(--text-tertiary); text-align:center; line-height:1.2; }
+.sd-radio { width:12px; height:12px; border-radius:50%; border:1.5px solid var(--border-strong); }
+.sd-textbox { font-size:11px; color:var(--text-tertiary); border:1px dashed var(--border-strong); border-radius:6px; padding:8px 10px; }
+.sd-ref { font-size:10.5px; color:#0E9CAA; margin-top:5px; }
+.sd-logic { font-size:10.5px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:5px 8px; margin-top:5px; line-height:1.45; }
+.sd-end { font-size:12px; color:var(--text-secondary); padding:10px 0; }
 
 /* ── 수집 대상 선택 카드 (Figma CollectGroup/SelectOption) ── */
 .co-card { background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px 18px 16px; width:100%; max-width:520px; display:flex; flex-direction:column; gap:12px; margin-bottom:12px; }
@@ -1521,13 +1590,15 @@ a { text-decoration: none; color: inherit; }
 
   <!-- ── ARTIFACT PANEL ───────────────────────── -->
   <aside class="artifact-panel" id="artifact-panel" aria-label="결과물">
-    <div class="artifact-header">
-      <span class="artifact-title" id="artifact-title">결과물</span>
-      <button class="artifact-close" onclick="closeArtifact()" aria-label="닫기">
-        <i class="ph-light ph-x" style="font-size:14px"></i>
-      </button>
+    <div class="artifact-inner">
+      <div class="artifact-header">
+        <span class="artifact-title" id="artifact-title">결과물</span>
+        <button class="artifact-close" onclick="closeArtifact()" aria-label="닫기">
+          <i class="ph-light ph-x" style="font-size:14px"></i>
+        </button>
+      </div>
+      <div class="artifact-body" id="artifact-body"></div>
     </div>
-    <div class="artifact-body" id="artifact-body"></div>
   </aside>
 
   <!-- ── CANVAS ─────────────────────────────────── -->
@@ -1595,6 +1666,7 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 /* Dataspace AI 브랜딩 인디케이터 — Lottie 애니메이션 */
 const STAR='<span class="ai-ind" aria-label="Generating"></span>';
+const OS_ICON='<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="16" height="16" rx="2" fill="#0050FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.7265 5.55452C10.6105 5.52603 10.5262 5.42379 10.5262 5.30437V3.79515C10.5262 3.61176 10.6889 3.47047 10.869 3.5053C13.7082 4.05453 15.9455 6.29185 16.4947 9.13105C16.5295 9.31109 16.3882 9.47384 16.2049 9.47384H14.6953C14.5759 9.47384 14.4736 9.38949 14.4452 9.27352C13.9958 7.44407 12.5559 6.00399 10.7265 5.55452ZM14.5374 10.7293C14.5443 10.5907 14.4312 10.4782 14.2925 10.4782H12.786C12.6473 10.4782 12.536 10.591 12.5246 10.7292C12.397 12.2758 11.1014 13.4913 9.5218 13.4913C7.85772 13.4913 6.50872 12.1423 6.50872 10.4782C6.50872 8.89865 7.72415 7.60298 9.27079 7.47542C9.40899 7.46402 9.5218 7.3527 9.5218 7.21403V5.70748C9.5218 5.56881 9.40925 5.45574 9.27075 5.46256C6.61392 5.59337 4.5 7.78892 4.5 10.4782C4.5 13.2517 6.74834 15.5 9.5218 15.5C12.2111 15.5 14.4066 13.3861 14.5374 10.7293Z" fill="white"/></svg>';
 let AI_IND_DATA=null;
 fetch('ai-indicator-frames.json').then(r=>r.json()).then(d=>{ AI_IND_DATA=d; hydrateInds(); }).catch(()=>{});
 function hydrateInds(){
@@ -1631,14 +1703,14 @@ function ccData(d){
   return `<div class="cc-data">
     <span class="cc-data-icon">📋</span>
     <span class="cc-data-info"><span class="cc-data-title">${d.name}</span><span class="cc-data-meta">${d.meta}</span></span>
-    <button class="btn-blue-outline" onclick="openPanel('designsurvey')">미리보기</button>
+    <button class="btn-blue-outline" onclick="openPanel('${d.open||'designsurvey'}')">미리보기</button>
     <a class="btn-blue" href="https://opensurvey.io" target="_blank" rel="noreferrer">바로 수집하기</a>
   </div>`;
 }
 function ccCollect(){
   const pill=(t,m)=>`<span class="co-pill${m?' mint':''}">${t}</span>`;
   return `<div class="co-card">
-    <div class="co-option selected">
+    <div class="co-option selected" onclick="openPanel('collectdoc')">
       <span class="co-rec">추천</span>
       <span class="co-ico"><i class="ph-fill ph-sparkle"></i></span>
       <span class="co-body">
@@ -1647,7 +1719,7 @@ function ccCollect(){
         <div class="co-tags">${pill('탐색적 조사에 적합')}${pill('가설 검증')}${pill('빠른 시장 확인')}</div>
       </span>
     </div>
-    <div class="co-option">
+    <div class="co-option" onclick="openPanel('collectdoc')">
       <span class="co-ico"><i class="ph-fill ph-users-three"></i></span>
       <span class="co-body">
         <span class="co-head"><span class="co-title">소비자 패널</span>${pill('약 120만원')}${pill('2~3일')}</span>
@@ -1655,7 +1727,7 @@ function ccCollect(){
         <div class="co-tags">${pill('정량적 검증 필요시')}${pill('의사결정용')}${pill('신중하고 확실한')}</div>
       </span>
     </div>
-    <div class="co-option">
+    <div class="co-option" onclick="openPanel('collectdoc')">
       <span class="co-ico"><i class="ph-fill ph-envelope-simple"></i></span>
       <span class="co-body">
         <span class="co-head"><span class="co-title">내 고객한테 보내기</span></span>
@@ -1679,7 +1751,62 @@ function ccDone(items){
     </div>`;
   }).join('')+'</div>';
 }
-function md(t){ return t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
+function md(t){
+  t=t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  const lines=t.split('\n'); const out=[]; let buf=[];
+  const flush=()=>{ if(buf.length){ out.push('<ul class="md-ul">'+buf.map(x=>'<li>'+x+'</li>').join('')+'</ul>'); buf=[]; } };
+  for(const ln of lines){ if(/^-\s/.test(ln)) buf.push(ln.replace(/^-\s/,'')); else { flush(); if(ln.trim()!=='') out.push('<p>'+ln+'</p>'); } }
+  flush();
+  return out.join('');
+}
+/* 순차 리빌 — AI 메시지 블록을 위→아래 하나씩 (생성되는 듯) */
+function streamReveal(el){
+  if(!el) return;
+  const units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
+  if(!units.length) return;
+  units.forEach(u=>u.classList.add('rv-hide'));
+  let i=0;
+  (function tick(){
+    if(i>=units.length) return;
+    const u=units[i++]; u.classList.remove('rv-hide'); u.classList.add('rv-in'); scrollChat();
+    setTimeout(tick, 150);
+  })();
+}
+/* 브리프 완료 카드 (미리보기 버튼 우측) */
+function ccBrief(o){
+  return `<div class="cc-card cc-briefcard">
+    <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${o.t}</span><button class="cc-brief-preview" onclick="openPanel('${o.open}')">미리보기 <i class="ph ph-caret-right" style="font-size:11px"></i></button></div>
+    <div class="cc-hr"></div>
+    ${o.intro?`<div class="cc-brief-intro">${o.intro}</div>`:''}
+    ${o.title?`<div class="cc-doc-title">${o.title}</div>`:''}
+    ${o.bullets?`<ul class="cc-doc-ul">${o.bullets.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+  </div>`;
+}
+/* 꼬리물기 질문 칩 — 우리 강점: AI가 다음 리서치 스텝을 먼저 제안 */
+function ccFollowups(arr){
+  return `<div class="cc-follow">${arr.map((t,i)=>`<button class="cc-follow-chip${i===0?' primary':''}" onclick="chipAdvance()"><i class="ph ph-plus cc-fi"></i><span>${t}</span><i class="ph ph-arrow-right cc-fa"></i></button>`).join('')}</div>`;
+}
+/* 칩/행 클릭 → 다음 대화 턴 진행 */
+function chipAdvance(){ clearTimeout(resumeT); clearTimeout(timer); if(!playing){ playing=true; statuses[sIdx]='active'; renderSidebar(); } advance(); }
+/* 풀 설문 문서 렌더 (메인 뷰 — 문항 유형·제약·로직 노출) */
+function renderSurveyDoc(){
+  const d=SURVEY_C; let h=`<div class="av sd"><div class="sd-title">${d.title}</div><div class="sd-meta">${d.meta}</div>`;
+  d.sections.forEach(sec=>{
+    h+=`<div class="sd-sec">${sec.name}</div>`;
+    if(sec.note) h+=`<div class="sd-secnote">⎇ ${sec.note}</div>`;
+    if(sec.end){ h+=`<div class="sd-end">참여해 주셔서 감사합니다.</div>`; return; }
+    (sec.qs||[]).forEach(q=>{
+      h+=`<div class="sd-q"><div class="sd-qhead"><span class="sd-qn">${q.n}</span><span class="sd-type">${q.type}</span>${q.cons?`<span class="sd-cons">${q.cons}</span>`:''}</div><div class="sd-qtext">${q.q}</div>`;
+      if(q.scale){ h+=`<div class="sd-scale">${q.scale.map(s=>`<span class="sd-sc"><span class="sd-radio"></span>${s}</span>`).join('')}</div>`; }
+      else if(q.opts){ h+=`<ol class="sd-opts">${q.opts.map(o=>`<li>${o}</li>`).join('')}</ol>`; }
+      else if(q.text){ h+=`<div class="sd-textbox">자유 응답 (long text)</div>`; }
+      if(q.ref) h+=`<div class="sd-ref">↑ ${q.ref}</div>`;
+      (q.logic||[]).forEach(l=> h+=`<div class="sd-logic">⎇ ${l}</div>`);
+      h+=`</div>`;
+    });
+  });
+  return h+`</div>`;
+}
 function $(id){ return document.getElementById(id); }
 function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
 
@@ -1730,7 +1857,7 @@ function chatBlock(type){
 function srcRows(list){
   return `<div class="fig-sources"><div class="fig-src-label">출처</div>`+list.map(s=>`
     <div class="fig-src-row"><span class="fig-src-num">${s.n}</span>
-      <div class="fig-src-card${s.open?' clickable':''}"${s.open?` onclick="openPanel('${s.open}')"`:''}><span class="fig-src-ico ${s.kind||'doc'}">${s.emoji||'📄'}</span>
+      <div class="fig-src-card${s.open?' clickable':''}"${s.open?` onclick="openPanel('${s.open}')"`:''}>${s.os?`<span class="fig-src-ico os">${OS_ICON}</span>`:`<span class="fig-src-ico ${s.kind||'doc'}">${s.emoji||'📄'}</span>`}
         <span class="fig-src-title">${s.title}</span><span class="fig-src-type">${s.type}</span>
         <span class="fig-src-link"><i class="ph ph-arrow-square-out" style="font-size:14px"></i></span></div>
     </div>`).join('')+`</div>`;
@@ -1739,11 +1866,11 @@ function srcRows(list){
 /* ── chat message markup ── */
 function msgHTML(m, skipBody=false){
   if(m.role==='system') return `<div class="msg-system msg-enter"><span class="system-dot"></span>${m.text}</div>`;
-  if(m.role==='file') return `<div class="file-attach-row msg-enter" style="padding:6px 0 4px;"><div class="file-chip">
+  if(m.role==='file') return `<div class="file-attach-row msg-enter" style="padding:6px 0 4px;"><div class="file-chip${m.open?' clickable':''}"${m.open?` onclick="openPanel('${m.open}')"`:''}>
       <div class="file-chip-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="9" height="13" rx="1.5" fill="#34A853" opacity=".15"/><rect x="2" y="1" width="9" height="13" rx="1.5" stroke="#34A853" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 8h5M4.5 10.5h3" stroke="#34A853" stroke-width="1.1" stroke-linecap="round"/><path d="M9.5 1v3.5H13" stroke="#34A853" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="file-chip-info"><span class="file-name">${m.name}</span><span class="file-sub">${m.sub||''}</span></div>
       ${m.badge?`<span class="file-meta">${m.badge}</span>`:''}</div></div>`;
-  if(m.role==='choices') return `<div class="chat-choices msg-enter">${m.choices.map((c,i)=>`<button class="choice-btn${i===0?' selected':''}">${i===0?'✓ ':''}${c}</button>`).join('')}</div>`;
+  if(m.role==='choices') return `<div class="chat-choices msg-enter">${m.choices.map((c,i)=>`<button class="choice-btn${i===0?' selected':''}" onclick="chipAdvance()">${i===0?'✓ ':''}${c}</button>`).join('')}</div>`;
   if(m.role==='user'){
     if(m.name) return `<div class="msg-user teammate msg-enter"><div class="tm-wrap"><div class="tm-name"><span class="tm-avatar">${m.avatar}</span>${m.name}</div><div class="user-bubble teammate">${m.text}</div></div></div>`;
     return `<div class="msg-user msg-enter"><div class="user-bubble">${m.text}</div></div>`;
@@ -1762,7 +1889,7 @@ function msgHTML(m, skipBody=false){
   return `<div class="msg-ai msg-enter">
     <div class="ai-header"><div class="ai-avatar">${STAR}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
-    ${m.cardproj?ccProject():''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}
+    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.followups?ccFollowups(m.followups):''}
     ${m.block?chatBlock(m.block):''}
     ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}
   </div>`;
@@ -1789,7 +1916,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
     if(!playing || myGen!==gen) return;   // 시나리오 전환 시 이전 타이머 차단
     if(idx>=scene.chat.length){ done&&done(); return; }
     const m=scene.chat[idx++];
-    if(m.done){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
+    if(m.done||m.briefcard||m.datarow){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
     if(m.role==='user' && !m.name){
       /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
       isFirstUserMsg=false;
@@ -1797,7 +1924,9 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
       setTimeout(next, 650);
     } else {
-      inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
+      inner.insertAdjacentHTML('beforeend', msgHTML(m));
+      if(m.role==='ai') streamReveal(inner.lastElementChild);
+      scrollChat();
       setTimeout(next, m.role==='ai'?640:420);
     }
   })();
@@ -1850,6 +1979,76 @@ function previewHTML(type){
     case 'collaborate': return `<div class="av"><div class="av-cl-head"><span class="av-cl-share">↗</span>지연님과 공유됨<span class="av-cl-online"></span></div>
       <div class="av-cl-row"><span class="av-cl-av">J</span><div><div class="av-cl-name">지연 (팀원)</div><div class="av-cl-msg">일본만 따로 보면 어떻게 돼?</div></div></div>
       <div class="av-cl-row ai"><span class="av-cl-av ai">✦</span><div class="av-cl-msg">일본 ChatGPT 시도율은 <strong>14.8%</strong>로 3개국 최저. 만족도(TOP2: 55.4%)는 중간이나 중립 응답이 높습니다.</div></div></div>`;
+    case 'surveydoc': return renderSurveyDoc();
+    case 'briefdocC': return `<div class="av bd">
+      <div class="cc-doc-title" style="font-size:14px">K뷰티 미국 MZ 여성 '향후 3개월 구매 의향 및 구매 결정 요인' 정량조사 프로젝트 브리프</div>
+      <div class="sv-divider"></div>
+      <div class="cc-doc-sec">1. 배경</div>
+      <div class="bd-p">미국 뷰티 시장에서 K-컬처 확산과 TikTok/Instagram/YouTube 중심의 바이럴 콘텐츠, 인플루언서·리뷰 기반 구매가 강화되며 K뷰티 관심이 확대되고 있습니다. 다만 '관심/호감'이 실제 '단기 구매(향후 3개월)'로 전환되는지는 별개의 문제이며, 가격 수용도·성분/효능 신뢰·브랜드 신뢰·리뷰/인플루언서 영향·채널 접근성 등 핵심 요인을 정량 검증해야 런칭/프로모션/유통 의사결정을 근거 기반으로 최적화할 수 있습니다.</div>
+      <div class="cc-doc-sec">2. 프로젝트 목적</div>
+      <div class="bd-p">미국 MZ 여성(18–35세)의 향후 3개월 구매 의향 수준을 정량 측정하고, 의향을 높이거나 낮추는 핵심 결정 요인(가격·성분/효능·브랜드 신뢰·리뷰/인플루언서·채널 접근성)을 규명하여 우선 공략 세그먼트와 메시지/오퍼(프로모션·번들·체험) 방향을 도출합니다.</div>
+      <div class="cc-doc-sec">3. 리서치 주요 질문</div>
+      <ul class="cc-doc-ul">
+        <li>향후 3개월 구매 의향 수준과 Top2(가능성 높음) 비중은?</li>
+        <li>구매 의향을 가장 강하게 설명하는 요인은? (가격·성분/효능·신뢰·리뷰/인플루언서·채널)</li>
+        <li>적정/저항 가격대와 오퍼(할인·쿠폰·세트)의 의향 상승 효과는?</li>
+        <li>어떤 성분/효능이 '구매 트리거'이며, 어떤 근거(임상·전성분·인증)가 신뢰를 강화하는가?</li>
+        <li>리뷰·인플루언서의 상대적 영향과 설득력 있는 콘텐츠 형태는?</li>
+        <li>구매 가능 채널(Amazon·DTC·Sephora/Ulta·틱톡샵)과 채널별 장벽은?</li>
+        <li>연령·관여도·K뷰티 경험 유무별 의향·요인 우선순위 차이는?</li>
+        <li>우선 공략 세그먼트와 세그먼트별 최적 메시지/오퍼는?</li>
+      </ul>
+      <div class="cc-doc-sec">4. 이해관계자</div>
+      <ul class="cc-doc-ul">
+        <li>브랜드 총괄/GM · US 마케팅 · US 세일즈/채널</li>
+        <li>제품/브랜드 전략 · 가격/수익관리 · CS/Operations · 리서치/인사이트</li>
+      </ul>
+      <div class="cc-doc-sec">5. 리서치 접근법 — 정량 조사</div>
+      <ul class="cc-doc-ul">
+        <li><strong>방법</strong>: 온라인 정량조사(미국 패널), U&A + 구매 의향/드라이버 분석</li>
+        <li><strong>대상</strong>: 미국 거주 여성 18–35세, 최근 6개월 내 스킨케어/메이크업/헤어 구매자</li>
+        <li><strong>K뷰티 경험</strong>: 구매 경험자/비경험자 모두 포함(비교)</li>
+        <li><strong>쿼터</strong>: 연령(18–24/25–29/30–35) · 관여도(고/중/저) · K뷰티 경험 유무</li>
+        <li><strong>표본</strong>: n=600–1,000 (세그먼트·드라이버 분석 안정성)</li>
+      </ul>
+      <div class="cc-doc-sec">6. 주요 의사결정/액션</div>
+      <ul class="cc-doc-ul">
+        <li>채널: Amazon vs DTC vs 리테일(Sephora/Ulta) 우선순위·역할 정의</li>
+        <li>가격/오퍼: 런칭 가격 포지션, 할인 깊이·쿠폰·번들·체험</li>
+        <li>커뮤니케이션: 성분/효능·근거·클린/민감·정품 신뢰 메시지 우선순위</li>
+        <li>크리에이터/리뷰: 유효 크리에이터 유형·콘텐츠 포맷</li>
+        <li>타겟팅: 연령×관여도×경험 기반 세그먼트 룰</li>
+      </ul>
+      <div class="cc-doc-sec">7. 기대 산출물</div>
+      <ul class="cc-doc-ul">
+        <li>Dataspace 분석 결과(요약·교차분석·PPT 자동 보고서) 및 데이터</li>
+        <li>의사결정용 요약(1–2p): 의향 KPI·우선 세그먼트·Top 드라이버·실행 권고</li>
+        <li>종합 보고서: 세그먼트별 의향/장벽·드라이버·채널/오퍼/메시지 매트릭스·로드맵</li>
+      </ul>
+      <div class="cc-doc-sec">8. 성공 기준</div>
+      <ul class="cc-doc-ul">
+        <li>세그먼트별(연령×관여도×경험) 의향 KPI 안정 추정 + 표본 품질 기준 충족</li>
+        <li>상위 결정 요인 Top3–5를 '상대 영향도'로 합의 가능하게 제시</li>
+        <li>우선 세그먼트 1–2개 특정 + 세그먼트별 권장 메시지/오퍼 도출</li>
+      </ul>
+      <div class="cc-doc-sec">9. 일정 — 정량조사</div>
+      <table class="sv-table"><thead><tr><th>순서</th><th>단계</th><th>일정</th></tr></thead><tbody>
+        <tr><td>0</td><td>방법론·응답자 조건·표본 확정</td><td>3영업일</td></tr>
+        <tr><td>1</td><td>설문 설계(필요 시)</td><td>5영업일</td></tr>
+        <tr><td>2</td><td>설문 프로그래밍·테스트링크</td><td>3영업일</td></tr>
+        <tr><td>3</td><td>설문 확정</td><td>TBD</td></tr>
+        <tr><td>4</td><td>데이터 수집</td><td>2영업일</td></tr>
+        <tr><td>5</td><td>요약 보고서(필요 시)</td><td>1영업일</td></tr>
+        <tr><td>6</td><td>종합 보고서(필요 시)</td><td>5영업일</td></tr>
+      </tbody></table>
+      <div class="cc-doc-sec">10. 기타 — Stakeholder engagement</div>
+      <ul class="cc-doc-ul">
+        <li>Kick-off: 'K뷰티' 범위·목표 카테고리·의사결정 항목·비교 세그먼트 합의</li>
+        <li>설문 확정 전 리뷰: 채널/인플루언서/오퍼 선택지 누락 점검</li>
+        <li>중간 공유(topline): 의향 KPI·우선 세그먼트 먼저 공유 → 런칭 일정 지연 방지</li>
+        <li>최종 공유: 드라이버 결과를 실행 체크리스트(메시지/오퍼/채널 To-do, R&R)로 변환</li>
+      </ul>
+      </div>`;
     case 'brief': return `<div class="av"><div class="av-brief-title">📋 Research Brief</div>
       <div class="av-brief-row"><span class="av-brief-key">목적</span><span>미국 MZ 여성의 K뷰티 구매 의향 파악</span></div>
       <div class="av-brief-row"><span class="av-brief-key">타겟</span><span>미국 여성, 18–35세, 뷰티 월 1회+ 구매</span></div>
@@ -2049,6 +2248,7 @@ function previewHTML(type){
   }
 }
 function updateArtifact(scene){
+  if(!scene.preview){ closeArtifact(); return; }
   if(scene.preview==='prompt'){ if(!lastArtifact) closeArtifact(); $('artifact-title').textContent='분석 중…'; return; }
   lastArtifact=scene.preview;
   $('artifact-title').textContent=scene.hl;
@@ -2058,7 +2258,7 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트'};
+const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트'};
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
@@ -2109,9 +2309,10 @@ function showScene(skipFirstTyping=false){
         const pressed=scene.press?pressLast(scene.press):false;
         setTimeout(()=>{ if(playing&&myGen===gen) showPanel(scene.open); }, pressed?450:0);
       }, 800);
+      if(scene.chipAfter){ setTimeout(()=>{ if(playing&&myGen===gen) pressLast(scene.chipAfter); }, DWELL_MS+2200); }
       timer=setTimeout(advance, DWELL_MS+3000);   /* 제품 화면 감상 시간 */
     } else {
-      timer=setTimeout(advance, DWELL_MS);
+      timer=setTimeout(advance, scene.dwell||DWELL_MS);
     }
   }, skipFirstTyping);
 }
