@@ -913,8 +913,8 @@ a { text-decoration: none; color: inherit; }
   padding: 20px 24px 4px;
 }
 .file-chip {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px;
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 13px;
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -922,7 +922,7 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: box-shadow var(--t-fast);
   cursor: default;
-  max-width: 380px;
+  width: 100%; max-width: 360px;
 }
 .file-chip:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.09);
@@ -949,6 +949,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 11.5px;
   letter-spacing: -0.2px;
   margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .file-meta {
   display: none;
@@ -1337,6 +1338,7 @@ a { text-decoration: none; color: inherit; }
 .cc-hr { height:1px; background:var(--border); margin:10px 0; }
 .cc-doc-title { font-size:16px; font-weight:700; color:var(--text-primary); line-height:1.4; letter-spacing:-0.4px; margin-bottom:10px; }
 .cc-doc-sec { font-size:13.5px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; margin:20px 0 7px; }
+.cc-doc-sec-first { margin-top:12px; }
 .cc-doc-ul { margin:0; padding-left:16px; }
 .cc-doc-ul li { font-size:13px; color:#444; line-height:1.7; letter-spacing:-0.2px; margin-bottom:5px; }
 .cc-doc-ul li strong { font-weight:600; color:var(--text-primary); }
@@ -1360,14 +1362,14 @@ a { text-decoration: none; color: inherit; }
 .cc-brief-intro { font-size:13px; color:var(--text-secondary); margin-bottom:10px; line-height:1.6; letter-spacing:-0.2px; }
 
 /* 문서 썸네일 peek (미리보기 강조) */
-.cc-peek { margin-top:12px; display:flex; align-items:center; gap:11px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#FAFBFD; cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
+.cc-peek { margin-top:12px; display:flex; align-items:center; gap:11px; padding:11px 13px; border:1px solid var(--border); border-radius:10px; background:#FAFBFD; cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
 .cc-peek:hover { border-color:var(--blue); background:var(--blue-soft); }
-.cc-peek-page { width:38px; height:48px; background:#fff; border:1px solid var(--border); border-radius:4px; padding:7px 6px; display:flex; flex-direction:column; gap:4px; flex-shrink:0; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.cc-peek-page { width:34px; height:40px; background:#fff; border:1px solid var(--border); border-radius:5px; padding:6px 5px; display:flex; flex-direction:column; gap:3.5px; flex-shrink:0; box-shadow:0 1px 2px rgba(0,0,0,.04); }
 .cc-peek-line { height:3px; border-radius:2px; background:#DCE0E8; }
 .cc-peek-line.w70{ width:70%; } .cc-peek-line.w100{ width:100%; } .cc-peek-line.w85{ width:85%; } .cc-peek-line.w60{ width:60%; }
 .cc-peek-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
-.cc-peek-cap { font-size:12.5px; font-weight:600; color:var(--text-primary); letter-spacing:-0.2px; }
-.cc-peek-sub { font-size:11px; color:var(--text-tertiary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cc-peek-cap { font-size:13px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; }
+.cc-peek-sub { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cc-peek-arrow { font-size:13px; color:var(--text-tertiary); flex-shrink:0; }
 .cc-peek:hover .cc-peek-arrow { color:var(--blue); }
 .cc-doc-title-sm { font-size:14px; }
@@ -1390,6 +1392,7 @@ a { text-decoration: none; color: inherit; }
 /* 순차 리빌 (생성되는 듯) */
 @keyframes itemUp { from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
 .rv-hide { opacity:0 !important; }
+.rv-defer { display:none !important; }
 .rv-in { animation: itemUp .34s ease both; }
 
 /* 클릭 affordance — 모든 인터랙티브 요소 */
@@ -1799,10 +1802,15 @@ function md(t){
   return out.join('');
 }
 /* 순차 리빌 — AI 메시지 블록을 위→아래 하나씩 (생성되는 듯) */
-function streamReveal(el){
+function streamReveal(el, deferFollow){
   if(!el) return;
-  const units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
+  let units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
   if(!units.length) return;
+  if(deferFollow){
+    const isFollow=u=>u.matches('.cc-follow-chip')||u.closest('.ai-prose');
+    units.filter(isFollow).forEach(u=>u.classList.add('rv-defer'));
+    units=units.filter(u=>!isFollow(u));
+  }
   units.forEach(u=>u.classList.add('rv-hide'));
   let i=0;
   (function tick(){
@@ -1811,19 +1819,28 @@ function streamReveal(el){
     setTimeout(tick, 150);
   })();
 }
+/* 패널이 열린 뒤 꼬리질문(질문+칩)을 순차로 드러냄 */
+function revealDeferred(){
+  const inner=$('live-chat'); if(!inner) return;
+  const units=[...inner.querySelectorAll('.rv-defer')];
+  let i=0;
+  (function tick(){
+    if(i>=units.length) return;
+    const u=units[i++]; u.classList.remove('rv-defer'); u.classList.add('rv-in'); scrollChat();
+    setTimeout(tick, 140);
+  })();
+}
 /* 브리프 완료 카드 (미리보기 버튼 우측) */
 function ccBrief(o){
-  return `<div class="cc-card cc-briefcard">
+  const body=o.body||o.bullets;
+  return `<div class="cc-card cc-done cc-briefcard">
     <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${o.t}</span></div>
     <div class="cc-hr"></div>
-    ${o.intro?`<div class="cc-brief-intro">${o.intro}</div>`:''}
     ${o.title?`<div class="cc-doc-title cc-doc-title-sm">${o.title}</div>`:''}
-    ${o.bullets?`<ul class="cc-doc-ul">${o.bullets.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
-    <div class="cc-peek cc-brief-preview" role="button" onclick="openPanel('${o.open}')">
-      <span class="cc-peek-page"><i class="cc-peek-line w70"></i><i class="cc-peek-line w100"></i><i class="cc-peek-line w85"></i><i class="cc-peek-line w60"></i></span>
-      <span class="cc-peek-info"><span class="cc-peek-cap">전체 문서 미리보기</span><span class="cc-peek-sub">${o.title||''}</span></span>
-      <i class="ph ph-arrow-up-right cc-peek-arrow"></i>
-    </div>
+    ${o.sec?`<div class="cc-doc-sec cc-doc-sec-first">${o.sec}</div>`:''}
+    ${body?`<ul class="cc-doc-ul">${body.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
+    <div class="cc-fade"></div>
+    <div class="cc-more"${o.open?` onclick="openPanel('${o.open}')"`:''}>더 보기 <i class="ph ph-caret-down" style="font-size:10px"></i></div>
   </div>`;
 }
 /* 꼬리물기 질문 칩 — 우리 강점: AI가 다음 리서치 스텝을 먼저 제안 */
@@ -1969,7 +1986,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       setTimeout(next, 650);
     } else {
       inner.insertAdjacentHTML('beforeend', msgHTML(m));
-      if(m.role==='ai') streamReveal(inner.lastElementChild);
+      if(m.role==='ai') streamReveal(inner.lastElementChild, !!(m.followups && scene.open));
       scrollChat();
       setTimeout(next, m.role==='ai'?640:420);
     }
@@ -2371,7 +2388,7 @@ function showScene(skipFirstTyping=false){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
         const pressed=scene.press?pressLast(scene.press):false;
-        setTimeout(()=>{ if(playing&&myGen===gen) showPanel(scene.open); }, pressed?450:0);
+        setTimeout(()=>{ if(playing&&myGen===gen){ showPanel(scene.open); setTimeout(()=>{ if(playing&&myGen===gen) revealDeferred(); }, 650); } }, pressed?450:0);
       }, 800);
       if(scene.chipAfter){ setTimeout(()=>{ if(playing&&myGen===gen) pressLast(scene.chipAfter); }, DWELL_MS+2200); }
       timer=setTimeout(advance, DWELL_MS+3000);   /* 제품 화면 감상 시간 */
