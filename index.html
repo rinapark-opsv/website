@@ -252,7 +252,7 @@ a { text-decoration: none; color: inherit; }
     "rail sidebar canvas artifact";
   height: 740px;
   background: transparent;   /* 패널 블러로 히어로 배경 은은히 비침 */
-  transition: grid-template-columns 240ms ease;
+  transition: grid-template-columns 460ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 /* 레일 호버 → 펼침 */
 .app:has(.rail:hover) {
@@ -260,10 +260,10 @@ a { text-decoration: none; color: inherit; }
 }
 /* 아티팩트 열림 */
 .app.artifact-open {
-  grid-template-columns: 52px 200px 1fr minmax(420px, 42%);
+  grid-template-columns: 52px 200px 1fr 42%;
 }
 .app.artifact-open:has(.rail:hover) {
-  grid-template-columns: 200px 200px 1fr minmax(420px, 42%);
+  grid-template-columns: 200px 200px 1fr 42%;
 }
 
 /* ═══════════════════════════════════════════════
@@ -974,10 +974,11 @@ a { text-decoration: none; color: inherit; }
   width: 100%;
   padding: 12px 14px 14px 6px;
   opacity: 0;
-  transform: translateX(20px);
-  transition: opacity 200ms ease, transform 200ms ease;
+  transform: translateX(28px);
+  transition: opacity 300ms ease, transform 460ms cubic-bezier(0.32, 0.72, 0, 1);
   pointer-events: none;
   z-index: 5;
+  will-change: transform, opacity;
 }
 .artifact-inner {
   flex: 1; min-height: 0;
@@ -1368,6 +1369,8 @@ a { text-decoration: none; color: inherit; }
 .msg-ai > .cc-card, .msg-ai > .cc-stack, .msg-ai > .cc-data, .msg-ai > .co-card { width:70%; }
 /* 브리프/설계서 카드 폭 */
 .msg-ai > .cc-briefcard { width:100%; }
+/* process(생성 과정) 카드도 브리프와 동일 폭으로 통일 */
+.msg-ai > .cc-stack { width:100%; }
 .msg-ai > .cc-card:first-of-type, .msg-ai > .cc-stack:first-of-type { margin-top:6px; }
 .cc-brief-intro { font-size:13px; color:var(--text-secondary); margin-bottom:10px; line-height:1.6; letter-spacing:-0.2px; }
 
@@ -1397,6 +1400,7 @@ a { text-decoration: none; color: inherit; }
 .cc-follow-chip .cc-fi { font-size:14px; color:var(--text-tertiary); flex-shrink:0; }
 .cc-follow-chip .cc-fa { font-size:11px; color:var(--blue); flex-shrink:0; }
 .cc-follow-chip:hover { background:rgba(0,0,0,0.05); }
+.cc-follow-chip.is-tapped { background:rgba(0,0,0,0.06); }
 .cc-follow-chip:active { background:rgba(0,0,0,0.08); }
 .cc-follow-chip:hover .cc-fa { color:var(--text-secondary); }
 
@@ -2432,7 +2436,7 @@ function showScene(skipFirstTyping=false){
             setTimeout(()=>{ if(!playing||myGen!==gen) return;
               skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
                 revealDeferred();
-                if(scene.chipAfter) setTimeout(()=>{ if(!playing||myGen!==gen) return; const chip=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(chip){ chip.classList.add('pressing'); setTimeout(()=>{ chip.classList.remove('pressing'); chip.classList.remove('active'); }, 480); } }, 1500);
+                if(scene.chipAfter) setTimeout(()=>{ if(!playing||myGen!==gen) return; const chip=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(chip){ chip.classList.add('is-tapped'); setTimeout(()=>{ chip.classList.remove('is-tapped'); chip.classList.remove('active'); }, 520); } }, 1500);
                 timer=setTimeout(advance, 2900);
               });
             }, 500);
@@ -2447,7 +2451,7 @@ function showScene(skipFirstTyping=false){
       const d=scene.dwell||DWELL_MS;
       if(scene.chipAfter){
         const myGen=gen;
-        setTimeout(()=>{ if(!playing||myGen!==gen) return; const c=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(c){ c.classList.add('pressing'); setTimeout(()=>{ c.classList.remove('pressing'); c.classList.remove('active'); }, 480); } }, d);
+        setTimeout(()=>{ if(!playing||myGen!==gen) return; const c=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(c){ c.classList.add('is-tapped'); setTimeout(()=>{ c.classList.remove('is-tapped'); c.classList.remove('active'); }, 520); } }, d);
         timer=setTimeout(advance, d+1300);
       } else {
         timer=setTimeout(advance, d);
