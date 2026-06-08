@@ -36,10 +36,10 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  ]},
  /* ③ 공유 (was B) — 리서치 흐름: 분석 → 공유 */
  {id:'B',label:'한국 vs 미국 소비자 AI 검색 행동 차이 비교',tagline:'분석이 팀의 자산이 되고, 누구나 이어서 질문합니다',panel:false,scenes:[
-   {chat:[{role:'system',text:'트렌드 데이터셋이 선택되었습니다.'},{role:'file',name:'2025 AI Search Trend Report (KR+US+JP)',sub:'트렌드 리포트 · 3개국',badge:'n=3,000'}],preview:'dataset',hl:'데이터셋 선택'},
+   {chat:[{role:'system',text:'트렌드 데이터셋이 선택되었습니다.'},{role:'file',name:'2025 한미일 AI 검색 트렌드',sub:'트렌드 리포트 · 3개국',badge:'n=3,000'}],preview:'dataset',hl:'데이터셋 선택'},
    {chat:[{role:'user',text:'한국과 미국의 소비자 AI 검색 행동 차이를 비교해줘'}],preview:'prompt',hl:'크로스컨트리 질문'},
-   {chat:[{role:'ai',text:'**Summary**\n- 한국은 AI 검색 도구 체험률이 가장 높습니다 (ChatGPT 시도: KR **50.9%** vs JP 14.8%).\n- 미국은 ChatGPT 검색 만족도·신뢰도가 가장 높습니다 (만족 TOP2: US **85.9%**).\n- 일본은 상대적으로 신중·중립적 태도입니다.',source:'Source 1'}],preview:'insights2',hl:'다국가 비교 인사이트'},
-   {chat:[{role:'user',text:'한국+일본을 East Asia로 묶어서 미국과 크로스탭 해줘'},{role:'ai',text:'**East Asia vs US — 통계적 유의 차이**',table:true,source:'Source 1'}],preview:'crosstab',hl:'변수 재코딩 · 유의차 검정'},
+   {chat:[{role:'ai',text:'**Summary**\n- 한국은 AI 검색 도구 체험률이 가장 높습니다 (ChatGPT 시도: KR **50.9%** vs JP 14.8%).\n- 미국은 ChatGPT 검색 만족도·신뢰도가 가장 높습니다 (만족 TOP2: US **85.9%**).\n- 일본은 상대적으로 신중·중립적 태도입니다.',source:'2025 한미일 AI 검색 트렌드'}],preview:'insights2',hl:'다국가 비교 인사이트'},
+   {chat:[{role:'user',text:'한국+일본을 East Asia로 묶어서 미국과 크로스탭 해줘'},{role:'ai',text:'**East Asia vs US — 통계적 유의 차이**',table:true,source:'2025 한미일 AI 검색 트렌드'}],preview:'crosstab',hl:'변수 재코딩 · 유의차 검정'},
    {chat:[{role:'system',text:'팀원에게 공유되었습니다.'},{role:'user',text:'일본만 따로 보면 어떻게 돼?',avatar:'J',name:'지연 (팀원)'},{role:'ai',text:'**Japan only | key findings**\n\n일본 응답자의 ChatGPT 시도율은 **14.8%**로 3개국 중 가장 낮습니다. 만족도(TOP2: 55.4%)는 중간 수준이나, 중립 응답이 상대적으로 높습니다.'}],preview:'collaborate',hl:'팀 협업 채팅'},
  ]},
  /* ① 설계 — 김민정 팀장(리서치 수행자) · media1 */
