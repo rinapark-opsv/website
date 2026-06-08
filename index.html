@@ -66,11 +66,11 @@
   --shadow-lg:  0 8px 24px rgba(0,0,0,.10);
 
   /* Radius — 크고 부드럽게 */
-  --r-xs:  6px;
+  --r-xs:  5px;
   --r-sm:  8px;
-  --r-md:  12px;
-  --r-lg:  16px;
-  --r-xl:  20px;
+  --r-md:  13px;
+  --r-lg:  21px;
+  --r-xl:  34px;
   --r-pill:9999px;
 
   /* Motion */
@@ -187,7 +187,7 @@ a { text-decoration: none; color: inherit; }
 .frame {
   position: relative; z-index: 10;
   width: min(1320px, 100%);
-  border-radius: 16px;
+  border-radius: 21px;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.90);
   box-shadow:
@@ -317,7 +317,7 @@ a { text-decoration: none; color: inherit; }
 .rail-row i { font-size: 16px; width: 16px; flex-shrink: 0; display: flex; justify-content: center; }
 .rail-row svg { width: 16px; height: 16px; flex-shrink: 0; }
 .rail-row.active {
-  background: rgba(255,255,255,0.4);   /* 선택·호버 동일 화이트 하이라이트 */
+  background: rgba(255,255,255,0.8);   /* 선택·호버 동일 화이트 하이라이트 */
   color: var(--blue);               /* 포인트는 메인 컬러 하나만 */
   cursor: pointer;
 }
@@ -506,23 +506,23 @@ a { text-decoration: none; color: inherit; }
 }
 .composer-attach:hover { background: var(--bg-hover); }
 .send-btn {
-  align-self: flex-end;
-  width: 28px; height: 28px;
-  border-radius: 7px;                 /* 제품: 사각 라운드 */
-  background: var(--blue);
+  align-self: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;                 /* 원형 — 정제된 전송 버튼 */
+  background: #0050FF;
   color: #fff;
   display: flex; align-items: center; justify-content: center;
   transition: background var(--t-fast), color var(--t-fast);
   flex-shrink: 0;
 }
-.send-btn:hover { background: var(--blue-hover); }
-.send-btn.idle { background: var(--blue-soft); color: #CCDCFF; }  /* 입력 전 비활성 (제품) */
-.send-btn.idle:hover { background: var(--blue-soft); }
+.send-btn:hover { background: #0050FF; }
+.send-btn.idle { background: #EDEDED; color: var(--text-tertiary); }  /* 비활성: 중립 그레이 */
+.send-btn.idle:hover { background: #0050FF; color: #fff; }
 .send-btn svg { width: 14px; height: 14px; fill: none; }
 
 /* ── 추천 질문 칩 — 컬러 서클 아이콘 + 대시 커넥터 (제품 컴포저) ── */
 .home-suggest {
-  display: flex; gap: 7px; margin-top: 20px;
+  display: flex; gap: 7px; margin-top: 24px;
   flex-wrap: wrap; align-items: center; justify-content: center;
 }
 .suggest-label { font-size: 12px; font-weight: 500; color: var(--text-tertiary); margin-right: 6px; }
@@ -581,17 +581,18 @@ a { text-decoration: none; color: inherit; }
   margin-top: 31px;
 }
 .user-bubble {
-  background: #F5F4F2;            /* 유저 버블: 웜 오프화이트 */
-  color: var(--text-primary);
-  padding: 10px 16px;
-  border-radius: 18px;            /* 균일 라운드, 꼬리 없음 */
+  background: #F1F6FF;            /* 유저 버블: 연한 블루 (Figma) */
+  color: #003BDD;
+  padding: 12px 16px;
+  border-radius: 13px;            /* 균일 라운드, 꼬리 없음 */
   font-size: 14px; line-height: 22px;   /* KR/Body-14 */
   max-width: 72%;
   letter-spacing: -0.4px;
 }
 
 /* AI message */
-.msg-ai { margin-bottom: 10px; padding-left: 24px; }
+.msg-ai { margin-bottom: 10px; padding-left: 24px; width: 80%; }
+.app.artifact-open .msg-ai { width: 100%; }
 
 .ai-header {
   display: flex; align-items: center; gap: 3px;
@@ -867,12 +868,12 @@ a { text-decoration: none; color: inherit; }
   pointer-events: none;
 }
 .chat-input-wrap {
-  border: 1px solid var(--border-strong);
-  border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 21px;
   background: var(--bg-input);
   box-shadow: var(--shadow-sm);
-  display: flex; align-items: flex-start; gap: 8px;   /* 텍스트는 박스 상단부터 */
-  padding: 12px 10px 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 9px 9px 18px;
   transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
 }
 .chat-input-wrap:focus-within {
@@ -882,9 +883,9 @@ a { text-decoration: none; color: inherit; }
 }
 .chat-input {
   flex: 1; border: none; outline: none; resize: none;
-  font-size: 13px; line-height: 20px;
+  font-size: 14px; line-height: 22px;
   color: var(--text-primary); background: transparent;
-  max-height: 96px; min-height: 20px; font-size: 13px;
+  max-height: 96px; min-height: 22px;
 }
 .chat-input::placeholder { color: var(--text-tertiary); }
 .chat-input-footer-note {
@@ -918,7 +919,7 @@ a { text-decoration: none; color: inherit; }
   padding: 10px 13px;
   background: #ffffff;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 13px;
   font-size: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: box-shadow var(--t-fast);
@@ -985,7 +986,7 @@ a { text-decoration: none; color: inherit; }
   display: flex; flex-direction: column;
   background: var(--bg-canvas);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 13px;
   overflow: hidden;
   box-shadow: none;
 }
@@ -1176,7 +1177,7 @@ a { text-decoration: none; color: inherit; }
 .tm-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; max-width: 72%; }
 .tm-name { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding-left: 2px; }
 .tm-avatar { width: 17px; height: 17px; border-radius: 50%; background: #7C3AED; color: #fff; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.user-bubble.teammate { background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border); border-radius: 18px; }
+.user-bubble.teammate { background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border); border-radius: 13px; }
 .ai-source-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-tertiary); }
 .ai-source-line .system-dot { background: var(--blue); }
 .ai-prose table.mini { border-collapse: collapse; width: 100%; font-size: 12px; margin: 8px 0; }
@@ -1287,7 +1288,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ── Figma 챗 카드 (DX 시연 컴포넌트: 프로젝트 선택/생성 과정/설문 데이터) ── */
 .cc-stack { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
-.cc-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px 16px; width:100%; }
+.cc-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:14px 16px; width:100%; }
 .msg-ai > .cc-card { margin-bottom:12px; }
 .cc-head { display:flex; align-items:center; gap:8px; }
 .cc-title { font-size:14px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.45; }
@@ -1302,9 +1303,11 @@ a { text-decoration: none; color: inherit; }
 .btn-blue.soft:hover { background:var(--blue-hover); color:#fff; }   /* 호버: 딥 블루 */
 .btn-blue-outline { display:inline-flex; align-items:center; justify-content:center; background:#fff; border:1px solid #8FB2FF; color:var(--blue); font-size:12px; font-weight:600; height:30px; padding:0 13px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); cursor:pointer; }
 .btn-blue-outline:hover { background:var(--blue-soft); }
-.cc-data { background:#fff; border:1px solid var(--border); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; width:100%; box-shadow:0 1px 3px rgba(0,0,0,0.05); cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
-.cc-data:hover { border-color:var(--blue); box-shadow:0 2px 10px rgba(71,129,255,0.12); }
+.cc-data { background:#F1F6FF; border:none; border-radius:13px; padding:10px 12px; display:flex; align-items:center; gap:10px; width:100%; cursor:pointer; transition:background var(--t-fast), box-shadow var(--t-fast); }
+.cc-data:hover { background:#E7EFFF; }
+.cc-data.pressing { background:#E7EFFF !important; }
 .cc-data-icon { width:32px; height:32px; border-radius:7px; background:#EEF3FF; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.cc-data-icon.svg { background:none; } .cc-data-icon.svg svg { width:26px; height:26px; display:block; }
 .cc-data-info { flex:1; min-width:0; display:flex; flex-direction:column; }
 .cc-data-title { font-size:13px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cc-data-meta { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; margin-top:1px; }
@@ -1348,15 +1351,16 @@ a { text-decoration: none; color: inherit; }
 .cc-doc-ul li { font-size:13px; color:var(--text-secondary); line-height:1.7; letter-spacing:-0.2px; margin-bottom:5px; }
 .cc-doc-ul li strong { font-weight:600; color:var(--text-primary); }
 .cc-fade { position:absolute; left:1px; right:1px; bottom:0; height:78px; background:linear-gradient(rgba(255,255,255,0) 0%, #fff 58%); pointer-events:none; }
-.cc-more { position:absolute; bottom:9px; left:0; right:0; display:flex; align-items:center; justify-content:center; gap:3px; font-size:11px; font-weight:500; color:var(--text-secondary); cursor:pointer; }
+.cc-more { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; justify-content:center; gap:3px; padding:5px 12px; border-radius:8px; font-size:11px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:background var(--t-fast); }
+.cc-more:hover { background:rgba(0,0,0,0.06); }
 
 /* 자동 시연 버튼 눌림 효과 */
-.pressing { transform: scale(.97) !important; opacity: .55; transition: transform 200ms cubic-bezier(.34,1.56,.64,1), opacity 200ms ease; }
+.pressing { background: rgba(0,0,0,0.06) !important; border-radius: 8px; transition: background 160ms ease; }
 
 /* 브리프 완료 카드 — 미리보기 버튼 우측 */
 .cc-briefcard .cc-head { width:100%; }
 .cc-head-out { width:100%; margin-bottom:10px; }
-.cc-briefcard { border-radius:12px; border:1px solid var(--border); box-shadow:none; padding-left:20px; padding-right:20px; }
+.cc-briefcard { border-radius:13px; border:1px solid var(--border); box-shadow:none; padding-left:20px; padding-right:20px; }
 .cc-brief-preview { margin-left:auto; flex-shrink:0; display:inline-flex; align-items:center; gap:2px; background:none; border:none; padding:4px 4px; font-size:12px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:color var(--t-fast); }
 .cc-brief-preview:hover { color:var(--blue); }
 .cc-brief-preview i { color:inherit; }
@@ -1365,12 +1369,8 @@ a { text-decoration: none; color: inherit; }
 .fig-src-ico.os svg { width:18px; height:18px; display:block; }
 /* 인라인 아티팩트 느낌 — 챗 안에서 카드 위아래 분할 */
 .cc-card, .cc-stack, .co-card, .cc-data { margin:14px 0; }
-/* 챗 아티팩트 카드 영역 폭 70% */
-.msg-ai > .cc-card, .msg-ai > .cc-stack, .msg-ai > .cc-data, .msg-ai > .co-card { width:70%; }
-/* 브리프/설계서 카드 폭 */
-.msg-ai > .cc-briefcard { width:100%; }
-/* process(생성 과정) 카드도 브리프와 동일 폭으로 통일 */
-.msg-ai > .cc-stack { width:100%; }
+/* 카드는 메시지 컬럼을 채움(폭 제어는 .msg-ai 단위) */
+.msg-ai > .cc-card, .msg-ai > .cc-stack, .msg-ai > .cc-data, .msg-ai > .co-card, .msg-ai > .cc-briefcard { width:100%; }
 .msg-ai > .cc-card:first-of-type, .msg-ai > .cc-stack:first-of-type { margin-top:6px; }
 .cc-brief-intro { font-size:13px; color:var(--text-secondary); margin-bottom:10px; line-height:1.6; letter-spacing:-0.2px; }
 
@@ -1399,9 +1399,9 @@ a { text-decoration: none; color: inherit; }
 .cc-follow-chip span { flex:0 1 auto; min-width:0; }
 .cc-follow-chip .cc-fi { font-size:14px; color:var(--text-tertiary); flex-shrink:0; }
 .cc-follow-chip .cc-fa { font-size:11px; color:var(--blue); flex-shrink:0; }
-.cc-follow-chip:hover { background:rgba(0,0,0,0.05); }
+.cc-follow-chip:hover { background:rgba(0,0,0,0.06); }
 .cc-follow-chip.is-tapped { background:rgba(0,0,0,0.06); }
-.cc-follow-chip:active { background:rgba(0,0,0,0.08); }
+.cc-follow-chip:active { background:rgba(0,0,0,0.06); }
 .cc-follow-chip:hover .cc-fa { color:var(--text-secondary); }
 
 /* 순차 리빌 (생성되는 듯) */
@@ -1442,10 +1442,10 @@ a { text-decoration: none; color: inherit; }
 .sd-end { font-size:12px; color:var(--text-secondary); padding:10px 0; }
 
 /* ── 수집 대상 선택 카드 (Figma CollectGroup/SelectOption) ── */
-.co-card { background:#fff; border:1px solid var(--border); border-radius:16px; padding:16px; width:100%; display:flex; flex-direction:column; gap:10px; margin:14px 0; }
-.co-option { position:relative; background:#fff; border:1px solid var(--border); border-radius:14px; padding:13px 15px; display:flex; gap:13px; align-items:flex-start; }
+.co-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:16px; width:100%; display:flex; flex-direction:column; gap:10px; margin:14px 0; }
+.co-option { position:relative; background:#fff; border:1px solid var(--border); border-radius:13px; padding:13px 15px; display:flex; gap:13px; align-items:flex-start; }
 .co-option.selected { border:2px solid var(--blue); padding:12px 14px; }
-.co-ico { width:32px; height:32px; border-radius:6px; background:#BEC4D0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.co-ico { width:32px; height:32px; border-radius:8px; background:#BEC4D0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
 .co-option.selected .co-ico { background:linear-gradient(125deg, #A86BF6 0%, #005CFF 100%); }
 .co-body { flex:1; min-width:0; }
 .co-head { display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
@@ -1455,7 +1455,7 @@ a { text-decoration: none; color: inherit; }
 .co-desc { font-size:12px; color:#4B566C; line-height:1.55; letter-spacing:-0.3px; margin-top:4px; }
 .co-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
 .co-rec { position:absolute; top:-9px; right:-7px; background:var(--blue); color:#fff; font-size:11px; font-weight:500; height:22px; padding:0 10px; border-radius:999px; display:flex; align-items:center; }
-.co-start { width:100%; height:34px; border-radius:7px; background:#CCDCFF; color:#fff; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:background var(--t-fast); }
+.co-start { width:100%; height:34px; border-radius:8px; background:#CCDCFF; color:#fff; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:background var(--t-fast); }
 .co-start:hover { background:var(--blue); color:#fff; }
 
 /* ── 설문 미리보기 문서 (아티팩트) ── */
@@ -1534,20 +1534,21 @@ a { text-decoration: none; color: inherit; }
 .av-doc-li { font-size:13px; color:var(--gray-10); padding:3px 0; line-height:18px; letter-spacing:-0.3px; }   /* Body-13 */
 
 /* ── Figma 출처 인용 (Chat / Data) — 제품 컴포넌트 1:1 ── */
-.fig-sources { margin-top:16px; display:flex; flex-direction:column; gap:8px; width:100%; }
+.fig-sources { margin-top:18px; padding-top:18px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; width:100%; }
 .fig-src-label { font-size:12px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin-bottom:4px; }
 .fig-src-row { display:flex; align-items:center; gap:7px; }
 .fig-src-num { flex-shrink:0; min-width:22px; height:20px; padding:2px 6px; display:inline-flex; align-items:center; justify-content:center;
   background:rgba(0,0,0,0.05); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:11.5px; color:var(--text-secondary); }
 .fig-src-card { flex:1; min-width:0; display:flex; align-items:center; gap:7px; padding:6px 10px;
-  background:rgba(159,163,173,0.07); border-radius:12px; transition:background var(--t-fast); }
+  background:rgba(159,163,173,0.07); border-radius:13px; transition:background var(--t-fast); }
 .fig-src-card { cursor:pointer; }
-.fig-src-card:hover { background:rgba(96,110,144,0.07); }
+.fig-src-card:hover { background:rgba(0,0,0,0.06); }
+.fig-src-card:active { background:rgba(0,0,0,0.09); }
 .fig-src-ico { width:18px; height:18px; flex-shrink:0; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:10px; }
 .fig-src-ico.survey { background:var(--blue-light); } .fig-src-ico.report { background:#FCE7D4; }
 .fig-src-ico.trend { background:#D9F9FC; } .fig-src-ico.doc { background:var(--green-bg); }
 .fig-src-title { flex:1; min-width:0; font-size:11.5px; font-weight:400; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.fig-src-go { flex-shrink:0; color:var(--text-tertiary); font-size:12px; }
+.fig-src-go { flex-shrink:0; color:var(--text-tertiary); font-size:12px; opacity:0.7; }
 .fig-src-type { flex-shrink:0; font-size:13px; font-weight:500; color:var(--text-tertiary); letter-spacing:-0.3px; }
 .fig-src-link { width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:6px; color:var(--text-tertiary); transition:color var(--t-fast); }
 .fig-src-card:hover .fig-src-link { color:var(--blue); }
@@ -1682,7 +1683,6 @@ a { text-decoration: none; color: inherit; }
           </div>
         </div>
         <div class="home-suggest">
-          <span class="suggest-label">질문으로 시작</span>
           <button class="home-chip" onclick="playScenario(0)"><span class="chip-icon yellow"><i class="ph ph-clipboard-text"></i></span>설문 설계</button>
           <span class="chip-dash"></span>
           <button class="home-chip" onclick="playScenario(3)"><span class="chip-icon orange"><i class="ph ph-user"></i></span>패널 추천</button>
@@ -1693,7 +1693,6 @@ a { text-decoration: none; color: inherit; }
           <span class="chip-dash"></span>
           <button class="home-chip" onclick="playScenario(5)"><span class="chip-icon blue"><i class="ph ph-magnifying-glass"></i></span>데이터 탐색</button>
         </div>
-        <p class="cta-hint">내 데이터로 직접 분석해 보려면, <a href="https://opensurvey.io" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a></p>
       </div>
     </div>
 
@@ -1730,6 +1729,7 @@ a { text-decoration: none; color: inherit; }
 /* Dataspace AI 브랜딩 인디케이터 — Lottie 애니메이션 */
 const STAR='<span class="ai-ind" aria-label="Generating"></span>';
 const OS_ICON='<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="16" height="16" rx="2" fill="#0050FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.7265 5.55452C10.6105 5.52603 10.5262 5.42379 10.5262 5.30437V3.79515C10.5262 3.61176 10.6889 3.47047 10.869 3.5053C13.7082 4.05453 15.9455 6.29185 16.4947 9.13105C16.5295 9.31109 16.3882 9.47384 16.2049 9.47384H14.6953C14.5759 9.47384 14.4736 9.38949 14.4452 9.27352C13.9958 7.44407 12.5559 6.00399 10.7265 5.55452ZM14.5374 10.7293C14.5443 10.5907 14.4312 10.4782 14.2925 10.4782H12.786C12.6473 10.4782 12.536 10.591 12.5246 10.7292C12.397 12.2758 11.1014 13.4913 9.5218 13.4913C7.85772 13.4913 6.50872 12.1423 6.50872 10.4782C6.50872 8.89865 7.72415 7.60298 9.27079 7.47542C9.40899 7.46402 9.5218 7.3527 9.5218 7.21403V5.70748C9.5218 5.56881 9.40925 5.45574 9.27075 5.46256C6.61392 5.59337 4.5 7.78892 4.5 10.4782C4.5 13.2517 6.74834 15.5 9.5218 15.5C12.2111 15.5 14.4066 13.3861 14.5374 10.7293Z" fill="white"/></svg>';
+const SURVEY_ICON='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.4" y="2.4" width="19.2" height="19.2" rx="3.2" fill="#4781FF"/><path d="M7.2 15.6C7.86 15.6 8.4 16.14 8.4 16.8C8.4 17.46 7.86 18 7.2 18C6.54 18 6 17.46 6 16.8C6 16.14 6.54 15.6 7.2 15.6Z" fill="white"/><path d="M18 18H10.8V15.6H18V18Z" fill="white"/><path d="M7.2 10.8C7.86 10.8 8.4 11.34 8.4 12C8.4 12.66 7.86 13.2 7.2 13.2C6.54 13.2 6 12.66 6 12C6 11.34 6.54 10.8 7.2 10.8Z" fill="white"/><path d="M18 13.2H10.8V10.8H18V13.2Z" fill="white"/><path d="M7.2 6C7.86 6 8.4 6.54 8.4 7.2C8.4 7.86 7.86 8.4 7.2 8.4C6.54 8.4 6 7.86 6 7.2C6 6.54 6.54 6 7.2 6Z" fill="white"/><path d="M18 8.4H10.8V6H18V8.4Z" fill="white"/></svg>';
 let AI_IND_DATA=null;
 fetch('ai-indicator-frames.json').then(r=>r.json()).then(d=>{ AI_IND_DATA=d; hydrateInds(); }).catch(()=>{});
 function hydrateInds(){
@@ -1764,7 +1764,7 @@ function ccProcess(items){
 }
 function ccData(d){
   return `<div class="cc-data" role="button" onclick="openPanel('${d.open||'designsurvey'}')">
-    <span class="cc-data-icon">📋</span>
+    <span class="cc-data-icon svg">${SURVEY_ICON}</span>
     <span class="cc-data-info"><span class="cc-data-title">${d.name}</span><span class="cc-data-meta">${d.meta}</span></span>
     <i class="ph ph-arrow-up-right cc-data-arrow"></i>
   </div>`;
@@ -1836,7 +1836,7 @@ function streamReveal(el, deferFollow){
 /* 본문(문단·리스트·표·출처)은 한 번에 스르륵, 카드/칩 버블은 하나씩 */
 function revealStaged(units){
   if(!units.length) return;
-  const isBody=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li, .ai-source-line, .fig-sources, .chat-block');
+  const isBody=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li, .chat-block');
   const body=units.filter(isBody);
   const seq=units.filter(u=>!isBody(u));
   units.forEach(u=>u.classList.remove('rv-defer'));
@@ -1943,8 +1943,8 @@ function chatBlock(type){
 /* ── Figma 출처 인용 컴포넌트 (Chat / Data) ── */
 function srcRows(list){
   return `<div class="fig-sources"><div class="fig-src-label">출처</div>`+list.map(s=>`
-    <div class="fig-src-row"><span class="fig-src-num">${s.n}</span>
-      <div class="fig-src-card${s.open?' clickable':''}"${s.open?` onclick="openPanel('${s.open}')"`:''}>${(s.os||s.kind==='trend')?`<span class="fig-src-ico os">${OS_ICON}</span>`:`<span class="fig-src-ico ${s.kind||'doc'}">${s.emoji||'📄'}</span>`}
+    <div class="fig-src-row">
+      <div class="fig-src-card${s.open?' clickable':''}"${s.open?` onclick="openPanel('${s.open}')"`:''}>${s.kind==='survey'?`<span class="fig-src-ico os">${SURVEY_ICON}</span>`:(s.os||s.kind==='trend')?`<span class="fig-src-ico os">${OS_ICON}</span>`:`<span class="fig-src-ico ${s.kind||'doc'}">${s.emoji||'📄'}</span>`}
         <span class="fig-src-title">${s.title}</span><i class="ph ph-arrow-up-right fig-src-go"></i></div>
     </div>`).join('')+`</div>`;
 }
@@ -2403,6 +2403,21 @@ function closeArtifact(){ document.querySelector('.app').classList.remove('artif
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 
 /* ── playback ── */
+/* 자동 클릭: 다음 씬의 유저 메시지와 일치하는 꼬리질문 칩을 선택(시나리오 기반) */
+function autoTapFollowup(myGen){
+  const blocks=document.querySelectorAll('#live-chat .cc-follow');
+  const lf=blocks[blocks.length-1];
+  if(!lf) return;
+  const chips=[...lf.querySelectorAll('.cc-follow-chip')];
+  if(!chips.length) return;
+  const sc=SCENARIOS[sIdx], ns=sc&&sc.scenes[scIdx+1];
+  const nextText=(ns&&ns.chat&&ns.chat[0]&&ns.chat[0].role==='user'&&ns.chat[0].text)?ns.chat[0].text.trim():null;
+  let chip=null;
+  if(nextText) chip=chips.find(c=>{ const s=c.querySelector('span'); return s && s.textContent.trim()===nextText; });
+  chip=chip||chips[0];
+  chip.classList.add('is-tapped');
+  setTimeout(()=>{ if(playing&&myGen===gen){ chip.classList.remove('is-tapped'); chip.classList.remove('active'); } }, 600);
+}
 function skimArtifact(myGen, done){
   const el=$('artifact-body');
   if(!el){ done&&done(); return; }
@@ -2436,7 +2451,7 @@ function showScene(skipFirstTyping=false){
             setTimeout(()=>{ if(!playing||myGen!==gen) return;
               skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
                 revealDeferred();
-                if(scene.chipAfter) setTimeout(()=>{ if(!playing||myGen!==gen) return; const chip=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(chip){ chip.classList.add('is-tapped'); setTimeout(()=>{ chip.classList.remove('is-tapped'); chip.classList.remove('active'); }, 520); } }, 1500);
+                if(scene.chipAfter) setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, 1500);
                 timer=setTimeout(advance, 2900);
               });
             }, 500);
@@ -2451,7 +2466,7 @@ function showScene(skipFirstTyping=false){
       const d=scene.dwell||DWELL_MS;
       if(scene.chipAfter){
         const myGen=gen;
-        setTimeout(()=>{ if(!playing||myGen!==gen) return; const c=document.querySelector('#live-chat .cc-follow-chip.active')||document.querySelector('#live-chat .cc-follow-chip'); if(c){ c.classList.add('is-tapped'); setTimeout(()=>{ c.classList.remove('is-tapped'); c.classList.remove('active'); }, 520); } }, d);
+        setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, d);
         timer=setTimeout(advance, d+1300);
       } else {
         timer=setTimeout(advance, d);
@@ -2534,6 +2549,8 @@ function goHome(){ pauseForUser(); askIntro(); document.querySelectorAll('.chat-
 function updateSendState(){
   const hi=$('home-input-el'), hs=$('home-send');
   if(hi&&hs) hs.classList.toggle('idle', !hi.value.trim());
+  const li=$('live-input'), ls=$('live-send');
+  if(li&&ls) ls.classList.toggle('idle', !li.value.trim());
 }
 function wireInputs(){
   updateSendState();
