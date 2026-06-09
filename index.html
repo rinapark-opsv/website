@@ -507,19 +507,19 @@ a { text-decoration: none; color: inherit; }
 .composer-attach:hover { background: var(--bg-hover); }
 .send-btn {
   align-self: center;
-  width: 32px; height: 32px;
+  width: 28px; height: 28px;
   border-radius: 50%;                 /* 원형 — 정제된 전송 버튼 */
-  background: #0050FF;
+  background: #0050FF;                 /* 기본: 브랜드 블루 */
   color: #fff;
   display: flex; align-items: center; justify-content: center;
-  transition: background var(--t-fast), color var(--t-fast);
+  transition: opacity var(--t-fast);
   flex-shrink: 0;
 }
-.send-btn:hover { background: #F0F5FF; color: #0050FF; }
-.send-btn:active { background: #F0F5FF; color: #0050FF; }
-.send-btn.idle { background: #EDEDED; color: var(--text-tertiary); }  /* 비활성: 중립 그레이 */
-.send-btn.idle:hover { background: #F0F5FF; color: #0050FF; }
-.send-btn svg { width: 14px; height: 14px; fill: none; }
+.send-btn:hover { opacity: 0.82; }                              /* 호버: 블루 유지, 살짝 흐리게 */
+.send-btn:active { opacity: 0.7; }
+.send-btn.idle { background: #0050FF; color: #fff; }            /* idle도 브랜드 블루 디폴트 */
+.send-btn.idle:hover { opacity: 0.82; }
+.send-btn svg { width: 12px; height: 12px; fill: none; }
 
 /* ── 추천 질문 칩 — 컬러 서클 아이콘 + 대시 커넥터 (제품 컴포저) ── */
 .home-suggest {
