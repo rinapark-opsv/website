@@ -356,7 +356,7 @@ a { text-decoration: none; color: inherit; }
 .rail-profile { padding: 0 5px; }
 .rail-avatar {
   width: 26px; height: 26px; border-radius: 50%;
-  background: var(--blue-light); color: var(--blue);
+  background: #CB9E7B; color: #FDF8D8;
   font-size: 10px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -572,7 +572,7 @@ a { text-decoration: none; color: inherit; }
 .chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
 .chat-inner { max-width: 820px; margin: 0 auto; padding: 0 48px; }
-.app.artifact-open .chat-inner, .app.artifact-open .chat-input-area { padding-left: 53px; padding-right: 53px; }
+.app.artifact-open .chat-inner, .app.artifact-open .chat-input-area { padding-left: 32px; padding-right: 32px; }
 
 /* User message */
 .msg-user {
@@ -613,6 +613,7 @@ a { text-decoration: none; color: inherit; }
   background: url(ai-indicator-poster.png) center/contain no-repeat;  /* 로드 전 fallback */
 }
 .ai-ind.ind-live { background: none; }
+.ai-hex { display:inline-block; width:100%; height:100%; pointer-events:none; background:url(dataspace-hex.svg) center/contain no-repeat; }
 .ai-ind canvas { display: block; width: 100% !important; height: 100% !important; }
 .rail-row .ai-ind { width: 18px; height: 18px; flex-shrink: 0; }
 .thinking-toggle {
@@ -1324,6 +1325,7 @@ a { text-decoration: none; color: inherit; }
 .pd-cell-main { flex:1; min-width:0; display:flex; align-items:center; gap:9px; }
 .pd-file-ico { width:26px; height:26px; border-radius:6px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
 .pd-file-ico.xls { background:#D6F0E8; }
+.pd-file-ico.svg { background:none; } .pd-file-ico.svg svg { width:22px; height:22px; display:block; }
 .pd-name { font-size:12.5px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:-0.3px; }
 .pd-meta { font-size:11px; color:var(--text-tertiary); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .pd-ai-btn { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border-radius:6px; color:#fff; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0;
@@ -1534,8 +1536,8 @@ a { text-decoration: none; color: inherit; }
 .av-doc-li { font-size:13px; color:var(--gray-10); padding:3px 0; line-height:18px; letter-spacing:-0.3px; }   /* Body-13 */
 
 /* ── Figma 출처 인용 (Chat / Data) — 제품 컴포넌트 1:1 ── */
-.fig-sources { margin-top:18px; padding-top:18px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; width:100%; }
-.fig-src-label { font-size:12px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin-bottom:4px; }
+.fig-sources { margin-top:18px; padding-top:18px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:4px; width:100%; }
+.fig-src-label { font-size:12px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin-bottom:2px; }
 .fig-src-row { display:flex; align-items:center; gap:7px; }
 .fig-src-num { flex-shrink:0; min-width:22px; height:20px; padding:2px 6px; display:inline-flex; align-items:center; justify-content:center;
   background:rgba(0,0,0,0.05); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:11.5px; color:var(--text-secondary); }
@@ -1709,7 +1711,7 @@ a { text-decoration: none; color: inherit; }
             <i class="ph ph-arrow-up" style="font-size:14px"></i>
           </button>
         </div>
-        <p class="cta-hint" id="cta-hint">내 데이터로 직접 분석해 보려면, <a href="https://opensurvey.io" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a></p>
+        <p class="cta-hint" id="cta-hint"><span id="cta-hook">내 데이터로 직접 분석해 보려면,</span> <a data-signup href="https://account.opensurvey.io/signup?lang=ko" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a></p>
       </div>
     </div>
 
@@ -1728,6 +1730,7 @@ a { text-decoration: none; color: inherit; }
 ═══════════════════════════════════════════════ */
 /* Dataspace AI 브랜딩 인디케이터 — Lottie 애니메이션 */
 const STAR='<span class="ai-ind" aria-label="Generating"></span>';
+const STATIC_HEX='<span class="ai-hex" aria-label="Dataspace AI"></span>';
 const OS_ICON='<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="16" height="16" rx="2" fill="#0050FF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M10.7265 5.55452C10.6105 5.52603 10.5262 5.42379 10.5262 5.30437V3.79515C10.5262 3.61176 10.6889 3.47047 10.869 3.5053C13.7082 4.05453 15.9455 6.29185 16.4947 9.13105C16.5295 9.31109 16.3882 9.47384 16.2049 9.47384H14.6953C14.5759 9.47384 14.4736 9.38949 14.4452 9.27352C13.9958 7.44407 12.5559 6.00399 10.7265 5.55452ZM14.5374 10.7293C14.5443 10.5907 14.4312 10.4782 14.2925 10.4782H12.786C12.6473 10.4782 12.536 10.591 12.5246 10.7292C12.397 12.2758 11.1014 13.4913 9.5218 13.4913C7.85772 13.4913 6.50872 12.1423 6.50872 10.4782C6.50872 8.89865 7.72415 7.60298 9.27079 7.47542C9.40899 7.46402 9.5218 7.3527 9.5218 7.21403V5.70748C9.5218 5.56881 9.40925 5.45574 9.27075 5.46256C6.61392 5.59337 4.5 7.78892 4.5 10.4782C4.5 13.2517 6.74834 15.5 9.5218 15.5C12.2111 15.5 14.4066 13.3861 14.5374 10.7293Z" fill="white"/></svg>';
 const SURVEY_ICON='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.4" y="2.4" width="19.2" height="19.2" rx="3.2" fill="#4781FF"/><path d="M7.2 15.6C7.86 15.6 8.4 16.14 8.4 16.8C8.4 17.46 7.86 18 7.2 18C6.54 18 6 17.46 6 16.8C6 16.14 6.54 15.6 7.2 15.6Z" fill="white"/><path d="M18 18H10.8V15.6H18V18Z" fill="white"/><path d="M7.2 10.8C7.86 10.8 8.4 11.34 8.4 12C8.4 12.66 7.86 13.2 7.2 13.2C6.54 13.2 6 12.66 6 12C6 11.34 6.54 10.8 7.2 10.8Z" fill="white"/><path d="M18 13.2H10.8V10.8H18V13.2Z" fill="white"/><path d="M7.2 6C7.86 6 8.4 6.54 8.4 7.2C8.4 7.86 7.86 8.4 7.2 8.4C6.54 8.4 6 7.86 6 7.2C6 6.54 6.54 6 7.2 6Z" fill="white"/><path d="M18 8.4H10.8V6H18V8.4Z" fill="white"/></svg>';
 let AI_IND_DATA=null;
@@ -1973,7 +1976,7 @@ function msgHTML(m, skipBody=false){
     } else { body=m.text?md(m.text):''; }
   }
   return `<div class="msg-ai msg-enter">
-    <div class="ai-header"><div class="ai-avatar">${STAR}</div>
+    <div class="ai-header"><div class="ai-avatar">${m.process?STAR:STATIC_HEX}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
     ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.followups?ccFollowups(m.followups):''}
     ${m.block?chatBlock(m.block):''}
@@ -2256,14 +2259,14 @@ function previewHTML(type){
         <span class="pd-filter">상태 <i class="ph ph-caret-down" style="font-size:10px"></i></span>
       </div>
       <div class="pd-row clickable" onclick="projectRowClick()">
-        <span class="pd-cell-main"><span class="pd-file-ico">📋</span>
+        <span class="pd-cell-main"><span class="pd-file-ico svg">${SURVEY_ICON}</span>
           <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">MZ세대 브랜드 인식 조사</span><span class="pd-meta" style="display:block">김오픈 · 2026-06-05 · 설문</span></span></span>
         <span class="pd-ai-btn"><img src="ai-indicator-poster.png" alt="">Dataspace AI</span>
         <span class="pd-badge blue">수집 중 (2)</span>
         <span class="pd-badge gray">162 / 250 ›</span>
       </div>
       <div class="pd-row">
-        <span class="pd-cell-main"><span class="pd-file-ico">📋</span>
+        <span class="pd-cell-main"><span class="pd-file-ico svg">${SURVEY_ICON}</span>
           <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">2025 1인가구 트렌드리포트 (보고서작업용)</span><span class="pd-meta" style="display:block">권유리 · 2025-08-15 · 설문</span></span></span>
         <span class="pd-badge gray">수집 완료</span>
         <span class="pd-badge gray">250 / 250 ›</span>
@@ -2481,13 +2484,14 @@ function advance(){
   else {
     statuses[sIdx]='done'; renderSidebar();
     let nx=SCENARIOS.findIndex((_,i)=>statuses[i]!=='done');
-    if(nx===-1){ playing=false; showEndCTA(); return; }
+    if(nx===-1){ statuses=SCENARIOS.map(()=>'waiting'); renderSidebar(); setTimeout(()=>{ if(playing) playScenario(0, true); }, 800); return; }
     setTimeout(()=>{ if(playing||statuses.some(s=>s!=='done')) playScenario(nx, true); }, 800);
   }
 }
 function playScenario(i, skipFirstTyping=false){
   gen++; clearTimeout(timer); clearInterval(typingTimer); userTyping=false; hideCTA();
   sIdx=i; scIdx=0; lastArtifact=null;
+  applyHook(i);
   if(statuses[i]!=='done') statuses[i]='active';
   playing=true;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -2523,23 +2527,15 @@ function userSend(text){
   const inner=$('live-chat');
   inner.insertAdjacentHTML('beforeend', msgHTML({role:'user',text})); clearInput(); scrollChat();
   setTimeout(()=>{
+    const hookEl=$('cta-hook');
+    const hook=(hookEl && hookEl.textContent.trim()) ? hookEl.textContent.trim() : DEFAULT_HOOK;
     inner.insertAdjacentHTML('beforeend',
-      `<div class="msg-ai msg-enter"><div class="ai-header"><div class="ai-avatar">${STAR}</div></div>
-       <div class="ai-prose">내 데이터로 직접 분석해 보려면, <a class="demo-link" href="https://opensurvey.io" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a></div></div>`);
+      `<div class="msg-ai msg-enter"><div class="ai-header"><div class="ai-avatar">${STATIC_HEX}</div></div>
+       <div class="ai-prose">${hook} <a class="demo-link" data-signup href="${CTA.url}" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a></div></div>`);
     scrollChat();
   }, 650);
 }
-function showEndCTA(){
-  const inner=$('live-chat');
-  if(inner.querySelector('.end-cta-card')) return;
-  inner.insertAdjacentHTML('beforeend',
-    `<div class="end-cta-card msg-enter">
-       <div class="end-cta-title">리서치 설계 · 분석 · 공유, 전 과정을 한 번에</div>
-       <div class="end-cta-sub">질문 한 줄로 시작해 보세요. Ask. AI does the rest.</div>
-       <a class="cta-btn lg" href="https://opensurvey.io" target="_blank" rel="noreferrer">Dataspace 시작하기 →</a>
-     </div>`);
-  scrollChat(); showCTA();
-}
+function showEndCTA(){ /* 종료 CTA 카드 제거 — 히어로는 루프 재생 */ }
 function hideEndCTA(){ const c=$('live-chat'); const e=c&&c.querySelector('.end-cta-card'); if(e) e.remove(); }
 
 function goHome(){ pauseForUser(); askIntro(); document.querySelectorAll('.chat-item').forEach(i=>i.classList.remove('active')); }
@@ -2551,6 +2547,31 @@ function updateSendState(){
   if(hi&&hs) hs.classList.toggle('idle', !hi.value.trim());
   const li=$('live-input'), ls=$('live-send');
   if(li&&ls) ls.classList.toggle('idle', !li.value.trim());
+}
+/* ── i18n: 언어별 signup CTA (텍스트 + URL) ── 언어 감지: URL ?lang= → <html lang> → 기본 ko */
+const CTA_I18N={
+  ko:{ navText:'무료로 시작하기',   url:'https://account.opensurvey.io/signup?lang=ko' },
+  en:{ navText:'Start free',        url:'https://account.opensurvey.io/signup?lang=en' },
+  ja:{ navText:'無料で始める',      url:'https://account.opensurvey.io/signup?lang=ja' }
+};
+function detectLang(){
+  const q=new URLSearchParams(location.search).get('lang');
+  const h=(document.documentElement.getAttribute('lang')||'').slice(0,2).toLowerCase();
+  const cand=(q||h||'ko').toLowerCase();
+  return CTA_I18N[cand] ? cand : 'ko';
+}
+const LANG=detectLang();
+const CTA=CTA_I18N[LANG];
+function applyI18nCTA(){
+  const nav=document.querySelector('.page-nav-cta');
+  if(nav){ nav.textContent=CTA.navText; nav.onclick=()=>window.open(CTA.url,'_blank','noreferrer'); }
+  document.querySelectorAll('a[data-signup]').forEach(a=>{ a.href=CTA.url; });
+}
+const DEFAULT_HOOK='내 데이터로 직접 분석해 보려면,';
+function applyHook(i){
+  const el=$('cta-hook'); if(!el) return;
+  const s=(typeof SCENARIOS!=='undefined' && SCENARIOS[i]) ? SCENARIOS[i] : null;
+  el.textContent=(s && s.hook) ? s.hook : DEFAULT_HOOK;
 }
 function wireInputs(){
   updateSendState();
@@ -2572,6 +2593,7 @@ function wireInputs(){
 }
 
 renderSidebar();
+applyI18nCTA();
 wireInputs();
 askIntro();
 { const m=location.hash.match(/^#play(\d+)$/); if(m) setTimeout(()=>playScenario(+m[1]), 900); } // QA: 특정 시나리오 바로 재생

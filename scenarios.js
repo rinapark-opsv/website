@@ -8,7 +8,7 @@
    ai 메시지: text(마크다운 **굵게**), source/sources(출처), block(인라인 표)
    ════════════════════════════════════════════════════ */
 const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
- {id:'C',label:'미국 MZ 여성 K뷰티 구매 의향 조사 브리프·설문 설계',tagline:'브리프 한 줄이 검증된 설문 문항으로, 10분 만에',scenes:[
+ {id:'C',label:'미국 MZ 여성 K뷰티 구매 의향 조사 브리프·설문 설계',tagline:'브리프 한 줄이 검증된 설문 문항으로, 10분 만에',hook:'이런 설문, 우리 제품으로 설계하려면',scenes:[
    {chat:[{role:'user',text:'미국 MZ 여성 대상 K뷰티 구매 의향 조사 브리프 써줘'}],preview:'prompt',hl:'리서치 목적 입력',dwell:200},
    {chat:[{role:'ai',process:[{t:'리서치 목표 정리 중...',b:['AI가 입력하신 내용을 바탕으로 리서치의 목표, 알아내야 할 것들, 의사결정 포인트를 정리하고 있어요.',"전문 리서처가 프로젝트 시작 전에 하는 '리서치 기획서' 작성 과정이에요."]}]}],preview:'prompt',hl:'리서치 목표 정리 중',dwell:700},
    {chat:[{role:'ai',briefcard:{t:'리서치 기획서 완료',open:'briefdocC',
@@ -29,7 +29,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
     preview:'surveydoc',hl:'설문 생성 완료',open:'surveydoc',press:'.cc-data'},
  ]},
  /* ② 분석 (was A) — 리서치 흐름: 수집 → 분석 · 디폴트 자동재생 */
- {id:'A',label:'설문 로데이터 주요 인사이트 요약·연령대별 분석',tagline:'로데이터를 올리면, 가공 없이 바로 분석이 시작됩니다',scenes:[
+ {id:'A',label:'설문 로데이터 주요 인사이트 요약·연령대별 분석',tagline:'로데이터를 올리면, 가공 없이 바로 분석이 시작됩니다',hook:'내 설문 데이터로 직접 분석해 보려면',scenes:[
    {chat:[{role:'system',text:'설문 파일이 업로드되었습니다.'},{role:'file',name:'survey_rawdata_2025.xlsx',sub:'설문 원데이터 · 스프레드시트',badge:'+2,400 rows'}],preview:'upload',hl:'데이터 업로드'},
    {chat:[{role:'user',text:'이 설문 데이터의 주요 인사이트를 요약해줘'}],preview:'prompt',hl:'자연어 질문'},
    {chat:[{role:'ai',text:'**Summary**\n1. 브랜드 인지도는 20대(78%)에서 가장 높고, 50대(41%)에서 가장 낮습니다.\n2. 구매 경험자의 재구매 의향은 82%로 높은 충성도를 보입니다.\n3. 주요 구매 채널은 온라인(64%)이며, 오프라인 대비 빠르게 성장 중입니다.',source:'Source 1'}],preview:'insights',hl:'데이터 기반 인사이트'},
@@ -38,7 +38,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'system',text:'분석 결과가 프로젝트에 저장되었습니다.'}],preview:'overview',hl:'프로젝트 저장'},
  ]},
  /* ③ 공유 (was B) — 리서치 흐름: 분석 → 공유 */
- {id:'B',label:'한국 vs 미국 소비자 AI 검색 행동 차이 비교',tagline:'분석이 팀의 자산이 되고, 누구나 이어서 질문합니다',panel:false,scenes:[
+ {id:'B',label:'한국 vs 미국 소비자 AI 검색 행동 차이 비교',tagline:'분석이 팀의 자산이 되고, 누구나 이어서 질문합니다',hook:'우리 팀과 함께 이렇게 분석하려면',panel:false,scenes:[
    {chat:[{role:'system',text:'트렌드 데이터셋이 선택되었습니다.'},{role:'file',name:'2025 한미일 AI 검색 트렌드',sub:'트렌드 리포트 · 3개국',badge:'n=3,000'}],preview:'dataset',hl:'데이터셋 선택'},
    {chat:[{role:'user',text:'한국과 미국의 소비자 AI 검색 행동 차이를 비교해줘'}],preview:'prompt',hl:'크로스컨트리 질문'},
    {chat:[{role:'ai',text:'**Summary**\n- 한국은 AI 검색 도구 체험률이 가장 높습니다 (ChatGPT 시도: KR **50.9%** vs JP 14.8%).\n- 미국은 ChatGPT 검색 만족도·신뢰도가 가장 높습니다 (만족 TOP2: US **85.9%**).\n- 일본은 상대적으로 신중·중립적 태도입니다.',source:'2025 한미일 AI 검색 트렌드'}],preview:'insights2',hl:'다국가 비교 인사이트'},
@@ -46,7 +46,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'system',text:'팀원에게 공유되었습니다.'},{role:'user',text:'일본만 따로 보면 어떻게 돼?',avatar:'J',name:'지연 (팀원)'},{role:'ai',text:'**Japan only | key findings**\n\n일본 응답자의 ChatGPT 시도율은 **14.8%**로 3개국 중 가장 낮습니다. 만족도(TOP2: 55.4%)는 중간 수준이나, 중립 응답이 상대적으로 높습니다.'}],preview:'collaborate',hl:'팀 협업 채팅'},
  ]},
  /* ① 설계 — 김민정 팀장(리서치 수행자) · media1 */
- {id:'design',label:'MZ세대 브랜드 인식 조사 — 설문 설계·생성',persona:'김민정 팀장 · 리서치 수행',panel:false,tagline:'질문 한 줄이 검증된 설문으로, 10분 만에',scenes:[
+ {id:'design',label:'MZ세대 브랜드 인식 조사 — 설문 설계·생성',persona:'김민정 팀장 · 리서치 수행',panel:false,tagline:'질문 한 줄이 검증된 설문으로, 10분 만에',hook:'우리 브랜드 조사를 직접 설계·수집하려면',scenes:[
    {chat:[{role:'user',text:'우리 브랜드 인식이 어떤지 알고 싶어요'},
           {role:'ai',text:'브랜드 인식 조사는 크게 두 가지 방향으로 접근할 수 있어요. **인지도·이미지 조사**라면 주요 연령대별로 브랜드를 어떻게 떠올리는지 측정하고, **경쟁사 대비 포지셔닝**도 함께 확인할 수 있어요. 어떤 타겟 세그먼트가 특히 궁금하신가요?'}],preview:'prompt',hl:'접근 방향 제안'},
    {chat:[{role:'user',text:'MZ세대 중심으로 설문 만들어줄 수 있어?'},
@@ -67,7 +67,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
           {role:'ai',collect:true,text:'**누구에게 물어볼까요?** 브랜드 인식 조사는 탐색적 조사이기 때문에 빠르게 인사이트를 얻을 수 있는 **합성 패널**을 추천해요.'}],preview:'collectdoc',hl:'수집 대상 선택',open:'collectdoc',press:'.co-start'},
  ]},
  /* ② 분석 — 박준호 PM(결과 활용자) · media2 · 디폴트 */
- {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'교차분석·세그먼트 유의차까지, 리서처처럼 답합니다',scenes:[
+ {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'교차분석·세그먼트 유의차까지, 리서처처럼 답합니다',hook:'내 컨셉 테스트 결과로 직접 비교해 보려면',scenes:[
    {chat:[{role:'system',text:'컨셉 테스트 결과가 연동되었습니다.'},{role:'file',name:'2026 K뷰티 신제품 컨셉 테스트',sub:'컨셉 평가 · 15개 컨셉',badge:'n=1,164',open:'concepts'}],preview:'conceptds',hl:'데이터셋 연동'},
    {chat:[{role:'user',text:'15개 컨셉의 구매 의향을 TOP2 기준으로 비교해줘'}],preview:'prompt',hl:'컨셉 비교 질문'},
    {chat:[{role:'ai',text:'**컨셉 구매 의향 TOP2 비교** (5점 척도, 전체 BASE n=1,164)\n- 상위: **VT Reedle Shot 앰플 57.6%**, AESTURA 크림 55.9%, Primera 클렌징 54.7%\n- 하위: Medicube Age-R 33.8%, Whoo 쿠션 28.9%\n\n핵심 인사이트 3개를 함께 정리했습니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'concepts',hl:'컨셉 TOP2 비교'},
@@ -75,7 +75,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'ai',text:'**TOP2 60%+ 컨셉 3개 · 연령대별 구매의향(TOP2)**\n3개 컨셉 모두 **30–39세가 가장 높고(약 70%)**, 40–49세가 가장 낮은 패턴이 공통으로 나타납니다.\n색상은 신뢰수준 80%에서 통계적으로 유의한 차이입니다.',block:'agecross',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'agecross',hl:'세그먼트 유의차 검정'},
  ]},
  /* ③ 탐색·트래킹 — 이수민 마케터(예산·시간 없이 근거) · media3 */
- {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 라이브러리로 근거를 만듭니다',scenes:[
+ {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 라이브러리로 근거를 만듭니다',hook:'우리 카테고리 트렌드를 직접 찾아보려면',scenes:[
    {chat:[{role:'system',text:'분석할 자체 데이터가 없어 라이브러리에서 탐색합니다.'},{role:'file',name:'건강기능식품 트렌드 데이터 (2025·2026)',sub:'트렌드 리포트 · 라이브러리',badge:'출처 2건',open:'library'}],preview:'library',hl:'라이브러리 데이터'},
    {chat:[{role:'user',text:'건강기능식품에서 2025 대비 2026에 뜨는 카테고리 알려줘'}],preview:'prompt',hl:'트렌드 질문'},
    {chat:[{role:'ai',text:'**2025 → 2026 섭취율 증가 카테고리** (단위 %p, 복수응답)\n- **오메가3 (+2.7%p)**, 수면 케어 (+1.0%p), 항산화/노화방지 (+0.7%p) 순으로 증가\n- 참고: 2026엔 ‘모발/탈모 영양제’(11.8%)가 신규 포함되어 직접 비교는 주의가 필요합니다.',block:'wave',source:'출처 1·2',sources:[{n:1,title:'2025 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'},{n:2,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'wave',hl:'웨이브 트래킹 비교'},
