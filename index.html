@@ -1923,6 +1923,13 @@ function renderSurveyDoc(){
 }
 function $(id){ return document.getElementById(id); }
 function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
+/* 생성 완료 → 메시지 아바타를 애니메이션(STAR)에서 솔리드 로고(STATIC_HEX)로 고정 */
+function settleAvatar(el){
+  if(!el) return;
+  const av=el.querySelector('.ai-avatar'); if(!av || av.dataset.settled) return;
+  av.dataset.settled='1';
+  av.innerHTML=STATIC_HEX;
+}
 
 /* ── sidebar scenario list ── */
 function renderSidebar(){
@@ -2013,7 +2020,7 @@ function msgHTML(m, skipBody=false){
     } else { body=m.text?md(m.text):''; }
   }
   return `<div class="msg-ai msg-enter">
-    <div class="ai-header"><div class="ai-avatar">${m.process?STAR:STATIC_HEX}</div>
+    <div class="ai-header"><div class="ai-avatar">${STAR}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
     ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}
     ${m.block?chatBlock(m.block):''}
@@ -2051,7 +2058,13 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       setTimeout(next, 650);
     } else {
       inner.insertAdjacentHTML('beforeend', msgHTML(m));
-      if(m.role==='ai') streamReveal(inner.lastElementChild, !!(m.followups && scene.open));
+      if(m.role==='ai'){
+        const aiEl=inner.lastElementChild;
+        streamReveal(aiEl, !!(m.followups && scene.open));
+        /* 아바타: 생성 중 애니메이션 → 생성 끝나면 솔리드 로고로 멈춤 (전역 규칙) */
+        const myG=gen, settleAt=Math.max(650, revealMs+250);
+        setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
+      }
       scrollChat();
       setTimeout(next, m.role==='ai'?Math.max(720, revealMs+150):420);
     }
@@ -2407,7 +2420,7 @@ const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 �
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
-  $('artifact-body').innerHTML=previewHTML(type);
+  const ab=$('artifact-body'); ab.innerHTML=previewHTML(type); ab.scrollTop=0;   /* 항상 최상단부터 */
   document.querySelector('.app').classList.add('artifact-open');
   setTimeout(scrollChat, 200); setTimeout(scrollChat, 500);
 }
@@ -2458,17 +2471,23 @@ function autoTapFollowup(myGen){
   chip.classList.add('is-tapped');
   setTimeout(()=>{ if(playing&&myGen===gen){ chip.classList.remove('is-tapped'); chip.classList.remove('active'); } }, 600);
 }
+/* 아티펙트 위→아래 훑기 — 규칙 통일:
+   일정 속도(SPEED)로 내려가되, 너무 길면(MAX_MS 초과) 일정 지점까지만 내려가고 자연스럽게 다음 액션으로. */
 function skimArtifact(myGen, done){
   const el=$('artifact-body');
   if(!el){ done&&done(); return; }
   el.scrollTop=0;
   const max=Math.max(0, el.scrollHeight - el.clientHeight);
   if(max<12){ setTimeout(()=>{ if(playing&&myGen===gen) done&&done(); }, 500); return; }
-  const dur=1900, steps=38, dt=dur/steps; let k=0;
+  const SPEED=0.7;            /* px/ms — 읽히는 속도 */
+  const MAX_MS=2800;          /* 스크롤이 이 시간을 넘기면 여기까지만 */
+  const target=Math.min(max, SPEED*MAX_MS);     /* 너무 길면 일정 지점까지만 */
+  const dur=Math.max(700, target/SPEED);        /* 거리 비례, 최소 0.7s */
+  const steps=Math.max(14, Math.round(dur/50)), dt=dur/steps; let k=0;
   const iv=setInterval(()=>{
     if(!playing||myGen!==gen){ clearInterval(iv); return; }
     k++; const p=k/steps; const e = p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;   /* easeInOutQuad */
-    el.scrollTop = max*e;
+    el.scrollTop = target*e;
     if(k>=steps){ clearInterval(iv); setTimeout(()=>{ if(playing&&myGen===gen) done&&done(); }, 300); }
   }, dt);
 }
@@ -2486,21 +2505,21 @@ function showScene(skipFirstTyping=false){
         setTimeout(()=>{ if(!playing||myGen!==gen) return;
           showPanel(scene.open);
           const hasDefer=!!document.querySelector('#live-chat .rv-defer');
-          /* 패널 등장 → 항상 위→아래로 한 번 훑어 전체를 보여줌 → 이후 흐름 */
+          /* 패널 등장 → 최상단에서 잠시 멈춘 뒤 위→아래로 훑고 → 끝나면 바로 다음 액션으로 */
           setTimeout(()=>{ if(!playing||myGen!==gen) return;
             skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
               if(hasDefer){
                 revealDeferred();
-                const tapAt=Math.max(revealMs+500, 900);
+                const tapAt=Math.max(revealMs+200, 600);
                 if(scene.chipAfter) setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
-                timer=setTimeout(advance, tapAt+1900);
+                timer=setTimeout(advance, tapAt+1200);
               } else {
-                setTimeout(()=>{ if(playing&&myGen===gen) revealDeferred(); }, 200);
-                if(scene.chipAfter){ setTimeout(()=>{ if(playing&&myGen===gen) pressLast(scene.chipAfter); }, 1600); }
-                timer=setTimeout(advance, Math.max(2200, revealMs+1500));
+                setTimeout(()=>{ if(playing&&myGen===gen) revealDeferred(); }, 120);
+                if(scene.chipAfter){ setTimeout(()=>{ if(playing&&myGen===gen) pressLast(scene.chipAfter); }, 700); timer=setTimeout(advance, 1900); }
+                else { timer=setTimeout(advance, 800); }
               }
             });
-          }, 500);
+          }, 1300);
         }, pressed?450:0);
       }, 800);
     } else {
