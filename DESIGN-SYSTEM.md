@@ -11,6 +11,7 @@
 1. **시나리오 = 데이터.** 모든 인터랙션·플로우·콘텐츠는 `scenarios.js`에 있고, 엔진/렌더러는 프리미티브만 안다. 시나리오별 HTML/하드코딩 금지. (자동 클릭·턴 진행도 시나리오 데이터 기반 — `autoTapFollowup`은 다음 씬 유저 메시지와 매칭.)
 2. **시각 언어 = ChatGPT 뉴트럴 + 자사 DS.** 중립 그레이/플랫 섀도우/큰 라운드(ChatGPT 참고) + 폰트(Pretendard)·아이콘(Phosphor)·메인컬러(Blue #4781FF)는 자사 DS.
 3. **새 시나리오가 들어와도 이 프리미티브 조합으로만** 구성한다. 새 컴포넌트가 필요하면 먼저 이 문서에 프리미티브로 추가하고 토큰을 쓴다.
+4. **솔리드 버튼 클릭 피드백 = 오퍼시티.** 솔리드 블루 버튼(`.send-btn`·`.btn-blue`)은 호버/클릭 시 색을 회색·다른 색으로 바꾸지 않고 블루를 유지한 채 오퍼시티만 뺀다 (hover 0.82 / active·`.pressing` 0.7). `.pressing` 전역 회색 배경은 이 버튼들에서 오버라이드.
 
 ---
 
@@ -52,7 +53,7 @@
 | 본문 불릿(패널) | 13 / `#3D3D3D` / 1.7 | `.cc-doc-ul li`, `.bd-p` |
 | 본문 불릿(챗 카드) | 12 / secondary | `.cc-card .cc-doc-ul li` |
 | 챗 프로즈 | 14 / 400 / 24 / primary | `.ai-prose` |
-| 설문 문항 | 13.5 / 500 / primary | `.sd-qtext` |
+| 설문 문항 | 13.5 / 600 / primary | `.sd-qq` (Q번호 `.sd-qn` 13.5/700) |
 | 출처 라벨 / 제목 | 11 / 500 · 11.5 / 400 | `.fig-src-label` / `.fig-src-title` |
 | 출처 번호·타입·화살표 | 모노폰트, tertiary @ 0.7 (3요소 동일 톤) | `.fig-src-num`(11.5) / `.fig-src-type`(10.5) / `.fig-src-go`(12) |
 
@@ -103,7 +104,7 @@
 | 템플릿 | 클래스/케이스 | 용도 | 표준 출처 |
 |---|---|---|---|
 | **문서(DocPanel)** | `.av.bd` — `briefdocC`·`plandocC` | 기획서/설계서 등 산출 문서 | C |
-| **설문 문서(SurveyDoc)** | `.av.sd` — `surveydoc`/`designsurvey` (`renderSurveyDoc`) | 문항·척도·로직 노출 | C/design |
+| **설문 문서(SurveyDoc)** | `.av.sd` — `surveydoc`/`designsurvey` (`renderSurveyDoc`) | 브리프 문서와 동일 위계(제목 22/600=`.cc-doc-title`, 섹션 13.5/600 회색=`.sd-sec`≈`.cc-doc-sec`). 문항 단위로 묶임: 문항 간 얇은 구분선(`.sd-q` border-top). **모든 요소가 Q번호 좌측 끝 하나의 라인에 좌측정렬** — Q번호는 질문(`.sd-qq` 15/600)의 인라인 접두(`.sd-qn` 700), 유형 태그·옵션·파이핑 노트 모두 컨테이너 좌측. 유형=모노톤 회색 fill 태그(`.sd-qtype` 9.5/tertiary/bg-hover), 옵션=라디오(단일)/체크박스(다중) 행(`.sd-opt`+`.sd-opt-mark` 13px). 파이핑/로직/통과조건 노트(`.sd-ref`·`.sd-logic`·`.sd-secnote`)는 모노톤 회색(teal·블루 보더 제거). 척도=`.sd-scale` | C/design |
 | **프로젝트 데이터(ProjectData)** | `.pd-*` — `projectdata` | 데이터 목록(아이콘·이름·메타·Dataspace AI 아웃라인 버튼·진행 배지) | design |
 | **수집 조건(Collect)** | `collectdoc` | 쿼터/대상 | design |
 | **데이터 인사이트(DataInsight)** *(신설)* | → `insights·insights2·filter·overview·crosstab·concepts·agecross·wave·trendins` 통합 | 헤더 + 표/요약 + 출처. 분석 시나리오 패널을 한 템플릿으로 | ②③⑤⑥ 리워크 대상 |
