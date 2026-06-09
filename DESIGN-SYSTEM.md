@@ -53,7 +53,8 @@
 | 본문 불릿(챗 카드) | 12 / secondary | `.cc-card .cc-doc-ul li` |
 | 챗 프로즈 | 14 / 400 / 24 / primary | `.ai-prose` |
 | 설문 문항 | 13.5 / 500 / primary | `.sd-qtext` |
-| 출처 라벨 / 제목 | 12 / 600 · 11.5 / 400 | `.fig-src-label` / `.fig-src-title` |
+| 출처 라벨 / 제목 | 11 / 500 · 11.5 / 400 | `.fig-src-label` / `.fig-src-title` |
+| 출처 번호·타입·화살표 | 모노폰트, tertiary @ 0.7 (3요소 동일 톤) | `.fig-src-num`(11.5) / `.fig-src-type`(10.5) / `.fig-src-go`(12) |
 
 > **핵심 위계 규칙:** 챗 카드 = 가볍게(secondary·작게), 아티팩트 패널 문서 = 가독성 우선(색만 진하게, primary/#3D3D3D). 같은 클래스도 `.cc-card` vs `.artifact-body` 스코프로 분기.
 
@@ -87,7 +88,8 @@
 | **생성 과정** | `ccProcess(items)` | `process:[{t, b[]}]` | 스피너 + 진행 텍스트. 아바타=애니 헥사곤. |
 | **수집 선택** | `ccCollect()` | `collect:true` (+ text) | 합성패널/소비자패널/내 고객 옵션 카드. |
 | **꼬리질문** | `ccFollowups(arr)` | `followups:[string]` | 라인형(보더 없음), 선두 블루 ↗, 호버=블랙 6% 채움. 첫 칩이 다음 씬 유저 메시지와 매칭→자동 클릭. 위에 구분 bar(등장 시 노출). |
-| **출처** | `srcRows(list)` | `sources:[{n,title,type,kind,emoji,os,open}]` | "출처" 라벨 + 카드(아이콘+제목+끝 모노톤 ↗). kind=survey→SURVEY_ICON, trend/os→OS_ICON. 위에 bar. |
+| **인라인 근거 칩** | `md()` `[[n]]`·`[[1,2]]` → `.cite` | 본문 텍스트에 마커 | 문장/불릿 끝의 작은 회색 번호 칩(18px·라운드5). 번호=출처 번호와 매칭. 호버 시 블루. |
+| **출처** | `srcRows(list)` | `sources:[{n,title,type,kind,emoji,os,open}]` | "출처"(11/회색 라벨) + 행: **번호 칩** + 아이콘 + 제목 + 타입(우측) + 끝 ↗. 번호·타입·↗는 **모노폰트 + tertiary @ 0.7 동일 톤**. kind=survey→SURVEY_ICON, trend/os→OS_ICON. **순서: 본문 → 출처 → 꼬리질문.** |
 | **프로즈** | `md(t)` → `.ai-prose` | `text:'**굵게**\n- 불릿'` | 문단/불릿. 본문은 **한 번에 페이드**, 칩 버블은 하나씩(위→아래 순). |
 | **인라인 표** | `chatBlock(type)` | `block:'<key>'` | 미니 표. → ②③⑤⑥ 리워크 시 단일 `Table` 스타일로 통일. |
 | 시스템/파일/유저 | `msgHTML` role 분기 | `role:'system'\|'file'\|'user'` | 유저 버블 `#F1F6FF`/`#003BDD`. |
@@ -135,9 +137,9 @@
 ---
 
 ## 6. 등장(reveal) 규칙
-- 본문(문단·불릿·표) = **한 번에 페이드**(`revealStaged` body 그룹), 카드/칩 버블 = **하나씩**(seq, 150ms).
-- 순서는 항상 **위→아래**(DOM 순). 출처는 꼬리질문 다음.
-- 꼬리질문 자동 선택은 §3 매칭 규칙.
+- **엄격한 DOM 순서(위→아래)**: `revealStaged`가 units를 DOM 순서대로 step 분할 — **연속된 본문(문단·불릿·표)은 한 step에 한 번에 페이드**, 카드/칩/출처는 각자 한 step씩(150ms). 카드(모달)가 위에 있으면 카드가 먼저, 그 아래 텍스트가 다음. (아래 텍스트가 위 카드보다 먼저 뜨는 역전 금지.)
+- 출처는 꼬리질문 다음. 꼬리질문 자동 선택은 §3 매칭 규칙.
+- 패널 오픈 시 챗 자동 스크롤(최신 챗 유지).
 
 ---
 

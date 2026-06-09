@@ -510,14 +510,15 @@ a { text-decoration: none; color: inherit; }
   width: 32px; height: 32px;
   border-radius: 50%;                 /* 원형 — 정제된 전송 버튼 */
   background: #0050FF;
-  color: #F0F5FF;
+  color: #fff;
   display: flex; align-items: center; justify-content: center;
   transition: background var(--t-fast), color var(--t-fast);
   flex-shrink: 0;
 }
-.send-btn:hover { background: #0046E0; }
+.send-btn:hover { background: #F0F5FF; color: #0050FF; }
+.send-btn:active { background: #F0F5FF; color: #0050FF; }
 .send-btn.idle { background: #EDEDED; color: var(--text-tertiary); }  /* 비활성: 중립 그레이 */
-.send-btn.idle:hover { background: #0050FF; color: #F0F5FF; }
+.send-btn.idle:hover { background: #F0F5FF; color: #0050FF; }
 .send-btn svg { width: 14px; height: 14px; fill: none; }
 
 /* ── 추천 질문 칩 — 컬러 서클 아이콘 + 대시 커넥터 (제품 컴포저) ── */
@@ -648,17 +649,14 @@ a { text-decoration: none; color: inherit; }
 /* Citation badge */
 .cite {
   display: inline-flex; align-items: center; justify-content: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: var(--r-pill);   /* ChatGPT 인용 뱃지: 필 */
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--text-secondary);
+  min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.05);
+  color: var(--text-tertiary);
   font-size: 11px; font-weight: 500;
-  margin-left: 3px; margin-right: 1px;
-  vertical-align: middle;
-  cursor: pointer;
+  margin: 0 2px; vertical-align: middle; line-height: 1;
+  cursor: default;
   transition: background var(--t-fast), color var(--t-fast);
-  line-height: 1;
 }
 .cite:hover {
   background: rgba(71,129,255,0.12);
@@ -1545,12 +1543,10 @@ a { text-decoration: none; color: inherit; }
 
 /* ── Figma 출처 인용 (Chat / Data) — 제품 컴포넌트 1:1 ── */
 .fig-sources { margin-top:18px; display:flex; flex-direction:column; gap:4px; width:100%; }
-/* 출처 상단 bar는 꼬리질문이 앞에 있을 때만 */
-.cc-follow ~ .fig-sources { padding-top:18px; border-top:1px solid var(--border); }
-.fig-src-label { font-size:12px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin-bottom:2px; }
+.fig-src-label { font-size:11px; font-weight:500; color:var(--text-tertiary); letter-spacing:-0.3px; margin-bottom:4px; }
 .fig-src-row { display:flex; align-items:center; gap:7px; }
 .fig-src-num { flex-shrink:0; min-width:22px; height:20px; padding:2px 6px; display:inline-flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,0.05); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:11.5px; color:var(--text-secondary); }
+  background:rgba(0,0,0,0.05); border-radius:6px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:11.5px; color:var(--text-tertiary); opacity:0.7; }
 .fig-src-card { flex:1; min-width:0; display:flex; align-items:center; gap:7px; padding:6px 10px;
   background:rgba(159,163,173,0.07); border-radius:13px; transition:background var(--t-fast); }
 .fig-src-card { cursor:pointer; }
@@ -1560,8 +1556,8 @@ a { text-decoration: none; color: inherit; }
 .fig-src-ico.survey { background:var(--blue-light); } .fig-src-ico.report { background:#FCE7D4; }
 .fig-src-ico.trend { background:#D9F9FC; } .fig-src-ico.doc { background:var(--green-bg); }
 .fig-src-title { flex:1; min-width:0; font-size:11.5px; font-weight:400; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fig-src-type { flex-shrink:0; font-size:10.5px; color:var(--text-tertiary); opacity:0.7; font-family:ui-monospace,'SF Mono',Menlo,monospace; letter-spacing:0; }
 .fig-src-go { flex-shrink:0; color:var(--text-tertiary); font-size:12px; opacity:0.7; }
-.fig-src-type { flex-shrink:0; font-size:13px; font-weight:500; color:var(--text-tertiary); letter-spacing:-0.3px; }
 .fig-src-link { width:28px; height:28px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:6px; color:var(--text-tertiary); transition:color var(--t-fast); }
 .fig-src-card:hover .fig-src-link { color:var(--blue); }
 
@@ -1835,6 +1831,7 @@ function ccDone(items){
 }
 function md(t){
   t=t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/\[\[([\d,\s]+)\]\]/g,(m,g)=>g.split(',').map(n=>n.trim()).filter(Boolean).map(n=>`<span class="cite">${n}</span>`).join(''));
   const lines=t.split('\n'); const out=[]; let buf=[];
   const flush=()=>{ if(buf.length){ out.push('<ul class="md-ul">'+buf.map(x=>'<li>'+x+'</li>').join('')+'</ul>'); buf=[]; } };
   for(const ln of lines){ if(/^-\s/.test(ln)) buf.push(ln.replace(/^-\s/,'')); else { flush(); if(ln.trim()!=='') out.push('<p>'+ln+'</p>'); } }
@@ -1842,6 +1839,7 @@ function md(t){
   return out.join('');
 }
 /* 순차 리빌 — AI 메시지 블록을 위→아래 하나씩 (생성되는 듯) */
+let revealMs=0;   /* 직전 reveal 총 소요(ms) — advance가 이보다 빨리 일어나지 않도록 */
 function streamReveal(el, deferFollow){
   if(!el) return;
   let units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
@@ -1857,19 +1855,23 @@ function streamReveal(el, deferFollow){
 function revealStaged(units){
   if(!units.length) return;
   const isBody=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li, .chat-block');
-  const body=units.filter(isBody);
-  const seq=units.filter(u=>!isBody(u));
   units.forEach(u=>u.classList.remove('rv-defer'));
   units.forEach(u=>u.classList.add('rv-hide'));
-  if(body.length){ body.forEach(u=>{ u.classList.remove('rv-hide'); u.classList.add('rv-in'); }); scrollChat(); }
-  let i=0;
-  setTimeout(function tick(){
-    if(i>=seq.length) return;
-    const u=seq[i++]; u.classList.remove('rv-hide'); u.classList.add('rv-in');
-    if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
+  /* DOM 순서(위→아래) 유지: 연속된 본문은 한 번에, 카드/칩/출처는 하나씩 */
+  const steps=[]; let k=0;
+  while(k<units.length){
+    if(isBody(units[k])){ const grp=[]; while(k<units.length && isBody(units[k])) grp.push(units[k++]); steps.push(grp); }
+    else { steps.push([units[k++]]); }
+  }
+  revealMs = steps.length*150 + 300;
+  let s=0;
+  (function tick(){
+    if(s>=steps.length) return;
+    steps[s++].forEach(u=>{ u.classList.remove('rv-hide'); u.classList.add('rv-in');
+      if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); } });
     scrollChat();
     setTimeout(tick, 150);
-  }, body.length?280:0);
+  })();
 }
 /* 패널이 열린 뒤 꼬리질문(본문 한 번에 → 칩 하나씩)을 드러냄 */
 function revealDeferred(){
@@ -1963,9 +1965,9 @@ function chatBlock(type){
 /* ── Figma 출처 인용 컴포넌트 (Chat / Data) ── */
 function srcRows(list){
   return `<div class="fig-sources"><div class="fig-src-label">출처</div>`+list.map(s=>`
-    <div class="fig-src-row">
+    <div class="fig-src-row"><span class="fig-src-num">${s.n}</span>
       <div class="fig-src-card${s.open?' clickable':''}"${s.open?` onclick="openPanel('${s.open}')"`:''}>${s.kind==='survey'?`<span class="fig-src-ico os">${SURVEY_ICON}</span>`:(s.os||s.kind==='trend')?`<span class="fig-src-ico os">${OS_ICON}</span>`:`<span class="fig-src-ico ${s.kind||'doc'}">${s.emoji||'📄'}</span>`}
-        <span class="fig-src-title">${s.title}</span><i class="ph ph-arrow-up-right fig-src-go"></i></div>
+        <span class="fig-src-title">${s.title}</span>${s.type?`<span class="fig-src-type">${s.type}</span>`:''}<i class="ph ph-arrow-up-right fig-src-go"></i></div>
     </div>`).join('')+`</div>`;
 }
 
@@ -1995,9 +1997,9 @@ function msgHTML(m, skipBody=false){
   return `<div class="msg-ai msg-enter">
     <div class="ai-header"><div class="ai-avatar">${m.process?STAR:STATIC_HEX}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
-    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.followups?ccFollowups(m.followups):''}
+    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}
     ${m.block?chatBlock(m.block):''}
-    ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}
+    ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}${m.followups?ccFollowups(m.followups):''}
   </div>`;
 }
 
@@ -2033,7 +2035,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       inner.insertAdjacentHTML('beforeend', msgHTML(m));
       if(m.role==='ai') streamReveal(inner.lastElementChild, !!(m.followups && scene.open));
       scrollChat();
-      setTimeout(next, m.role==='ai'?640:420);
+      setTimeout(next, m.role==='ai'?Math.max(720, revealMs+150):420);
     }
   })();
 }
@@ -2471,25 +2473,26 @@ function showScene(skipFirstTyping=false){
             setTimeout(()=>{ if(!playing||myGen!==gen) return;
               skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
                 revealDeferred();
-                if(scene.chipAfter) setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, 1500);
-                timer=setTimeout(advance, 2900);
+                const tapAt=Math.max(revealMs+500, 900);
+                if(scene.chipAfter) setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
+                timer=setTimeout(advance, tapAt+1900);
               });
             }, 500);
           } else {
             setTimeout(()=>{ if(playing&&myGen===gen) revealDeferred(); }, 650);
             if(scene.chipAfter){ setTimeout(()=>{ if(playing&&myGen===gen) pressLast(scene.chipAfter); }, DWELL_MS+2200); }
-            timer=setTimeout(advance, DWELL_MS+3000);
+            timer=setTimeout(advance, Math.max(DWELL_MS+3000, revealMs+1700));
           }
         }, pressed?450:0);
       }, 800);
     } else {
-      const d=scene.dwell||DWELL_MS;
+      const d=Math.max(scene.dwell||DWELL_MS, revealMs+700);
       if(scene.chipAfter){
-        const myGen=gen;
-        setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, d);
-        timer=setTimeout(advance, d+1300);
+        const myGen=gen; const tapAt=Math.max(revealMs+700, 1300);
+        setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
+        timer=setTimeout(advance, tapAt+1700);
       } else {
-        timer=setTimeout(advance, d);
+        timer=setTimeout(advance, d+400);
       }
     }
   }, skipFirstTyping);
@@ -2500,6 +2503,11 @@ function advance(){
   if(scIdx+1<sc.scenes.length){ scIdx++; showScene(); }
   else {
     statuses[sIdx]='done'; renderSidebar();
+    // embed 모드: 부모에게 완료 신호
+    if(location.search.includes('embed')) {
+      try { window.parent.postMessage({ type:'scenarioDone', idx:sIdx }, '*'); } catch(e){}
+      return; // embed 모드에선 자동 다음 시나리오로 넘어가지 않음
+    }
     let nx=SCENARIOS.findIndex((_,i)=>statuses[i]!=='done');
     if(nx===-1){ statuses=SCENARIOS.map(()=>'waiting'); renderSidebar(); setTimeout(()=>{ if(playing) playScenario(0, true); }, 800); return; }
     setTimeout(()=>{ if(playing||statuses.some(s=>s!=='done')) playScenario(nx, true); }, 800);
@@ -2614,6 +2622,36 @@ applyI18nCTA();
 wireInputs();
 askIntro();
 { const m=location.hash.match(/^#play(\d+)$/); if(m) setTimeout(()=>playScenario(+m[1]), 900); } // QA: 특정 시나리오 바로 재생
+
+/* ─── EMBED MODE (?embed) ───────────────────────
+   below-hero.html iframe에서 사용.
+   배경·네비·헤드라인 숨김 + postMessage { type:'play', idx:N } 으로 시나리오 전환
+─────────────────────────────────────────────────*/
+(function(){
+  if(!location.search.includes('embed')) return;
+  var s=document.createElement('style');
+  s.textContent=[
+    'html,body{overflow:hidden;background:#F9F9F9!important;}',
+    '.stage{display:none!important;}',
+    '.page-wrapper{padding:0!important;background:transparent!important;}',
+    '.page-nav,.page-headline{display:none!important;}',
+    '.frame{max-width:100%!important;width:100%!important;margin:0!important;',
+    '  box-shadow:none!important;border-radius:0!important;}',
+    '.browser-chrome{display:none!important;}',
+    /* 레일·사이드바 숨기고 채팅만 풀 폭 */
+    '.app{height:100vh!important;border-radius:0!important;',
+    '  grid-template-columns:0px 0px 1fr 0px!important;transition:none!important;}',
+    '.app.artifact-open{grid-template-columns:0px 0px 1fr 44%!important;}',
+    '.app:has(.rail:hover){grid-template-columns:0px 0px 1fr 0px!important;}',
+    '.app.artifact-open:has(.rail:hover){grid-template-columns:0px 0px 1fr 44%!important;}',
+    '.rail,.sidebar{display:none!important;}'
+  ].join('');
+  document.head.appendChild(s);
+  window.addEventListener('message',function(e){
+    var d=e.data;
+    if(d&&d.type==='play'&&typeof d.idx==='number') playScenario(d.idx);
+  });
+})();
 </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
     preview:'briefdocC',hl:'리서치 기획서 완료',open:'briefdocC',press:'.cc-more',chipAfter:'.cc-follow-chip'},
    {chat:[{role:'user',text:'설문 문항 설계해줘'},
       {role:'ai',
-        text:"가능합니다. 우선 유사 레퍼런스로는 **미국 K-뷰티 트렌드 데이터**, 미국 뷰티 트렌드 데이터(2023) 등이 확인됩니다.\n\n다음 내용으로 설문을 설계해 생성하겠습니다 (약 25~30문항, 7~9분 내외).\n- **스크리닝/프로필**: 미국 거주, 성별/연령(18–35), 최근 6–12개월 뷰티 구매 여부\n- **K뷰티 인지·경험**: 인지, 사용/구매 경험, 최근 구매 카테고리\n- **구매의향**: 향후 3개월(또는 6개월) 구매의향, 카테고리(스킨케어/메이크업)별 의향\n- **채널 선호/이용**: 주 구매 채널(Sephora/Ulta/Amazon/자사몰/기타), 채널별 장단점, 병행 패턴\n- **채널 선택 요인**: 정품 신뢰, 배송, 가격/프로모션, 리뷰, 체험 가능, 반품 용이성 등 중요도\n- **전환 트리거/장벽**: 구매를 늘리는 조건과 방해 요인(가격, 피부 적합성, 정보 부족 등)\n- **정보원/콘텐츠**: TikTok/Instagram/YouTube/리뷰/지인 추천 등 영향도\n\n이 골자로 바로 설문을 생성해도 될까요? (원하시면 '구매의향 기간'을 3개월/6개월 중 무엇으로 할지도 지정해 주세요.)",
+        text:"가능합니다. 우선 유사 레퍼런스로는 **미국 K-뷰티 트렌드 데이터**, 미국 뷰티 트렌드 데이터(2023) 등이 확인됩니다.[[1]]\n\n다음 내용으로 설문을 설계해 생성하겠습니다 (약 25~30문항, 7~9분 내외).\n- **스크리닝/프로필**: 미국 거주, 성별/연령(18–35), 최근 6–12개월 뷰티 구매 여부\n- **K뷰티 인지·경험**: 인지, 사용/구매 경험, 최근 구매 카테고리\n- **구매의향**: 향후 3개월(또는 6개월) 구매의향, 카테고리(스킨케어/메이크업)별 의향\n- **채널 선호/이용**: 주 구매 채널(Sephora/Ulta/Amazon/자사몰/기타), 채널별 장단점, 병행 패턴\n- **채널 선택 요인**: 정품 신뢰, 배송, 가격/프로모션, 리뷰, 체험 가능, 반품 용이성 등 중요도\n- **전환 트리거/장벽**: 구매를 늘리는 조건과 방해 요인(가격, 피부 적합성, 정보 부족 등)\n- **정보원/콘텐츠**: TikTok/Instagram/YouTube/리뷰/지인 추천 등 영향도\n\n이 골자로 바로 설문을 생성해도 될까요? (원하시면 '구매의향 기간'을 3개월/6개월 중 무엇으로 할지도 지정해 주세요.)",
         sources:[{n:1,title:'[Eat Buy Play] 2025 Buy_미국 K-뷰티 트렌드 데이터',type:'데이터',kind:'trend',emoji:'📈'}],
         followups:['브랜드(K사) 퍼널(인지→호감→첫구매의향)까지 포함해서 생성해줘','구매의향 기간을 3개월로 지정','채널 선택 요인을 더 깊게 물어봐줘']}],
     hl:'설문 문항 설계',dwell:2600,chipAfter:'.cc-follow-chip'},
@@ -70,17 +70,17 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'교차분석·세그먼트 유의차까지, 리서처처럼 답합니다',hook:'내 컨셉 테스트 결과로 직접 비교해 보려면',scenes:[
    {chat:[{role:'system',text:'컨셉 테스트 결과가 연동되었습니다.'},{role:'file',name:'2026 K뷰티 신제품 컨셉 테스트',sub:'컨셉 평가 · 15개 컨셉',badge:'n=1,164',open:'concepts',ftype:'survey'}],preview:'conceptds',hl:'데이터셋 연동'},
    {chat:[{role:'user',text:'15개 컨셉의 구매 의향을 TOP2 기준으로 비교해줘'}],preview:'prompt',hl:'컨셉 비교 질문'},
-   {chat:[{role:'ai',text:'**컨셉 구매 의향 TOP2 비교** (5점 척도, 전체 BASE n=1,164)\n- 상위: **VT Reedle Shot 앰플 57.6%**, AESTURA 크림 55.9%, Primera 클렌징 54.7%\n- 하위: Medicube Age-R 33.8%, Whoo 쿠션 28.9%\n\n핵심 인사이트 3개를 함께 정리했습니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'concepts',hl:'컨셉 TOP2 비교'},
+   {chat:[{role:'ai',text:'**컨셉 구매 의향 TOP2 비교** (5점 척도, 전체 BASE n=1,164)\n- 상위: **VT Reedle Shot 앰플 57.6%**, AESTURA 크림 55.9%, Primera 클렌징 54.7%[[1]]\n- 하위: Medicube Age-R 33.8%, Whoo 쿠션 28.9%\n\n핵심 인사이트 3개를 함께 정리했습니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'concepts',hl:'컨셉 TOP2 비교'},
    {chat:[{role:'user',text:'TOP2가 60% 이상인 제품 3개를 연령대별 구매의향으로 비교해줘'}],preview:'prompt',hl:'세그먼트 질문'},
-   {chat:[{role:'ai',text:'**TOP2 60%+ 컨셉 3개 · 연령대별 구매의향(TOP2)**\n3개 컨셉 모두 **30–39세가 가장 높고(약 70%)**, 40–49세가 가장 낮은 패턴이 공통으로 나타납니다.\n색상은 신뢰수준 80%에서 통계적으로 유의한 차이입니다.',block:'agecross',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'agecross',hl:'세그먼트 유의차 검정'},
+   {chat:[{role:'ai',text:'**TOP2 60%+ 컨셉 3개 · 연령대별 구매의향(TOP2)**\n3개 컨셉 모두 **30–39세가 가장 높고(약 70%)**, 40–49세가 가장 낮은 패턴이 공통으로 나타납니다.[[1]]\n색상은 신뢰수준 80%에서 통계적으로 유의한 차이입니다.',block:'agecross',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'agecross',hl:'세그먼트 유의차 검정'},
  ]},
  /* ③ 탐색·트래킹 — 이수민 마케터(예산·시간 없이 근거) · media3 */
  {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 라이브러리로 근거를 만듭니다',hook:'우리 카테고리 트렌드를 직접 찾아보려면',scenes:[
    {chat:[{role:'system',text:'분석할 자체 데이터가 없어 라이브러리에서 탐색합니다.'},{role:'file',name:'건강기능식품 트렌드 데이터 (2025·2026)',sub:'트렌드 리포트 · 라이브러리',badge:'출처 2건',open:'library',ftype:'trend'}],preview:'library',hl:'라이브러리 데이터'},
    {chat:[{role:'user',text:'건강기능식품에서 2025 대비 2026에 뜨는 카테고리 알려줘'}],preview:'prompt',hl:'트렌드 질문'},
-   {chat:[{role:'ai',text:'**2025 → 2026 섭취율 증가 카테고리** (단위 %p, 복수응답)\n- **오메가3 (+2.7%p)**, 수면 케어 (+1.0%p), 항산화/노화방지 (+0.7%p) 순으로 증가\n- 참고: 2026엔 ‘모발/탈모 영양제’(11.8%)가 신규 포함되어 직접 비교는 주의가 필요합니다.',block:'wave',source:'출처 1·2',sources:[{n:1,title:'2025 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'},{n:2,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'wave',hl:'웨이브 트래킹 비교'},
+   {chat:[{role:'ai',text:'**2025 → 2026 섭취율 증가 카테고리** (단위 %p, 복수응답)\n- **오메가3 (+2.7%p)**, 수면 케어 (+1.0%p), 항산화/노화방지 (+0.7%p) 순으로 증가[[1,2]]\n- 참고: 2026엔 ‘모발/탈모 영양제’(11.8%)가 신규 포함되어 직접 비교는 주의가 필요합니다.',block:'wave',source:'출처 1·2',sources:[{n:1,title:'2025 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'},{n:2,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'wave',hl:'웨이브 트래킹 비교'},
    {chat:[{role:'user',text:'30대 타깃으로 더 깊이 분석해줘'}],preview:'prompt',hl:'세그먼트 딥다이브'},
-   {chat:[{role:'ai',text:'**30대 핵심 인사이트**\n- **속성**: 효능·성분·후기를 최우선 (효능 48.8%)\n- **제형**: 알약/캡슐 79.8%, ‘먹기 편함’으로 소형 캡슐·스틱 보조\n- **채널**: 네이버 46.2% · 쿠팡 44.9% + 약국/대형마트(신뢰)\n- **가격**: 5~10만원 25%가 최다',source:'출처 1',sources:[{n:1,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'trendins',hl:'세그먼트 인사이트'},
+   {chat:[{role:'ai',text:'**30대 핵심 인사이트**\n- **속성**: 효능·성분·후기를 최우선 (효능 48.8%)[[1]]\n- **제형**: 알약/캡슐 79.8%, ‘먹기 편함’으로 소형 캡슐·스틱 보조\n- **채널**: 네이버 46.2% · 쿠팡 44.9% + 약국/대형마트(신뢰)\n- **가격**: 5~10만원 25%가 최다',source:'출처 1',sources:[{n:1,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'trendins',hl:'세그먼트 인사이트'},
  ]},
 ];
 
