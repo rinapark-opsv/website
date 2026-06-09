@@ -1617,6 +1617,79 @@ a { text-decoration: none; color: inherit; }
   border:1px solid var(--blue-light); border-radius:6px; padding:5px 9px; transition:background var(--t-fast); }
 .file-open:hover { background:var(--blue-light); }
 .file-open i { display:flex; }
+/* ════ 신규: 페르소나 탐색 (검색 세그먼트 · 가상 소비자 카드/패널) ════ */
+/* 검색 세그먼트 블록 (좌측 채팅 인라인) */
+.ps-search { margin:12px 0 4px; display:flex; flex-direction:column; gap:8px; }
+.ps-seg { display:flex; gap:11px; align-items:flex-start; padding:13px 15px; background:#fff; border:1px solid var(--border); border-radius:13px; }
+.ps-seg-rank { width:20px; height:20px; border-radius:6px; background:var(--blue-light); color:var(--blue); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.ps-seg.b .ps-seg-rank { background:rgba(31,182,166,0.14); color:#119b8d; }
+.ps-seg-body { flex:1; min-width:0; }
+.ps-seg-head { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+.ps-seg-tag { font-size:12px; font-weight:700; color:var(--blue); }
+.ps-seg.b .ps-seg-tag { color:#119b8d; }
+.ps-seg-name { font-size:13px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; }
+.ps-seg-size { margin-left:auto; font-size:12px; font-weight:700; color:var(--text-primary); }
+.ps-seg-size em { font-style:normal; font-weight:500; color:var(--text-tertiary); font-size:11px; margin-left:3px; }
+.ps-seg-desc { font-size:12px; color:var(--text-secondary); line-height:1.55; margin-top:4px; letter-spacing:-0.2px; }
+.ps-seg-note { display:flex; align-items:flex-start; gap:6px; font-size:11.5px; color:var(--text-secondary); background:#F6F8FC; border-radius:9px; padding:9px 11px; line-height:1.5; }
+.ps-seg-note i { color:var(--blue); font-size:13px; margin-top:1px; flex-shrink:0; }
+
+/* 가상 소비자 카드 (좌측 채팅) */
+.pc-wrap { display:flex; flex-direction:column; gap:10px; margin:12px 0 4px; }
+.pc-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:15px 16px; }
+.pc-head { display:flex; align-items:center; gap:11px; }
+.pc-av { width:34px; height:34px; border-radius:9px; color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pc-av.sm { width:24px; height:24px; border-radius:7px; font-size:11px; }
+.pc-id { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.pc-name { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
+.pc-sub { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.pc-tag { font-size:11px; font-weight:600; color:var(--blue); background:var(--blue-light); padding:2px 8px; border-radius:20px; }
+.pc-size { font-size:11px; color:var(--text-tertiary); font-weight:600; }
+.pc-quote { font-size:12.5px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.2px; margin:12px 0 14px; padding:11px 13px; background:#F6F8FC; border-radius:11px; }
+.pc-btns { display:flex; justify-content:flex-end; gap:8px; }
+.pc-detail { height:30px; padding:0 13px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font-size:12px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:border-color var(--t-fast), color var(--t-fast); }
+.pc-detail:hover, .pc-detail.pressing { border-color:var(--blue); color:var(--blue); }
+.pc-talk { height:30px; padding:0 14px; border:none; border-radius:8px; background:var(--blue); color:#fff; font-size:12px; font-weight:600; cursor:pointer; transition:opacity var(--t-fast); }
+.pc-talk:hover { opacity:0.85; }
+
+/* 가상 소비자 대화 버블 (좌측 채팅) */
+.msg-persona { margin:10px 0; }
+.pb-head { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.pb-name { font-size:13px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
+.pb-bubble { display:inline-block; max-width:88%; font-size:13px; color:var(--text-primary); line-height:1.6; letter-spacing:-0.2px; background:#EEF3FF; border-radius:4px 14px 14px 14px; padding:11px 14px; }
+
+/* 페르소나 상세 패널 (우측) */
+.pp-name { font-size:21px; font-weight:700; color:var(--text-primary); letter-spacing:-0.4px; margin-bottom:14px; }
+.pp-quote { font-size:13px; color:var(--text-secondary); line-height:1.7; letter-spacing:-0.2px; padding:0 0 0 13px; border-left:3px solid var(--blue); margin-bottom:16px; }
+.pp-bullets { margin:0 0 16px; padding-left:17px; }
+.pp-bullets li { font-size:12.5px; color:var(--text-secondary); line-height:1.7; }
+.pp-attr { width:100%; border-collapse:collapse; margin-bottom:8px; }
+.pp-attr th { width:42%; text-align:left; vertical-align:top; font-size:12px; font-weight:600; color:var(--text-secondary); padding:9px 10px; background:#F6F8FC; border:1px solid var(--border); }
+.pp-attr td { font-size:12px; color:var(--text-primary); padding:9px 10px; border:1px solid var(--border); line-height:1.5; }
+.pp-sec { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; margin:22px 0 9px; }
+.pp-think { font-size:12.5px; color:var(--text-secondary); line-height:1.75; letter-spacing:-0.2px; padding:0 0 0 13px; border-left:3px solid var(--border-strong); }
+.pp-evnote { font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:9px; }
+.pp-ev { width:100%; border-collapse:collapse; font-size:11.5px; }
+.pp-ev thead th { text-align:left; vertical-align:top; font-size:11px; font-weight:600; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); background:#F6F8FC; line-height:1.4; }
+.pp-ev tbody th { text-align:left; font-size:11.5px; font-weight:600; color:var(--text-primary); padding:8px 9px; border:1px solid var(--border); background:#FBFCFE; white-space:nowrap; }
+.pp-ev td { font-size:11.5px; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); }
+
+/* ════ 신규: Proof Seeker 보고서 패널 ════ */
+.rp-meta { font-size:11.5px; color:var(--text-tertiary); margin:-14px 0 0; }
+.rp-src { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; padding:7px 11px; background:#F6F8FC; border:1px solid var(--border); border-radius:9px; margin-bottom:6px; }
+.rp-src-name { font-size:12px; font-weight:600; color:var(--text-primary); }
+.rp-src-spec { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
+.rp-head { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.5; margin:22px 0 8px; padding-top:18px; border-top:1px solid var(--border); }
+.rp-tag { display:inline-block; font-size:9.5px; font-weight:700; color:var(--blue); background:var(--blue-light); padding:1px 7px; border-radius:6px; margin-left:4px; vertical-align:middle; }
+.rp-chart { margin:8px 0 4px; padding:14px 15px; background:#F6F8FC; border:1px solid var(--border); border-radius:12px; }
+.rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:12px; letter-spacing:-0.2px; }
+.rp-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.rp-bar-row:last-child { margin-bottom:0; }
+.rp-bar-lab { width:84px; flex-shrink:0; font-size:11px; color:var(--text-secondary); letter-spacing:-0.3px; }
+.rp-bar-track { flex:1; height:14px; background:#E7EBF2; border-radius:7px; overflow:hidden; }
+.rp-bar-fill { height:100%; border-radius:7px; background:#C3CEDF; }
+.rp-bar-fill.hi { background:linear-gradient(90deg,#4781FF,#22C0E0); }
+.rp-bar-val { width:38px; flex-shrink:0; text-align:right; font-size:11.5px; font-weight:700; color:var(--blue-deep); }
 </style>
 </head>
 <body>
@@ -1860,7 +1933,7 @@ function md(t){
 let revealMs=0;   /* 직전 reveal 총 소요(ms) — advance가 이보다 빨리 일어나지 않도록 */
 function streamReveal(el, deferFollow){
   if(!el) return;
-  let units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
+  let units=[...el.querySelectorAll('.cc-card, .co-card, .cc-data, .ps-seg, .pc-card, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip')];
   if(!units.length) return;
   if(deferFollow){
     const isFollow=u=>u.matches('.cc-follow-chip')||u.closest('.ai-prose');
@@ -1912,6 +1985,32 @@ function ccBrief(o){
 /* 꼬리물기 질문 칩 — 우리 강점: AI가 다음 리서치 스텝을 먼저 제안 */
 function ccFollowups(arr){
   return `<div class="cc-follow">${arr.map((t)=>`<button class="cc-follow-chip" onclick="chipAdvance()"><i class="ph ph-arrow-up-right cc-fa"></i><span>${t}</span></button>`).join('')}</div>`;
+}
+/* ── 페르소나 탐색 (시나리오 persona) — 검색 세그먼트 블록 ── */
+function ccSearch(o){
+  return `<div class="ps-search">
+    ${o.segs.map((s,i)=>`<div class="ps-seg ${i===0?'a':'b'}">
+      <span class="ps-seg-rank">${i+1}</span>
+      <div class="ps-seg-body">
+        <div class="ps-seg-head"><span class="ps-seg-tag">‘${s.tag}’</span><span class="ps-seg-name">${s.name}</span><span class="ps-seg-size">${s.size}<em>(${s.n})</em></span></div>
+        <div class="ps-seg-desc">${s.desc}</div>
+      </div></div>`).join('')}
+    ${o.note?`<div class="ps-seg-note"><i class="ph ph-lightbulb"></i>${o.note}</div>`:''}
+  </div>`;
+}
+/* 가상 소비자(페르소나) 데이터 — Figma DS·AI Draft 28093/28119 */
+const PERSONAS={
+  hn:{av:'김',avc:'#4781FF',name:'김도윤 과장',tag:'‘맛 타협 불가’ 제로 섭취층 대표',size:'32.5% (130명)',quote:'저는 건강하게 먹는 데 관심이 많아요. 체질에 안 맞는 고기나 단 음료는 가급적 피하는 편이고요. 그래도 다이어트 콜라는 일하다 스트레스 받으면 종종 마시게 되더라고요.'},
+  jh:{av:'박',avc:'#1FB6A6',name:'박준영 대리',tag:'‘죄책감 방어형’ 라이트 섭취층 대표',size:'23.7% (95명)',quote:'햄버거나 치킨 먹을 때는 탄산을 꼭 같이 마시는데, 늘 칼로리랑 건강이 걸려요. 그래서 다이어트 콜라로 마시면 죄책감이 덜해서 좋더라고요.'}
+};
+function ccPersonas(){
+  const card=(k,cls)=>{const p=PERSONAS[k];return `<div class="pc-card">
+    <div class="pc-head"><span class="pc-av" style="background:${p.avc}">${p.av}</span>
+      <div class="pc-id"><span class="pc-name">${p.name}</span><span class="pc-sub"><span class="pc-tag">${p.tag}</span><span class="pc-size">${p.size}</span></span></div></div>
+    <div class="pc-quote">${p.quote}</div>
+    <div class="pc-btns"><button class="pc-detail ${cls}" onclick="openPanel('persona${k==='hn'?'Hn':'Jh'}')">특징 보기</button><button class="pc-talk" onclick="chipAdvance()">대화 시작하기</button></div>
+  </div>`;};
+  return `<div class="pc-wrap">${card('hn','pc-detail-hn')}${card('jh','pc-detail-jh')}</div>`;
 }
 /* 칩/행 클릭 → 다음 대화 턴 진행 */
 function chipAdvance(){ clearTimeout(resumeT); clearTimeout(timer); if(!playing){ playing=true; statuses[sIdx]='active'; renderSidebar(); } advance(); }
@@ -2018,6 +2117,7 @@ function msgHTML(m, skipBody=false){
       <div class="file-chip-info"><span class="file-name">${m.name}</span><span class="file-sub">${m.sub||''}</span></div>
       ${m.badge?`<span class="file-meta">${m.badge}</span>`:''}</div></div>`;
   if(m.role==='choices') return `<div class="chat-choices msg-enter">${m.choices.map((c,i)=>`<button class="choice-btn${i===0?' selected':''}" onclick="chipAdvance()">${i===0?'✓ ':''}${c}</button>`).join('')}</div>`;
+  if(m.role==='persona'){ const p=PERSONAS[m.who]||{}; return `<div class="msg-persona msg-enter"><div class="pb-head"><span class="pc-av sm" style="background:${p.avc}">${p.av}</span><span class="pb-name">${p.name}</span></div><div class="pb-bubble">${m.text}</div></div>`; }
   if(m.role==='user'){
     if(m.name) return `<div class="msg-user teammate msg-enter"><div class="tm-wrap"><div class="tm-name"><span class="tm-avatar">${m.avatar}</span>${m.name}</div><div class="user-bubble teammate">${m.text}</div></div></div>`;
     return `<div class="msg-user msg-enter"><div class="user-bubble">${m.text}</div></div>`;
@@ -2036,7 +2136,7 @@ function msgHTML(m, skipBody=false){
   return `<div class="msg-ai msg-enter">
     <div class="ai-header"><div class="ai-avatar">${STAR}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
-    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}
+    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.search?ccSearch(m.search):''}${m.personas?ccPersonas():''}
     ${m.block?chatBlock(m.block):''}
     ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}${m.followups?ccFollowups(m.followups):''}
   </div>`;
@@ -2416,6 +2516,69 @@ function previewHTML(type){
       ${CHART_BARS.map(b=>`<div class="artifact-bar-row"><span class="artifact-bar-label">${b.label}</span>
         <div class="artifact-bar-track"><div class="artifact-bar-fill" style="width:0%;background:linear-gradient(90deg,#4781FF,#22C0E0)" data-w="${b.value}"></div></div>
         <span class="artifact-bar-val">${b.value}%</span></div>`).join('')}</div></div>`;
+    case 'proofgap': return `<div class="av"><div class="av-label">향후 사용 의향 − 현재 사용 Gap <span class="av-sig-badge">미국 · n=600</span></div>
+      <table class="av-ct"><thead><tr><th>카테고리</th><th>현재</th><th>향후 의향</th><th>Gap</th></tr></thead><tbody>
+      <tr class="hl"><td>부스팅 에센스</td><td>18.4%</td><td>35.5%</td><td class="av-hi">+17.1</td></tr>
+      <tr class="hl"><td>토너패드</td><td>21.0%</td><td>35.2%</td><td class="av-hi">+14.2</td></tr>
+      <tr><td>스킨케어(기초)</td><td>24.9%</td><td>33.9%</td><td class="av-hi">+9.0</td></tr>
+      <tr><td>마스크팩</td><td>29.1%</td><td>34.3%</td><td class="av-hi">+5.2</td></tr></tbody></table>
+      <div class="av-sig-note">‘의향은 높은데 보급은 낮은’ 부스팅 에센스·토너패드가 카테고리 확장 1순위</div>
+      <div class="av-src"><span class="av-src-pill">출처 1·2</span><span class="av-src-text">미국 K-뷰티/뷰티 트렌드 데이터</span></div></div>`;
+    case 'proofcross': return `<div class="av"><div class="av-label">연령대별 향후/신규 사용 의향 <span class="av-sig-badge">⚡ 유의차 80%</span></div>
+      <table class="av-ct"><thead><tr><th>카테고리</th><th>18–29</th><th>30–39</th><th>40–49</th></tr></thead><tbody>
+      <tr><td>부스팅 에센스</td><td>33.1</td><td class="av-hi">35.5</td><td class="av-lo">31.0</td></tr>
+      <tr><td>토너패드</td><td>32.0</td><td class="av-hi">35.2</td><td class="av-lo">30.5</td></tr>
+      <tr><td>마스크팩</td><td>32.7</td><td class="av-hi">34.3</td><td class="av-lo">30.1</td></tr>
+      <tr><td>스킨케어(기초)</td><td>31.9</td><td class="av-hi">33.9</td><td class="av-lo">28.8</td></tr></tbody></table>
+      <div class="av-sig-note">🔴 30대 코어(전 카테고리 최고) · 🔵 40대는 현재 사용 낮으나 향후 의향 Gap 큰 잠재층</div>
+      <div class="av-src"><span class="av-src-pill">출처 1</span><span class="av-src-text">2025 미국 K-뷰티 트렌드 데이터</span></div></div>`;
+    case 'report': return `<div class="av rp">
+      <div class="cc-doc-title">미국 스킨케어 기회 지도 — 성장 카테고리·연령 타깃·진입 우선순위</div>
+      <div class="rp-meta">투자자·바이어용 기회 보고서 · 방금 생성됨</div>
+      <div class="sv-divider"></div>
+      <div class="cc-doc-sec cc-doc-sec-first">리서치 개요</div>
+      <div class="rp-src"><span class="rp-src-name">2023 미국 뷰티 트렌드 데이터</span><span class="rp-src-spec">n=1,000 · 표본오차 ±2.03%p (95%)</span></div>
+      <div class="rp-src"><span class="rp-src-name">2025 Eat Buy Play 미국 K-뷰티</span><span class="rp-src-spec">n=600 · 표본오차 ±2.62%p (95%)</span></div>
+      <div class="rp-head">요약 — ‘의향 대비 보급이 낮은’ 부스팅 에센스·토너패드가 카테고리 확장 기회 1순위</div>
+      <div class="rp-chart"><div class="rp-chart-cap">‘쓰고 싶은데 아직 안 쓰는’ 격차 — 향후 의향 − 현재 사용 (%p)</div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">부스팅 에센스</span><div class="rp-bar-track"><div class="rp-bar-fill hi" style="width:95%"></div></div><span class="rp-bar-val">+17.1</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">토너패드</span><div class="rp-bar-track"><div class="rp-bar-fill hi" style="width:79%"></div></div><span class="rp-bar-val">+14.2</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">스킨케어(기초)</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:50%"></div></div><span class="rp-bar-val">+9.0</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">마스크팩</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:29%"></div></div><span class="rp-bar-val">+5.2</span></div>
+      </div>
+      <div class="rp-head">코어 타깃은 30대 — 4개 확장 카테고리 전반에서 향후/신규 의향이 가장 강함</div>
+      <ul class="cc-doc-ul"><li>30대 향후/신규 의향이 부스팅·토너패드·마스크팩·스킨케어 모두에서 최고</li><li>커뮤니케이션·SKU 우선순위를 30대 코어에 정렬 <span class="rp-tag">Q16</span></li></ul>
+      <div class="rp-head">40대는 ‘필요할 때’ 잠재 타깃 — 토너패드·스킨케어에서 Gap 특히 큼</div>
+      <ul class="cc-doc-ul"><li>현재 사용은 낮으나 향후 의향과의 Gap이 커, 진입 시 추가 수요 여력 <span class="rp-tag">Q16</span></li></ul>
+      <div class="rp-head">K-뷰티 경험층은 ‘루틴 확장형(부스팅·미스트·토너패드)’에서 반응이 더 강함</div>
+      <ul class="cc-doc-ul"><li>경험층 향후 의향: 미스트 37.4% · 부스팅 32.7% · 토너패드 33.3% <span class="rp-tag">Q33×Q47</span></li></ul>
+      <div class="rp-head">K-뷰티 트라이얼 의향 75% — 확산 전제는 ‘첫 구매 경험 설계’</div>
+      <ul class="cc-doc-ul"><li>구매 의향 Top2(트라이/의향/실용) 합산 75%, 진입 관건은 첫 구매 전환 <span class="rp-tag">Q35</span></li></ul>
+      <div class="cc-doc-sec">다음 단계 제안 (Next Steps)</div>
+      <ul class="cc-doc-ul"><li><strong>제품/포트폴리오</strong> — 카테고리 확장 ‘루틴 확장’ 투트랙, SKU 우선순위</li><li><strong>마케팅/커뮤니케이션</strong> — 30대 코어 정조준 + 40대 ‘필요할 때’ 메시지</li><li><strong>채널/세일즈</strong> — K-뷰티 경험층 무관 향후 의향 높은 카테고리 우선 입점</li></ul>
+      </div>`;
+    case 'personaHn': case 'personaJh': { const k=type==='personaHn'?'hn':'jh'; const p=PERSONAS[k];
+      const attrs=k==='hn'
+        ?[['평소 식생활 태도','건강하게 먹는 것을 선호'],['콜라 섭취 빈도','주 3회'],['콜라 먹는 상황','업무 중'],['콜라 구매 채널','편의점 또는 회사에 구비된 것을 섭취'],['음료 KBF','가격, 맛, 브랜드']]
+        :[['평소 식생활 태도','맛있게 먹되 칼로리는 신경 씀'],['콜라 섭취 빈도','주 2회'],['콜라 먹는 상황','기름진 음식과 함께'],['콜라 구매 채널','대형마트·편의점'],['음료 KBF','칼로리, 맛, 가격']];
+      const think=k==='hn'
+        ?'제로 콜라는 종종 먹습니다. 하지만 제로 콜라의 합성 감미료 성분에 대한 의심이 여전히 있어요. 일반 콜라보다는 낫겠지 싶어 선택하는 거지 제로 콜라를 좋아해서 마시는 건 아닙니다. 맛만 진짜에 가까워진다면 더 자주 살 것 같아요.'
+        :'기름진 걸 먹을 때 탄산은 포기 못 해요. 다만 일반 콜라는 칼로리가 부담스러워서 제로로 바꿨어요. 죄책감을 던다는 점이 제일 큰 이유라, 맛은 어느 정도 감수하는 편입니다.';
+      const evRows=k==='hn'
+        ?[['성','남성 51%','남성 64%'],['나이','30대 24%','30대 38%'],['직업','사무·전문직 33%','사무·전문직 47%'],['라이프스테이지','기혼·자녀 41%','기혼·자녀 55%'],['평소 식생활 태도','건강 지향 36%','건강 지향 58%'],['콜라 구매 채널','편의점 39%','편의점 53%'],['콜라 섭취 빈도','주 2~3회 31%','주 3회+ 49%'],['콜라 섭취 상황','업무 중 28%','업무 중 44%'],['음료 KBF','맛 47%','맛 71%']]
+        :[['성','남성 51%','남성 58%'],['나이','30대 24%','30대 34%'],['직업','사무·전문직 33%','사무직 42%'],['라이프스테이지','기혼 41%','기혼 49%'],['평소 식생활 태도','칼로리 관리 29%','칼로리 관리 52%'],['콜라 구매 채널','대형마트 34%','대형마트 46%'],['콜라 섭취 빈도','주 2회 27%','주 2회 41%'],['콜라 섭취 상황','식사 중 33%','기름진 식사와 함께 51%'],['음료 KBF','칼로리 26%','칼로리 63%']];
+      const baseTotal='전체 (400명)'; const baseSeg=k==='hn'?'맛에 불만족하는 다이어트 콜라 섭취자 (130명)':'칼로리를 신경 쓰는 다이어트 콜라 섭취자 (95명)';
+      return `<div class="av pp">
+        <div class="pp-name">${p.name}</div>
+        <div class="pp-quote">${p.quote}</div>
+        <ul class="pp-bullets"><li>${k==='hn'?'남성 · 39세 · 개발자':'남성 · 34세 · 사무직'}</li><li>${k==='hn'?'기혼 · 초등학생 자녀 있음':'기혼 · 미취학 자녀 있음'}</li></ul>
+        <table class="pp-attr"><tbody>${attrs.map(a=>`<tr><th>${a[0]}</th><td>${a[1]}</td></tr>`).join('')}</tbody></table>
+        <div class="pp-sec">조사 주제에 대한 생각</div>
+        <div class="pp-think">${think}</div>
+        <div class="pp-sec">가상 소비자 생성 근거</div>
+        <div class="pp-evnote">‘전체’ 대비 ‘${k==='hn'?'맛에 불만족하는':'칼로리를 신경 쓰는'} 다이어트 콜라 섭취자’에서 통계적으로 유의미한 변수를 기반으로 생성되었습니다.</div>
+        <table class="pp-ev"><thead><tr><th></th><th>${baseTotal}</th><th>${baseSeg}</th></tr></thead><tbody>${evRows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table>
+      </div>`; }
     default: return '';
   }
 }
@@ -2430,7 +2593,7 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트'};
+const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'라이브러리 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
