@@ -355,9 +355,9 @@ a { text-decoration: none; color: inherit; }
 .rail-spacer { flex: 1; }
 .rail-profile { padding: 0 5px; }
 .rail-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: #CB9E7B; color: #FDF8D8;
-  font-size: 10px; font-weight: 700;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,0,0,0.4); color: #fff;
+  font-size: 9px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -1331,6 +1331,7 @@ a { text-decoration: none; color: inherit; }
 .pd-ai-btn { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border-radius:6px; color:#fff; font-size:11px; font-weight:600; white-space:nowrap; flex-shrink:0;
   background: radial-gradient(120% 220% at 72% 0%, #75BCFF 0%, #6893FF 28%, #707CFF 54%, #426DFF 75%, #2B65FF 86%, #145EFF 96%); }
 .pd-ai-btn img { width:12px; height:12px; display:block; }
+.pd-ai-btn-svg { height:24px; width:auto; display:block; flex-shrink:0; }
 .pd-badge { display:inline-flex; align-items:center; gap:2px; height:22px; padding:0 8px; border-radius:6px; font-size:11px; font-weight:500; color:rgba(1,14,45,0.7); white-space:nowrap; flex-shrink:0; }
 .pd-badge.blue { background:var(--blue-light); }
 .pd-badge.gray { background:rgba(96,110,144,0.1); }
@@ -2261,7 +2262,7 @@ function previewHTML(type){
       <div class="pd-row clickable" onclick="projectRowClick()">
         <span class="pd-cell-main"><span class="pd-file-ico svg">${SURVEY_ICON}</span>
           <span style="flex:1;min-width:0"><span class="pd-name" style="display:block">MZ세대 브랜드 인식 조사</span><span class="pd-meta" style="display:block">김오픈 · 2026-06-05 · 설문</span></span></span>
-        <span class="pd-ai-btn"><img src="ai-indicator-poster.png" alt="">Dataspace AI</span>
+        <img class="pd-ai-btn-svg" src="textbtn-ai-outlined.svg" alt="Dataspace AI">
         <span class="pd-badge blue">수집 중 (2)</span>
         <span class="pd-badge gray">162 / 250 ›</span>
       </div>
