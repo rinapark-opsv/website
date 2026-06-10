@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opensurvey — Hero 하단 (S1~S8)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+:root {
+  --bg-page:        #F4F4F4;
+  --bg-canvas:      #ffffff;
+  --bg-hover:       #F3F3F3;
+  --bg-active:      #F0F5FF;
+  --border:         #ECECEC;
+  --border-strong:  #D9D9D9;
+  --text-primary:   #0D0D0D;
+  --text-secondary: #5D5D5D;
+  --text-tertiary:  #8F8F8F;
+  --blue:           #4781FF;
+  --blue-soft:      #F0F5FF;
+  --blue-light:     #E0EAFF;
+  --blue-hover:     #2469FF;
+  --blue-deep:      #0050FF;
+  --navy:           #1E293B;
+  --red:            #DD4040;
+  --green:          #40B08E;
+  --green-bg:       #D6F0E8;
+  --sky:            #0E9CAA;
+  --r-sm:  8px;
+  --r-md:  13px;
+  --r-lg:  21px;
+  --r-pill:9999px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.10);
+  --t-fast:   150ms ease;
+  --t-normal: 200ms ease;
+  --font: "PretendardVariable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font);
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+/* ── 공통 타이포 ── */
+.sec-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--blue); background: var(--blue-soft);
+  border: 1px solid var(--blue-light);
+  padding: 4px 11px; border-radius: var(--r-pill);
+  margin-bottom: 18px;
+}
+.sec-thought {
+  font-size: 12px; font-weight: 500; color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+.sec-title {
+  font-size: 36px; font-weight: 600; line-height: 1.25; letter-spacing: -.025em;
+  color: var(--text-primary);
+}
+.sec-lead {
+  font-size: 17px; line-height: 1.65; color: var(--text-secondary); font-weight: 400;
+  max-width: 580px;
+}
+.center { text-align: center; }
+.center .sec-lead { margin: 16px auto 0; }
+
+/* ── 버튼 ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 46px; padding: 0 22px; border-radius: var(--r-lg);
+  font-size: 14px; font-weight: 600; font-family: var(--font);
+  cursor: pointer; border: none; text-decoration: none;
+  transition: background var(--t-fast), box-shadow var(--t-fast), transform var(--t-fast);
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: var(--blue-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(71,129,255,.3); }
+.btn-ghost { background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border-strong); }
+.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ── 섹션 공통 ── */
+.sec { padding: 96px 0; }
+.sec-divider { border: none; border-top: 1px solid var(--border); }
+
+/* ════════════════════════════════════════════
+   S1 — Featured (세로 리스트 + 우측 데모)
+   Intercom 스타일
+════════════════════════════════════════════ */
+.s1 {
+  background: var(--bg-page);
+  border-bottom: 1px solid var(--border);
+  padding: 88px 0;
+}
+
+/* 전체 레이아웃 */
+.feat-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+/* 왼쪽 세로 리스트 */
+.feat-list { display: flex; flex-direction: column; gap: 2px; }
+
+.feat-item {
+  position: relative;
+  padding: 18px 16px 18px 24px;
+  cursor: pointer; border: none;
+  background: transparent;
+  border-radius: var(--r-md);
+  text-align: left; font-family: var(--font);
+  transition: background var(--t-fast);
+}
+.feat-item:hover { background: var(--bg-hover); }
+.feat-item.on  { background: var(--bg-canvas); box-shadow: var(--shadow-sm); }
+
+/* 왼쪽 인디케이터 바 */
+.feat-item::before {
+  content: '';
+  position: absolute; left: 0; top: 12px; bottom: 12px;
+  width: 3px; background: transparent;
+  border-radius: var(--r-pill);
+  transition: background var(--t-fast);
+}
+.feat-item.on::before { background: var(--blue); }
+
+.feat-item-q {
+  font-size: 15px; font-weight: 500;
+  color: var(--text-tertiary);
+  line-height: 1.45;
+  transition: color var(--t-fast);
+}
+.feat-item.on .feat-item-q { color: var(--text-primary); font-weight: 600; }
+.feat-item:hover:not(.on) .feat-item-q { color: var(--text-secondary); }
+
+.feat-item-desc {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.65;
+  font-weight: 400;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 260ms cubic-bezier(0.32,0.72,0,1),
+              opacity 200ms ease, margin-top 260ms ease;
+  margin-top: 0;
+}
+.feat-item.on .feat-item-desc {
+  max-height: 60px; opacity: 1; margin-top: 6px;
+}
+.feat-item-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12.5px; font-weight: 600; color: var(--blue);
+  text-decoration: none;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 260ms cubic-bezier(0.32,0.72,0,1),
+              opacity 180ms ease, margin-top 260ms ease;
+  margin-top: 0;
+}
+.feat-item.on .feat-item-link { max-height: 28px; opacity: 1; margin-top: 10px; }
+
+/* 오른쪽 데모 영역 */
+.feat-demo-area { position: sticky; top: 24px; }
+.feat-screen-wrap {
+  background: var(--navy);
+  border-radius: var(--r-lg); padding: 10px;
+  box-shadow: 0 24px 64px rgba(30,41,59,.2), 0 4px 16px rgba(30,41,59,.1);
+}
+.feat-win-bar {
+  display: flex; gap: 6px; padding: 6px 8px 8px;
+}
+.feat-screen {
+  background: var(--bg-page); border-radius: var(--r-md);
+  min-height: 360px; overflow: hidden; position: relative;
+}
+
+/* 패널 전환 */
+.feat-panel { display: none; }
+.feat-panel.on { display: block; }
+.feat-panel.fade-in { animation: featFadeUp 280ms cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes featFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* URL바 */
+.feat-urlbar {
+  flex: 1; text-align: center;
+  font-size: 11px; color: rgba(255,255,255,.3);
+  font-family: ui-monospace, monospace; letter-spacing: .01em;
+}
+/* 창 프레임 */
+.feat-screen-wrap {
+  background: #1C2333;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06),
+    0 24px 64px rgba(15,20,40,.35),
+    0 8px 24px rgba(15,20,40,.2);
+}
+.feat-win-bar {
+  display: flex; align-items: center;
+  gap: 6px; padding: 4px 8px 9px;
+}
+/* 결과 패널 영역 */
+.feat-screen {
+  border-radius: var(--r-md); overflow: hidden;
+  background: var(--bg-canvas);
+  min-height: 420px;
+}
+/* 앱 탑바 */
+.feat-app-topbar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-canvas);
+}
+.feat-app-topbar-q {
+  font-size: 12.5px; font-weight: 500; color: var(--text-primary);
+  flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.feat-ds-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+  background: var(--bg-page); border: 1px solid var(--border);
+  border-radius: var(--r-pill); padding: 3px 9px;
+  white-space: nowrap;
+}
+.feat-ds-chip i { font-size: 10px; }
+/* 패널 내부 레이아웃 */
+.feat-chat-layout {
+  display: grid; grid-template-columns: 1fr 1.2fr; height: 100%;
+}
+.feat-chat-col {
+  padding: 18px 16px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 10px; min-height: 380px;
+  background: #FAFAFA;
+}
+.feat-data-col {
+  padding: 18px 16px; background: var(--bg-canvas);
+  display: flex; flex-direction: column; gap: 12px; min-height: 380px;
+}
+/* 공통 버블 */
+.bubble-user {
+  align-self: flex-end;
+  background: #F1F6FF; color: #003BDD;
+  font-size: 12.5px; font-weight: 500;
+  padding: 9px 13px; border-radius: var(--r-md);
+  max-width: 88%; line-height: 1.5;
+}
+.bubble-process {
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.bubble-ai-icon {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--blue); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.bubble-ai-icon svg { width: 12px; height: 12px; fill: #fff; }
+.bubble-ai-text {
+  font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;
+}
+.bubble-done {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 11px 13px;
+}
+.bubble-done-head {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 7px;
+}
+.bubble-done-body {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.65;
+}
+/* 데이터 패널 공통 */
+.dp-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 10px;
+}
+
+/* 가로 바 차트 (신규) */
+.dp-hbars-full { display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: center; }
+.dp-hb-row { display: grid; grid-template-columns: 88px 1fr 32px; align-items: center; gap: 7px; }
+.dp-hb-name { font-size: 11.5px; color: var(--text-secondary); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dp-hb-track { height: 6px; background: var(--bg-page); border-radius: var(--r-pill); overflow: hidden; }
+.dp-hb-fill { height: 100%; border-radius: var(--r-pill); background: var(--blue-light); transition: width 600ms cubic-bezier(0.22,1,0.36,1); }
+.dp-hb-fill.hi { background: var(--blue); }
+.dp-hb-fill.muted { background: var(--border-strong); }
+.dp-hb-val { font-size: 11.5px; font-weight: 600; color: var(--text-secondary); text-align: right; }
+.dp-hb-val.hi { color: var(--blue); }
+.dp-hb-val.muted { color: var(--text-tertiary); font-weight: 400; }
+.dp-hb-row.muted .dp-hb-name { color: var(--text-tertiary); }
+
+/* 도큐먼트 리스트 (brand 패널) */
+.dp-doc-list { display: flex; flex-direction: column; gap: 6px; flex: 1; justify-content: center; }
+.dp-doc-item { display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; background: var(--bg-page); border-radius: var(--r-sm); }
+.dp-doc-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.dp-doc-icon.blue { background: var(--blue-light); color: var(--blue); }
+.dp-doc-icon.green { background: var(--green-bg); color: var(--green); }
+.dp-doc-title { font-size: 11.5px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+.dp-doc-meta { font-size: 10.5px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* 하단 보조 노트 */
+.dp-seg-note {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-tertiary);
+  border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto;
+}
+
+.dp-bars { display: flex; align-items: flex-end; gap: 8px; height: 100px; }
+.dp-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; justify-content: flex-end; }
+.dp-bar { width: 100%; border-radius: 3px 3px 0 0; background: var(--blue-light); }
+.dp-bar.hi { background: var(--blue); }
+.dp-x { font-size: 9.5px; color: var(--text-tertiary); font-weight: 500; }
+.dp-insight {
+  background: var(--blue-soft); border: 1px solid var(--blue-light);
+  border-radius: var(--r-sm); padding: 10px 12px;
+}
+.dp-insight-h { font-size: 10px; font-weight: 700; color: var(--blue); margin-bottom: 5px; }
+.dp-insight-t { font-size: 11.5px; color: var(--text-primary); line-height: 1.6; }
+/* 표 */
+.dp-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.dp-table th {
+  text-align: left; font-weight: 600; color: var(--text-tertiary);
+  font-size: 10px; padding: 0 6px 8px; letter-spacing: .02em;
+}
+.dp-table td { padding: 7px 6px; border-top: 1px solid var(--border); color: var(--text-secondary); }
+.dp-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.dp-table tr.hi td { color: var(--text-primary); font-weight: 600; }
+.dp-hi-val { color: var(--blue-deep); font-weight: 700; }
+/* 키워드 클라우드 */
+.dp-keywords { display: flex; flex-wrap: wrap; gap: 6px; }
+.dp-kw {
+  font-size: 11.5px; font-weight: 500; padding: 5px 10px;
+  border-radius: var(--r-pill); background: var(--bg-page); border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.dp-kw.big { font-size: 13px; font-weight: 700; color: var(--text-primary); background: var(--blue-light); border-color: var(--blue-light); }
+.dp-kw.mid { font-size: 12px; font-weight: 600; color: var(--blue); }
+/* 도넛/게이지 대체 수평 바 */
+.dp-hbar { height: 8px; border-radius: var(--r-pill); background: var(--border); overflow: hidden; margin-bottom: 6px; }
+.dp-hbar-fill { height: 100%; border-radius: var(--r-pill); background: var(--blue); }
+.dp-hbar-row { margin-bottom: 12px; }
+.dp-hbar-row-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+/* 수집 옵션 */
+.dp-collect { display: flex; flex-direction: column; gap: 8px; }
+.dp-co {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.dp-co.sel { border-color: var(--blue); background: var(--blue-soft); }
+.dp-co-ic { font-size: 16px; }
+.dp-co-label { font-size: 12px; font-weight: 600; }
+.dp-co-meta { font-size: 10.5px; color: var(--text-tertiary); }
+
+/* ════════════════════════════════════════════
+   S2 — 3열 기능 카드 (Cursor product style)
+════════════════════════════════════════════ */
+.s2 { background: var(--bg-page); }
+.s2-header { margin-bottom: 32px; }
+.s2-header h2 { font-size: 32px; font-weight: 600; letter-spacing: -.02em; }
+
+.feat-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.feat-card {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.feat-card-copy { padding: 24px 24px 20px; }
+.feat-card-copy h4 {
+  font-size: 16px; font-weight: 600; line-height: 1.4;
+  margin-bottom: 8px;
+}
+.feat-card-copy p {
+  font-size: 13.5px; color: var(--text-secondary);
+  line-height: 1.65; font-weight: 400; margin-bottom: 14px;
+}
+.feat-card-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13px; font-weight: 600; color: var(--blue);
+  text-decoration: none;
+  transition: gap var(--t-fast);
+}
+.feat-card-link:hover { gap: 9px; }
+
+/* 데모 영역 */
+.feat-card-demo {
+  flex: 1; background: var(--bg-page);
+  border-top: 1px solid var(--border);
+  padding: 20px; min-height: 220px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+}
+
+/* 카드1 — 설문 설계 */
+.demo-design-input {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 12px 14px;
+  font-size: 13px; color: var(--text-tertiary);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.demo-design-input .send-btn {
+  width: 28px; height: 28px; border-radius: var(--r-sm);
+  background: var(--blue); display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+.demo-survey-preview {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 14px 16px; flex: 1;
+}
+.demo-survey-preview .dsp-title {
+  font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px;
+}
+.demo-survey-q {
+  font-size: 11.5px; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.5;
+}
+.demo-survey-opts { display: flex; flex-direction: column; gap: 5px; }
+.demo-survey-opt {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--text-secondary); font-weight: 400;
+}
+.demo-survey-opt .opt-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong); flex-shrink: 0;
+}
+.demo-survey-opt.sel .opt-dot {
+  background: var(--blue); border-color: var(--blue);
+}
+.demo-survey-opt.sel { color: var(--text-primary); font-weight: 500; }
+/* AI 생성 배지 */
+.demo-ai-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10.5px; font-weight: 600; color: var(--blue);
+  background: var(--blue-soft); border: 1px solid var(--blue-light);
+  padding: 3px 9px; border-radius: var(--r-pill); margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+/* 카드2 — 응답 수집 */
+.demo-collect-steps { display: flex; flex-direction: column; gap: 8px; }
+.demo-collect-step {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 11px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.demo-collect-step.active { border-color: var(--blue); background: var(--blue-soft); }
+.demo-collect-step .step-ic {
+  width: 28px; height: 28px; border-radius: var(--r-sm);
+  background: var(--bg-page); display: flex; align-items: center;
+  justify-content: center; font-size: 13px; flex-shrink: 0;
+}
+.demo-collect-step.active .step-ic { background: var(--blue-light); }
+.demo-collect-step .step-label {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+}
+.demo-collect-step.active .step-label { color: var(--blue); }
+.demo-collect-step .step-meta {
+  font-size: 10.5px; color: var(--text-tertiary); margin-left: auto;
+}
+.demo-progress {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 12px 14px;
+}
+.demo-progress-label {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;
+}
+.demo-progress-label strong { color: var(--text-primary); font-weight: 700; }
+.demo-progress-bar {
+  height: 6px; border-radius: var(--r-pill); background: var(--border);
+  overflow: hidden;
+}
+.demo-progress-fill {
+  height: 100%; border-radius: var(--r-pill); background: var(--blue);
+  width: 68%;
+  transition: width 1s ease;
+}
+
+/* 카드3 — 인사이트 */
+.demo-insight-cards { display: flex; flex-direction: column; gap: 8px; }
+.demo-insight-card {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 12px 14px;
+}
+.demo-insight-card.hi { border-color: var(--blue-light); background: var(--blue-soft); }
+.demo-insight-stat {
+  font-size: 22px; font-weight: 700; letter-spacing: -.02em;
+  color: var(--blue-deep); line-height: 1; margin-bottom: 4px;
+}
+.demo-insight-label {
+  font-size: 11px; color: var(--text-secondary); font-weight: 400; line-height: 1.4;
+}
+.demo-insight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+@media (max-width: 900px) {
+  .feat-cards { grid-template-columns: 1fr; }
+}
+
+/* ════════════════════════════════════════════
+   S3 — Dataspace AI 챗↔데이터
+════════════════════════════════════════════ */
+.s3 { background: var(--bg-canvas); }
+.s3-stage {
+  margin-top: 48px; background: var(--navy);
+  border-radius: var(--r-lg); padding: 10px;
+  box-shadow: 0 24px 64px rgba(30,41,59,.22);
+}
+.s3-bar {
+  display: flex; gap: 6px; padding: 6px 8px 8px;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; }
+.dot.r { background: #FF5F57; }
+.dot.y { background: #FEBC2E; }
+.dot.g { background: #28C840; }
+.s3-screen {
+  background: var(--bg-page); border-radius: var(--r-md);
+  display: grid; grid-template-columns: 1fr 1.3fr; min-height: 320px;
+}
+.s3-left {
+  padding: 22px 20px;
+  border-right: 1px solid var(--border);
+}
+.s3-right {
+  padding: 22px 20px; background: var(--bg-canvas);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+.s3-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--blue);
+  background: var(--blue-soft); padding: 4px 10px;
+  border-radius: var(--r-pill); margin-bottom: 14px;
+}
+/* 유저 버블 */
+.s3-user {
+  display: flex; justify-content: flex-end; margin-bottom: 12px;
+}
+.s3-user span {
+  background: #F1F6FF; color: #003BDD;
+  font-size: 13px; font-weight: 500;
+  padding: 9px 13px; border-radius: var(--r-md);
+  max-width: 85%; line-height: 1.5;
+}
+/* 처리 흐름 */
+.s3-flow {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--text-tertiary);
+  margin: 14px 0 8px;
+}
+.s3-flow b { color: var(--blue); }
+/* 코드 블록 */
+.s3-calc {
+  background: var(--bg-page); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 12px;
+  font-size: 12px; color: var(--text-secondary);
+  font-family: ui-monospace, "SFMono-Regular", monospace; line-height: 1.65;
+}
+/* AI 인사이트 카드 */
+.s3-insight {
+  background: var(--blue-soft); border: 1px solid var(--blue-light);
+  border-radius: var(--r-md); padding: 14px 16px; margin-top: 12px;
+}
+.s3-insight .ih {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; color: var(--blue); margin-bottom: 8px;
+}
+.s3-insight .it {
+  font-size: 13.5px; font-weight: 400; line-height: 1.6; color: var(--text-primary);
+}
+/* 차트 */
+.art-label {
+  font-size: 11px; font-weight: 600; color: var(--text-tertiary);
+  letter-spacing: .02em; text-transform: uppercase; margin-bottom: 10px;
+}
+.art-bars { display: flex; align-items: flex-end; gap: 10px; height: 120px; }
+.art-col {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 5px; justify-content: flex-end;
+}
+.art-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--blue-light); }
+.art-bar.hi { background: var(--blue); }
+.art-x { font-size: 10px; color: var(--text-tertiary); font-weight: 500; }
+
+/* ════════════════════════════════════════════
+   S4 — 팀 협업
+════════════════════════════════════════════ */
+.s4 { background: var(--bg-page); }
+.collab {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-top: 48px;
+}
+.collab-card {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px;
+}
+.role-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 600; padding: 5px 11px;
+  border-radius: var(--r-pill); margin-bottom: 14px;
+}
+.role-creator { background: var(--blue-soft); color: var(--blue); }
+.role-viewer  { background: #D6F0E8; color: #1C7A5E; }
+.collab-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.collab-card p  { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.collab-avatars { display: flex; margin-top: 16px; }
+.av {
+  width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--bg-canvas);
+  background: var(--blue-light); color: var(--blue-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-left: -7px;
+}
+.av:first-child { margin-left: 0; }
+.collab-flow {
+  grid-column: span 2; background: var(--bg-canvas);
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: 26px 32px; display: flex; align-items: center;
+  justify-content: space-between; gap: 16px;
+}
+.flow-step { flex: 1; text-align: center; }
+.flow-step .fi {
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  background: var(--blue-soft); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; margin: 0 auto 10px;
+}
+.flow-step .ft { font-size: 14px; font-weight: 600; }
+.flow-step .fd { font-size: 12px; color: var(--text-tertiary); font-weight: 400; margin-top: 3px; }
+.flow-arr { color: var(--border-strong); font-size: 18px; flex-shrink: 0; }
+
+/* ════════════════════════════════════════════
+   S5 — 지표 + 로고
+════════════════════════════════════════════ */
+.s5 { background: var(--bg-canvas); }
+.metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; margin: 48px 0 40px;
+}
+.metric {
+  text-align: center; padding: 0 20px;
+  border-right: 1px solid var(--border);
+}
+.metric:last-child { border-right: none; }
+.metric .n {
+  font-size: 42px; font-weight: 700; letter-spacing: -.03em;
+  color: var(--blue); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.metric .l { font-size: 13px; color: var(--text-tertiary); font-weight: 400; margin-top: 8px; }
+.logos {
+  display: flex; flex-wrap: wrap; gap: 12px 36px;
+  justify-content: center; align-items: center;
+}
+.logo { font-size: 18px; font-weight: 700; color: var(--border-strong); letter-spacing: .01em; }
+
+/* ════════════════════════════════════════════
+   S6 — 보안
+════════════════════════════════════════════ */
+.s6 { background: var(--bg-page); }
+.trust {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 48px;
+}
+.tcard {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px;
+}
+.tcard .ic {
+  width: 44px; height: 44px; border-radius: var(--r-md);
+  background: var(--blue-soft); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; margin-bottom: 16px;
+}
+.tcard h4 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.tcard p  { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
+.badges {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-top: 36px;
+}
+.badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 500; color: var(--text-secondary);
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  padding: 8px 16px; border-radius: var(--r-pill);
+}
+
+/* ════════════════════════════════════════════
+   S7 — 3단계 + 분기
+════════════════════════════════════════════ */
+.s7 { background: var(--bg-page); }
+.steps {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 48px;
+}
+.step {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 28px; position: relative;
+}
+.step .sn {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: var(--blue); color: #fff;
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.step h4 { font-size: 17px; font-weight: 600; margin-bottom: 7px; }
+.step p  { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
+.step-arr {
+  position: absolute; top: 50%; right: -12px;
+  transform: translateY(-50%); color: var(--border-strong);
+  font-size: 16px; z-index: 2;
+}
+.branches { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.branch {
+  background: var(--bg-canvas); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px 24px;
+  display: flex; align-items: center; gap: 16px;
+  cursor: pointer; transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  text-decoration: none;
+}
+.branch:hover { border-color: var(--blue); box-shadow: var(--shadow-md); }
+.branch .bi {
+  flex-shrink: 0; width: 46px; height: 46px; border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.branch.prof .bi { background: #EDE9F8; color: #6B3FD4; }
+.branch.quick .bi { background: #FFF8DC; color: #9B7C00; }
+.branch h5 { font-size: 15px; font-weight: 600; margin-bottom: 3px; color: var(--text-primary); }
+.branch p  { font-size: 12.5px; color: var(--text-tertiary); font-weight: 400; }
+.branch .ba-arr { margin-left: auto; color: var(--border-strong); font-size: 18px; }
+
+/* ════════════════════════════════════════════
+   S8 — 리소스
+════════════════════════════════════════════ */
+.s8 { background: var(--bg-canvas); }
+.res { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.rc {
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  overflow: hidden; cursor: pointer;
+  transition: transform var(--t-normal), box-shadow var(--t-normal);
+}
+.rc:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.rc-img  { height: 130px; display: flex; align-items: flex-end; padding: 12px; }
+.rc-cat  {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .03em;
+  background: rgba(255,255,255,.88); color: var(--text-secondary);
+  padding: 4px 10px; border-radius: var(--r-pill);
+}
+.rc-body { padding: 16px 18px 20px; background: var(--bg-canvas); }
+.rc-body h4 { font-size: 15px; font-weight: 600; line-height: 1.45; margin-bottom: 6px; }
+.rc-body p  { font-size: 12px; color: var(--text-tertiary); font-weight: 400; }
+
+/* ════════════════════════════════════════════
+   CTA
+════════════════════════════════════════════ */
+.cta {
+  background: var(--navy);
+  text-align: center; position: relative; overflow: hidden;
+  padding: 96px 0;
+}
+.cta-glow {
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 260px;
+  background: radial-gradient(ellipse, rgba(71,129,255,.35), transparent 70%);
+  pointer-events: none;
+}
+.cta h2 {
+  font-size: 36px; font-weight: 600; color: #fff;
+  letter-spacing: -.025em; position: relative;
+}
+.cta .sec-lead { color: rgba(255,255,255,.55); margin: 14px auto 0; position: relative; }
+.cta-btns {
+  display: flex; gap: 10px; justify-content: center;
+  margin-top: 30px; position: relative;
+}
+.cta .btn-ghost {
+  background: transparent; color: rgba(255,255,255,.8);
+  border-color: rgba(255,255,255,.25);
+}
+.cta .btn-ghost:hover {
+  border-color: rgba(255,255,255,.6); color: #fff;
+}
+
+/* ════════════════════════════════════════════
+   Responsive
+════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .ba-grid, .collab, .metrics, .trust, .steps, .branches, .res {
+    grid-template-columns: 1fr;
+  }
+  .ba-before   { border-right: none; border-bottom: 1px solid var(--border); }
+  .collab-flow { grid-column: span 1; flex-direction: column; gap: 12px; }
+  .s3-screen   { grid-template-columns: 1fr; }
+  .s3-right    { border-radius: 0 0 var(--r-md) var(--r-md); }
+  .metric      { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 0; }
+  .step-arr, .flow-arr { display: none; }
+  .sec-title   { font-size: 26px; }
+  .wrap        { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+  S1 — Featured (세로 리스트 + 우측 데모)
+════════════════════════════════════════════ -->
+<section class="s1">
+  <div class="wrap">
+  <div class="feat-layout">
+
+    <!-- 왼쪽 세로 리스트 -->
+    <div class="feat-list">
+      <button class="feat-item on ticking" data-panel="concept">
+        <div class="feat-item-q">신제품, 어떤 컨셉이 먹힐까?</div>
+        <div class="feat-item-desc">질문 하나로 AI가 설문을 설계하고, 구매 의향부터 선호 이유까지 분석합니다.</div>
+        <a class="feat-item-link" href="#">살펴보기 <i class="ph ph-arrow-right" style="font-size:11px"></i></a>
+      </button>
+      <button class="feat-item" data-panel="brand">
+        <div class="feat-item-q">우리 브랜드, 어떻게 보일까?</div>
+        <div class="feat-item-desc">소비자가 연상하는 키워드, 경쟁사 대비 포지션을 AI가 정리합니다.</div>
+        <a class="feat-item-link" href="#">살펴보기 <i class="ph ph-arrow-right" style="font-size:11px"></i></a>
+      </button>
+      <button class="feat-item" data-panel="trend">
+        <div class="feat-item-q">요즘 이 카테고리, 뭐가 뜰까?</div>
+        <div class="feat-item-desc">500만 패널 데이터로 카테고리 트렌드와 성장 키워드를 빠르게 파악합니다.</div>
+        <a class="feat-item-link" href="#">살펴보기 <i class="ph ph-arrow-right" style="font-size:11px"></i></a>
+      </button>
+      <button class="feat-item" data-panel="churn">
+        <div class="feat-item-q">고객이 왜 떠날까?</div>
+        <div class="feat-item-desc">이탈 이유와 세그먼트별 원인을 데이터로 확인합니다.</div>
+        <a class="feat-item-link" href="#">살펴보기 <i class="ph ph-arrow-right" style="font-size:11px"></i></a>
+      </button>
+      <button class="feat-item" data-panel="compete">
+        <div class="feat-item-q">경쟁사 대비 우리는?</div>
+        <div class="feat-item-desc">소비자에게 직접 비교 평가받아 포지션 차이와 개선 기회를 명확히 합니다.</div>
+        <a class="feat-item-link" href="#">살펴보기 <i class="ph ph-arrow-right" style="font-size:11px"></i></a>
+      </button>
+    </div>
+
+    <!-- 오른쪽 결과 패널 영역 -->
+    <div class="feat-demo-area">
+      <div class="feat-screen-wrap">
+        <div class="feat-win-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="feat-urlbar">app.opensurvey.io/ai</span>
+        </div>
+
+        <div class="feat-screen">
+
+          <!-- ① 신제품 컨셉 -->
+          <div class="feat-panel on" id="panel-concept">
+            <div class="feat-app-topbar">
+              <span class="feat-ds-chip"><i class="ph ph-chart-bar"></i> 2026 K뷰티 신제품 컨셉 테스트 · n=1,164</span>
+            </div>
+            <div class="feat-chat-layout">
+              <div class="feat-chat-col">
+                <div class="bubble-user">15개 컨셉 중 구매 의향 TOP2 기준으로 비교해줘</div>
+                <div class="bubble-process">
+                  <div class="bubble-ai-icon"><i class="ph ph-sparkle" style="font-size:10px;color:#fff"></i></div>
+                  <div class="bubble-ai-text"><strong>VT Reedle Shot 앰플이 57.6%</strong>로 1위. 상위 3개 컨셉이 55%+를 기록하며 뚜렷한 선호가 나타납니다.</div>
+                </div>
+                <div class="bubble-done">
+                  <div class="bubble-done-head"><i class="ph ph-lightbulb" style="font-size:11px"></i> 핵심 인사이트</div>
+                  <div class="bubble-done-body">상위 컨셉 공통점은 <strong>기능성 성분 소구</strong>. 30–39세에서 구매 의향이 일관되게 가장 높습니다 (약 70%).</div>
+                </div>
+              </div>
+              <div class="feat-data-col">
+                <div class="dp-label">컨셉별 구매 의향 TOP2 (%)</div>
+                <div class="dp-hbars-full">
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">VT Reedle Shot</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill hi" style="width:57.6%"></div></div>
+                    <span class="dp-hb-val hi">57.6</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">AESTURA 크림</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:55.9%"></div></div>
+                    <span class="dp-hb-val">55.9</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">Primera 클렌징</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:54.7%"></div></div>
+                    <span class="dp-hb-val">54.7</span>
+                  </div>
+                  <div class="dp-hb-row muted">
+                    <span class="dp-hb-name">Medicube Age-R</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill muted" style="width:33.8%"></div></div>
+                    <span class="dp-hb-val muted">33.8</span>
+                  </div>
+                  <div class="dp-hb-row muted">
+                    <span class="dp-hb-name">Whoo 쿠션</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill muted" style="width:28.9%"></div></div>
+                    <span class="dp-hb-val muted">28.9</span>
+                  </div>
+                </div>
+                <div class="dp-seg-note"><i class="ph ph-info" style="font-size:10px"></i> 30–39세 전체 평균 대비 +12%p 높음</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ② 브랜드 인식 -->
+          <div class="feat-panel" id="panel-brand">
+            <div class="feat-app-topbar">
+              <span class="feat-ds-chip"><i class="ph ph-file-text"></i> MZ세대 브랜드 인식 조사 · 설문 설계 완료</span>
+            </div>
+            <div class="feat-chat-layout">
+              <div class="feat-chat-col">
+                <div class="bubble-user">MZ세대 중심으로 브랜드 인식 조사 설계해줘</div>
+                <div class="bubble-process">
+                  <div class="bubble-ai-icon"><i class="ph ph-sparkle" style="font-size:10px;color:#fff"></i></div>
+                  <div class="bubble-ai-text">브리프와 설계서를 완성했습니다. <strong>인지도·이용·충성도 3개 영역</strong>을 커버하는 검증된 문항 구조예요.</div>
+                </div>
+                <div class="bubble-done">
+                  <div class="bubble-done-head"><i class="ph ph-check-circle" style="font-size:11px"></i> 설계 완료</div>
+                  <div class="bubble-done-body">설문 설계서 · 프로젝트 브리프가 생성됐습니다. 바로 수집을 시작하거나 문항을 수정할 수 있습니다.</div>
+                </div>
+              </div>
+              <div class="feat-data-col">
+                <div class="dp-label">생성된 산출물</div>
+                <div class="dp-doc-list">
+                  <div class="dp-doc-item">
+                    <div class="dp-doc-icon blue"><i class="ph ph-file-doc" style="font-size:13px"></i></div>
+                    <div class="dp-doc-info">
+                      <div class="dp-doc-title">MZ세대 브랜드 인지도·이용·충성도 정량조사 프로젝트 브리프</div>
+                      <div class="dp-doc-meta">브리프 · 방금 생성됨</div>
+                    </div>
+                  </div>
+                  <div class="dp-doc-item">
+                    <div class="dp-doc-icon blue"><i class="ph ph-list-checks" style="font-size:13px"></i></div>
+                    <div class="dp-doc-info">
+                      <div class="dp-doc-title">MZ세대 대상 자사·경쟁 브랜드 인지도·이용·충성도 정량조사 설계서</div>
+                      <div class="dp-doc-meta">설계서 · 방금 생성됨</div>
+                    </div>
+                  </div>
+                  <div class="dp-doc-item">
+                    <div class="dp-doc-icon green"><i class="ph ph-rows" style="font-size:13px"></i></div>
+                    <div class="dp-doc-info">
+                      <div class="dp-doc-title">브랜드 인식·이용 U&A 설문</div>
+                      <div class="dp-doc-meta">설문 · 28문항 · 방금 생성됨</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dp-seg-note"><i class="ph ph-lightning" style="font-size:10px"></i> 설계 완료 → 바로 수집 시작 가능</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ③ 카테고리 트렌드 -->
+          <div class="feat-panel" id="panel-trend">
+            <div class="feat-app-topbar">
+              <span class="feat-ds-chip"><i class="ph ph-trend-up"></i> 건강기능식품 트렌드 데이터 2025·2026 · 출처 2건</span>
+            </div>
+            <div class="feat-chat-layout">
+              <div class="feat-chat-col">
+                <div class="bubble-user">2025 대비 2026에 뜨는 카테고리 알려줘</div>
+                <div class="bubble-process">
+                  <div class="bubble-ai-icon"><i class="ph ph-sparkle" style="font-size:10px;color:#fff"></i></div>
+                  <div class="bubble-ai-text"><strong>오메가3 (+2.7%p)</strong>가 가장 큰 폭으로 성장. 수면 케어·항산화가 뒤를 잇습니다.</div>
+                </div>
+                <div class="bubble-done">
+                  <div class="bubble-done-head"><i class="ph ph-lightbulb" style="font-size:11px"></i> 30대 타깃 인사이트</div>
+                  <div class="bubble-done-body"><strong>효능·성분·후기</strong>를 최우선. 주 구매 채널은 네이버(46%) · 쿠팡(45%). 5–10만원대가 최다.</div>
+                </div>
+              </div>
+              <div class="feat-data-col">
+                <div class="dp-label">섭취율 증가 카테고리 (2025→2026, %p)</div>
+                <div class="dp-hbars-full">
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">오메가3</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill hi" style="width:78%"></div></div>
+                    <span class="dp-hb-val hi">+2.7</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">수면 케어</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:36%"></div></div>
+                    <span class="dp-hb-val">+1.0</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">항산화·노화방지</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:25%"></div></div>
+                    <span class="dp-hb-val">+0.7</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">모발·탈모 영양제</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:43%"></div></div>
+                    <span class="dp-hb-val">신규↑</span>
+                  </div>
+                </div>
+                <div class="dp-seg-note"><i class="ph ph-info" style="font-size:10px"></i> 출처: 건강기능식품 트렌드 데이터 2025·2026</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ④ 고객 이탈 -->
+          <div class="feat-panel" id="panel-churn">
+            <div class="feat-app-topbar">
+              <span class="feat-ds-chip"><i class="ph ph-table"></i> survey_rawdata_2025.xlsx · +2,400 rows</span>
+            </div>
+            <div class="feat-chat-layout">
+              <div class="feat-chat-col">
+                <div class="bubble-user">이 설문 데이터의 주요 인사이트를 요약해줘</div>
+                <div class="bubble-process">
+                  <div class="bubble-ai-icon"><i class="ph ph-sparkle" style="font-size:10px;color:#fff"></i></div>
+                  <div class="bubble-ai-text">브랜드 인지도는 <strong>20대(78%)에서 가장 높고</strong>, 재구매 의향 82%로 높은 충성도를 보입니다.</div>
+                </div>
+                <div class="bubble-done">
+                  <div class="bubble-done-head"><i class="ph ph-lightbulb" style="font-size:11px"></i> 연령대별 특이점</div>
+                  <div class="bubble-done-body"><strong>20대</strong>: 인지도 78%(+18%p), 재구매 89%, 인스타그램 광고 41%로 유입이 집중됩니다.</div>
+                </div>
+              </div>
+              <div class="feat-data-col">
+                <div class="dp-label">연령대별 브랜드 인지도 TOP2 (%)</div>
+                <div class="dp-hbars-full">
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">20대</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill hi" style="width:78%"></div></div>
+                    <span class="dp-hb-val hi">78</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">30대</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:67%"></div></div>
+                    <span class="dp-hb-val">67</span>
+                  </div>
+                  <div class="dp-hb-row">
+                    <span class="dp-hb-name">40대</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill" style="width:54%"></div></div>
+                    <span class="dp-hb-val">54</span>
+                  </div>
+                  <div class="dp-hb-row muted">
+                    <span class="dp-hb-name">50대</span>
+                    <div class="dp-hb-track"><div class="dp-hb-fill muted" style="width:41%"></div></div>
+                    <span class="dp-hb-val muted">41</span>
+                  </div>
+                </div>
+                <div class="dp-seg-note"><i class="ph ph-chart-line" style="font-size:10px"></i> 재구매 의향 전체 82% · 온라인 채널 64%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑤ 경쟁사 비교 -->
+          <div class="feat-panel" id="panel-compete">
+            <div class="feat-app-topbar">
+              <span class="feat-ds-chip"><i class="ph ph-globe"></i> 2025 한미일 AI 검색 트렌드 · n=3,000</span>
+            </div>
+            <div class="feat-chat-layout">
+              <div class="feat-chat-col">
+                <div class="bubble-user">한국과 미국의 AI 검색 행동 차이를 비교해줘</div>
+                <div class="bubble-process">
+                  <div class="bubble-ai-icon"><i class="ph ph-sparkle" style="font-size:10px;color:#fff"></i></div>
+                  <div class="bubble-ai-text">한국은 <strong>체험률(50.9%)</strong>이 가장 높고, 미국은 <strong>만족도·신뢰도(85.9%)</strong>가 가장 높습니다.</div>
+                </div>
+                <div class="bubble-done">
+                  <div class="bubble-done-head"><i class="ph ph-lightbulb" style="font-size:11px"></i> 크로스탭 유의차</div>
+                  <div class="bubble-done-body">East Asia vs US — <strong>신뢰도</strong>에서 통계적으로 유의한 차이(p&lt;.05). 일본은 중립 응답 비율이 가장 높습니다.</div>
+                </div>
+              </div>
+              <div class="feat-data-col">
+                <div class="dp-label">ChatGPT 체험률·만족도 (TOP2, %)</div>
+                <table class="dp-table">
+                  <thead><tr><th>국가</th><th>체험률</th><th>만족도</th></tr></thead>
+                  <tbody>
+                    <tr class="hi"><td>🇰🇷 한국</td><td class="num dp-hi-val">50.9</td><td class="num">72.1</td></tr>
+                    <tr class="hi"><td>🇺🇸 미국</td><td class="num">38.4</td><td class="num dp-hi-val">85.9</td></tr>
+                    <tr><td>🇯🇵 일본</td><td class="num" style="color:var(--text-tertiary)">14.8</td><td class="num" style="color:var(--text-tertiary)">55.4</td></tr>
+                  </tbody>
+                </table>
+                <div class="dp-seg-note"><i class="ph ph-info" style="font-size:10px"></i> 출처: 2025 한미일 AI 검색 트렌드 리포트</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /feat-screen -->
+      </div><!-- /feat-screen-wrap -->
+    </div><!-- /feat-demo-area -->
+
+  </div><!-- /feat-layout -->
+  </div><!-- /wrap -->
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S2 — 3열 기능 카드
+════════════════════════════════════════════ -->
+<section class="sec s2">
+  <div class="wrap">
+    <div class="s2-header">
+      <h2>리서치를 가장 잘 아는 AI가,<br>처음부터 끝까지 함께합니다</h2>
+    </div>
+    <div class="feat-cards">
+
+      <!-- 카드 1 — AI 설문 설계 -->
+      <div class="feat-card">
+        <div class="feat-card-copy">
+          <h4>질문만 던지면 AI가 설문을 설계합니다</h4>
+          <p>20년간 검증된 리서치 노하우가 AI에 담겨 있습니다. 전문가 없이도 최적의 문항 구조를 바로 만들어 드립니다.</p>
+          <a class="feat-card-link" href="#">설문 설계 살펴보기 <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="feat-card-demo">
+          <div class="demo-ai-badge"><i class="ph ph-sparkle" style="font-size:10px"></i> Opensurvey AI</div>
+          <div class="demo-design-input">
+            <span>신제품 컨셉 테스트 설문 만들어줘</span>
+            <div class="send-btn"><i class="ph ph-arrow-up" style="color:#fff;font-size:12px"></i></div>
+          </div>
+          <div class="demo-survey-preview">
+            <div class="dsp-title">생성된 설문 — 컨셉 테스트</div>
+            <div class="demo-survey-q">Q1. 다음 중 어떤 컨셉이 가장 마음에 드십니까?</div>
+            <div class="demo-survey-opts">
+              <div class="demo-survey-opt sel"><div class="opt-dot"></div> 컨셉 A — 자연 유래 성분 강조</div>
+              <div class="demo-survey-opt"><div class="opt-dot"></div> 컨셉 B — 프리미엄 패키지</div>
+              <div class="demo-survey-opt"><div class="opt-dot"></div> 컨셉 C — 가성비 라인</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 2 — 빠른 응답 수집 -->
+      <div class="feat-card">
+        <div class="feat-card-copy">
+          <h4>검증된 패널에서 몇 시간이면 충분합니다</h4>
+          <p>500만+ 검증 패널이 대기 중입니다. 원하는 타깃을 설정하면 응답이 실시간으로 쌓입니다.</p>
+          <a class="feat-card-link" href="#">패널 살펴보기 <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="feat-card-demo">
+          <div class="demo-collect-steps">
+            <div class="demo-collect-step">
+              <div class="step-ic"><i class="ph ph-user-focus" style="color:var(--text-tertiary)"></i></div>
+              <div class="step-label">타깃 설정</div>
+              <div class="step-meta">30대 여성 · 수도권</div>
+            </div>
+            <div class="demo-collect-step active">
+              <div class="step-ic"><i class="ph ph-broadcast" style="color:var(--blue)"></i></div>
+              <div class="step-label">응답 수집 중</div>
+              <div class="step-meta">340 / 500명</div>
+            </div>
+            <div class="demo-collect-step">
+              <div class="step-ic"><i class="ph ph-check-circle" style="color:var(--text-tertiary)"></i></div>
+              <div class="step-label">수집 완료</div>
+              <div class="step-meta">—</div>
+            </div>
+          </div>
+          <div class="demo-progress">
+            <div class="demo-progress-label">
+              <span>수집 현황</span>
+              <strong>340<span style="font-weight:400;color:var(--text-tertiary)"> / 500명</span></strong>
+            </div>
+            <div class="demo-progress-bar"><div class="demo-progress-fill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 3 — 자동 인사이트 -->
+      <div class="feat-card">
+        <div class="feat-card-copy">
+          <h4>AI가 근거와 함께, 리서처처럼 답합니다</h4>
+          <p>응답 데이터를 직접 계산한 결과 위에 AI의 해석이 더해집니다. 숫자의 의미를 바로 파악합니다.</p>
+          <a class="feat-card-link" href="#">Dataspace AI 살펴보기 <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="feat-card-demo">
+          <div class="demo-insight-row">
+            <div class="demo-insight-card hi">
+              <div class="demo-insight-stat">62%</div>
+              <div class="demo-insight-label">컨셉 C 구매의향<br>TOP2</div>
+            </div>
+            <div class="demo-insight-card">
+              <div class="demo-insight-stat">+18%p</div>
+              <div class="demo-insight-label">전월 대비<br>상승폭</div>
+            </div>
+          </div>
+          <div class="demo-insight-card" style="margin-top:0">
+            <div class="demo-ai-badge" style="margin-bottom:6px"><i class="ph ph-sparkle" style="font-size:10px"></i> AI 해석</div>
+            <div class="demo-insight-label" style="font-size:12px;line-height:1.6;">30대 여성에서 컨셉 C의 구매 의향이 통계적으로 유의하게 높습니다(p&lt;0.01). '성분 신뢰도'를 핵심 소구점으로 설정을 권장합니다.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S3 — Dataspace AI
+════════════════════════════════════════════ -->
+<section class="sec s3">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-sparkle"></i> S3 · Dataspace AI</div>
+      <div class="sec-thought">유저 생각: "그냥 그럴듯하게 지어낸 거 아냐?"</div>
+      <h2 class="sec-title">코드가 계산하고, AI가 해석합니다</h2>
+      <p class="sec-lead">출처를 넘어, 실제 데이터를 계산한 결과 위에 AI의 해석이 더해집니다. 그게 Dataspace AI입니다.</p>
+    </div>
+    <div class="s3-stage">
+      <div class="s3-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      </div>
+      <div class="s3-screen">
+        <div class="s3-left">
+          <div class="s3-badge"><i class="ph ph-sparkle"></i> Dataspace AI</div>
+          <div class="s3-user">
+            <span>재구매 의향, 연령대별로 유의미한 차이 있어?</span>
+          </div>
+          <div class="s3-flow">
+            <span>CHAT</span>
+            <i class="ph ph-arrow-right"></i>
+            <b>DATA</b>
+          </div>
+          <div class="s3-calc">groupby(age).mean(repurchase)<br>→ ANOVA p = 0.003 *<br>→ 30대 여성 4.6 / 전체 3.9</div>
+        </div>
+        <div class="s3-right">
+          <div class="art-label">재구매 의향 (연령대별, 5점 척도)</div>
+          <div class="art-bars">
+            <div class="art-col"><div class="art-bar" style="height:54%"></div><span class="art-x">20대</span></div>
+            <div class="art-col"><div class="art-bar hi" style="height:92%"></div><span class="art-x">30대</span></div>
+            <div class="art-col"><div class="art-bar" style="height:64%"></div><span class="art-x">40대</span></div>
+            <div class="art-col"><div class="art-bar" style="height:47%"></div><span class="art-x">50대+</span></div>
+          </div>
+          <div class="s3-insight">
+            <div class="ih"><i class="ph ph-sparkle"></i> AI 해석</div>
+            <div class="it">30대 여성의 재구매 의향이 통계적으로 유의하게 높습니다(p&lt;0.01). 인터뷰에서 '성분 신뢰도'를 주된 이유로 언급해, 이 층을 리텐션 타깃으로 삼을 만합니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S4 — 팀 협업
+════════════════════════════════════════════ -->
+<section class="sec s4">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-users-three"></i> S4 · 팀 협업</div>
+      <div class="sec-thought">유저 생각: "혼자 쓰는 게 아니라 팀이 같이 봐야 하는데"</div>
+      <h2 class="sec-title">한 사람의 리서치가,<br>팀의 자산이 됩니다</h2>
+    </div>
+    <div class="collab">
+      <div class="collab-card">
+        <span class="role-badge role-creator"><i class="ph ph-circle-fill" style="font-size:8px"></i> Creator</span>
+        <h4>만들고, 분석합니다</h4>
+        <p>설문을 설계하고 데이터를 수집해 인사이트를 도출합니다. 리서치의 출발점.</p>
+        <div class="collab-avatars">
+          <span class="av">민</span><span class="av">준</span>
+        </div>
+      </div>
+      <div class="collab-card">
+        <span class="role-badge role-viewer"><i class="ph ph-circle-fill" style="font-size:8px"></i> Viewer</span>
+        <h4>이어서, 질문합니다</h4>
+        <p>같은 데이터를 보고 각자의 각도에서 새로운 질문을 던집니다. 분석이 한 번에 끝나지 않습니다.</p>
+        <div class="collab-avatars">
+          <span class="av">수</span><span class="av">지</span><span class="av">혁</span>
+          <span class="av" style="background:var(--bg-hover);color:var(--text-tertiary)">+5</span>
+        </div>
+      </div>
+      <div class="collab-flow">
+        <div class="flow-step">
+          <div class="fi"><i class="ph ph-pencil-simple"></i></div>
+          <div class="ft">Creator가 분석</div>
+          <div class="fd">설문 · 수집 · 인사이트</div>
+        </div>
+        <span class="flow-arr"><i class="ph ph-arrow-right"></i></span>
+        <div class="flow-step">
+          <div class="fi"><i class="ph ph-arrows-left-right"></i></div>
+          <div class="ft">팀에 공유</div>
+          <div class="fd">같은 데이터 · 같은 화면</div>
+        </div>
+        <span class="flow-arr"><i class="ph ph-arrow-right"></i></span>
+        <div class="flow-step">
+          <div class="fi"><i class="ph ph-sparkle"></i></div>
+          <div class="ft">Viewer가 이어서 질문</div>
+          <div class="fd">다양한 각도로 확장</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S5 — 지표 + 로고
+════════════════════════════════════════════ -->
+<section class="sec s5">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-chart-bar"></i> S5 · 사용량</div>
+      <div class="sec-thought">유저 생각: "실제로 우리 같은 회사·담당자들이 쓰고 있나?"</div>
+      <h2 class="sec-title">이미, 많은 팀이 쓰고 있습니다</h2>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="n">3,500+</div><div class="l">도입 기업</div></div>
+      <div class="metric"><div class="n">500만+</div><div class="l">검증된 패널</div></div>
+      <div class="metric"><div class="n">70%</div><div class="l">리서치 기간 단축</div></div>
+      <div class="metric"><div class="n">98%</div><div class="l">응답 데이터 신뢰도</div></div>
+    </div>
+    <div class="logos">
+      <span class="logo">SAMSUNG</span>
+      <span class="logo">LG</span>
+      <span class="logo">KAKAO</span>
+      <span class="logo">NAVER</span>
+      <span class="logo">COUPANG</span>
+      <span class="logo">TOSS</span>
+      <span class="logo">CJ</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S6 — 보안
+════════════════════════════════════════════ -->
+<section class="sec s6">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-lock-key"></i> S6 · 보안</div>
+      <div class="sec-thought">유저 생각: "보안팀이 막지 않을까? 데이터 믿을 만한가?"</div>
+      <h2 class="sec-title">믿고 맡길 수 있는 리서치</h2>
+    </div>
+    <div class="trust">
+      <div class="tcard">
+        <div class="ic"><i class="ph ph-seal-check"></i></div>
+        <h4>검증된 패널 품질</h4>
+        <p>중복·불성실 응답을 자동으로 걸러내, 신뢰할 수 있는 데이터만 남깁니다.</p>
+      </div>
+      <div class="tcard">
+        <div class="ic"><i class="ph ph-shield-chevron"></i></div>
+        <h4>엔터프라이즈 보안</h4>
+        <p>국제 보안 인증과 데이터 암호화로 민감한 리서치 데이터를 보호합니다.</p>
+      </div>
+      <div class="tcard">
+        <div class="ic"><i class="ph ph-trend-up"></i></div>
+        <h4>규모에 맞는 확장</h4>
+        <p>단일 설문부터 전사 리서치 운영까지 한 곳에서 관리합니다.</p>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge"><i class="ph ph-shield-check"></i> ISO 27001</span>
+      <span class="badge"><i class="ph ph-seal-check"></i> SOC 2 Type II</span>
+      <span class="badge"><i class="ph ph-check-circle"></i> ISMS 인증</span>
+      <span class="badge"><i class="ph ph-flag"></i> GDPR 준수</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S7 — 3단계 + 분기
+════════════════════════════════════════════ -->
+<section class="sec s7">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-rocket-launch"></i> S7 · 시작하기</div>
+      <div class="sec-thought">유저 생각: "좋아, 그래서 내가 지금 뭘 하면 되지?"</div>
+      <h2 class="sec-title">시작은 3단계면 충분합니다</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="sn">1</div>
+        <h4>질문한다</h4>
+        <p>조사 목적을 한 줄로 입력하면 AI가 설문을 설계합니다.</p>
+        <span class="step-arr"><i class="ph ph-arrow-right"></i></span>
+      </div>
+      <div class="step">
+        <div class="sn">2</div>
+        <h4>모은다</h4>
+        <p>검증된 패널에서 원하는 타깃의 응답을 빠르게 수집합니다.</p>
+        <span class="step-arr"><i class="ph ph-arrow-right"></i></span>
+      </div>
+      <div class="step">
+        <div class="sn">3</div>
+        <h4>답을 얻는다</h4>
+        <p>응답이 차트와 인사이트로 정리되어 바로 의사결정에 씁니다.</p>
+      </div>
+    </div>
+    <div class="branches">
+      <a class="branch prof" href="#">
+        <div class="bi"><i class="ph ph-diamond"></i></div>
+        <div>
+          <h5>더 전문적인 리서치가 필요하다면</h5>
+          <p>리서치 전문 서비스로 연결</p>
+        </div>
+        <span class="ba-arr"><i class="ph ph-arrow-right"></i></span>
+      </a>
+      <a class="branch quick" href="#">
+        <div class="bi"><i class="ph ph-lightning"></i></div>
+        <div>
+          <h5>지금 바로 직접 돌려보고 싶다면</h5>
+          <p>셀프서베이(퀵서베이)로 연결</p>
+        </div>
+        <span class="ba-arr"><i class="ph ph-arrow-right"></i></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  S8 — 리소스
+════════════════════════════════════════════ -->
+<section class="sec s8">
+  <div class="wrap">
+    <div class="center">
+      <div class="sec-eyebrow"><i class="ph ph-books"></i> S8 · 리소스</div>
+      <h2 class="sec-title">리서치, 더 깊이 알아보기</h2>
+    </div>
+    <div class="res">
+      <div class="rc">
+        <div class="rc-img" style="background: var(--green-bg);">
+          <span class="rc-cat">가이드</span>
+        </div>
+        <div class="rc-body">
+          <h4>처음 설문을 설계하는 사람을 위한 7가지 원칙</h4>
+          <p>읽는 데 6분</p>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-img" style="background: #FFF8DC;">
+          <span class="rc-cat">웨비나</span>
+        </div>
+        <div class="rc-body">
+          <h4>AI 시대, 리서처의 일은 어떻게 바뀌는가</h4>
+          <p>온디맨드 · 45분</p>
+        </div>
+      </div>
+      <div class="rc">
+        <div class="rc-img" style="background: #EDE9F8;">
+          <span class="rc-cat">리포트</span>
+        </div>
+        <div class="rc-body">
+          <h4>2026 소비 트렌드 데이터 리포트</h4>
+          <p>무료 다운로드</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+  Final CTA
+════════════════════════════════════════════ -->
+<section class="cta">
+  <div class="cta-glow"></div>
+  <div class="wrap">
+    <h2>지금, 첫 질문을 던져보세요</h2>
+    <p class="sec-lead">14일 무료 체험. 카드 등록 없이 바로 시작할 수 있습니다.</p>
+    <div class="cta-btns">
+      <a class="btn btn-primary" href="#">무료로 시작하기</a>
+      <a class="btn btn-ghost" href="#">영업팀에 문의하기 <i class="ph ph-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  var PANEL_ORDER = ['concept','brand','trend','churn','compete'];
+  var AUTO_DELAY = 5000; // 패널당 자동 전환 ms
+  var items = Array.from(document.querySelectorAll('.feat-item'));
+  var autoTimer = null;
+
+  function switchTo(panel) {
+    // 왼쪽 리스트
+    items.forEach(function(i) { i.classList.remove('on'); });
+    var item = document.querySelector('.feat-item[data-panel="' + panel + '"]');
+    if (item) item.classList.add('on');
+
+    // 오른쪽 패널
+    document.querySelectorAll('.feat-panel').forEach(function(p) {
+      p.classList.remove('on','fade-in');
+    });
+    var panel_el = document.getElementById('panel-' + panel);
+    if (panel_el) {
+      void panel_el.offsetWidth; // reflow → animation restart
+      panel_el.classList.add('on','fade-in');
+    }
+
+    // 자동 전환 타이머 재시작
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function() {
+      var cur = document.querySelector('.feat-item.on');
+      var curIdx = items.indexOf(cur);
+      var next = items[(curIdx + 1) % items.length];
+      switchTo(next.getAttribute('data-panel'));
+    }, AUTO_DELAY);
+  }
+
+  // 수동 클릭 (타이머 리셋)
+  items.forEach(function(item) {
+    item.addEventListener('click', function() {
+      switchTo(item.getAttribute('data-panel'));
+    });
+  });
+
+  // 첫 패널 표시
+  switchTo('concept');
+</script>
+</body>
+</html>
