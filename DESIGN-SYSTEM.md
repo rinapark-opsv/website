@@ -91,7 +91,7 @@
 | **수집 선택** | `ccCollect()` | `collect:true` (+ text) | 합성패널/소비자패널/내 고객 옵션 카드. |
 | **꼬리질문** | `ccFollowups(arr)` | `followups:[string]` | 라인형(보더 없음), 선두 블루 ↗, 호버=블랙 6% 채움. 첫 칩이 다음 씬 유저 메시지와 매칭→자동 클릭. 위에 구분 bar(등장 시 노출). |
 | **인라인 근거 칩** | `md()` `[[n]]`·`[[1,2]]` → `.cite` | 본문 텍스트에 마커 | 문장/불릿 끝의 작은 회색 번호 칩(18px·라운드5). 번호=출처 번호와 매칭. 호버 시 블루. |
-| **출처** | `srcRows(list)` | `sources:[{n,title,type,kind,emoji,os,open}]` | "출처"(11/회색 라벨) + 행: **번호 칩** + 아이콘 + 제목 + 타입(우측) + 끝 ↗. 번호·타입·↗는 **모노폰트 + tertiary @ 0.7 동일 톤**. kind=survey→SURVEY_ICON, trend/os→OS_ICON. **순서: 본문 → 출처 → 꼬리질문.** |
+| **출처** | `srcRows(list)` | `sources:[{n,title,type,kind,emoji,os,open,href}]` | "출처"(11/회색 라벨) + 행: **번호 칩** + 아이콘 + 제목 + 타입(우측) + 끝 ↗. 번호·타입·↗는 **모노폰트 + tertiary @ 0.7 동일 톤**. kind=survey→SURVEY_ICON, trend/os→OS_ICON. 클릭: `href`(외부 URL·새 탭) 우선, 없으면 `open`(내부 패널). **순서: 본문 → 출처 → 꼬리질문.** |
 | **검색 세그먼트** | `ccSearch(o)` | `search:{segs:[{tag,name,size,n,desc}], note}` | 데이터에서 도출한 세그먼트 비교 카드(랭크 배지+태그+이름+비율). 1순위=블루, 2순위=`--green`. 하단 노트는 `--blue-faint` 면. reveal는 `.ps-seg` 단위. |
 | **가상 소비자 카드** | `ccPersonas()` + `PERSONAS{}` | `personas:'<set>'`(truthy 플래그) | 프로필 카드(아바타·이름·태그·대표성·인용) + [특징 보기](패널)·[대화 시작하기]. 아바타색=person별(blue/`--green`). reveal `.pc-card` 단위. |
 | **가상 소비자 발화** | `msgHTML` `role:'persona'` | `{role:'persona', who, text}` | 좌측 인커밍 버블(`.pb-bubble` `--r-md`, 헤더 아바타+이름). AI 아바타 경로 아님(사람형). |
@@ -156,6 +156,7 @@
 
 ## 7. 표 스타일 (canonical)
 - **인라인/패널 표 = `.cb-table` 스타일이 표준**: 13px, 숫자 우측정렬·첫 칼럼 좌측, padding 10~12, `tbody tr:hover=bg-page`, 강조 `.cb-hi=--red`·`.cb-lo=--blue-deep`. 구형 `.ai-prose table.mini`·`.av-ct`도 이 스타일로 정렬됨.
+- **제품형 크로스탭(모노톤)**: 실제 제품 analytics 화면처럼 값/배경은 모노톤(컬러·이모지 없음), 값 뒤 증감 마커만 색 — `▲`=#EC7669(`.cb-mk.up`)·`▼`=#4893FF(`.cb-mk.dn`)로 80% 유의 높음/낮음만 표시. n수 헤더(`Total(n=600)`), 격차 행(`.cb-gap`), 카테고리 그룹 구분선(`.cb-grp`), 하단 주석. 예: `chatBlock('proofcross')`·`chatBlock('proofgap')`. 분석 데이터는 **아티팩트 패널이 아닌 챗 인라인**(`block:`)으로 노출(proof는 `panel:false`).
 
 ## 8. 정비 현황 / To-Do
 - ✅ **②③⑤⑥ 분석 패널 시각 정렬(2026-06-09)**: `.av-ins/.av-ov-card/.av-ds` 라운드 8→13, surface `#F6F8FC`, 강조 숫자 `--blue-deep`, 배지 라운드 6, `.mini` 표→canonical(cb-table) 스타일. → 13개 분석 패널이 C 토큰·표·라운드와 일관.

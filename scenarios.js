@@ -8,16 +8,16 @@
    ai 메시지: text(마크다운 **굵게**), source/sources(출처), block(인라인 표)
    ════════════════════════════════════════════════════ */
 const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
- {id:'C',label:'미국 MZ 여성 K뷰티 구매 의향 조사 브리프·설문 설계',tagline:'브리프 한 줄이 검증된 설문 문항으로, 10분 만에',hook:'이런 설문, 우리 제품으로 설계하려면',scenes:[
-   {chat:[{role:'user',text:'미국 MZ 여성 대상 K뷰티 구매 의향 조사 브리프 써줘'}],preview:'prompt',hl:'리서치 목적 입력',dwell:200},
-   {chat:[{role:'ai',process:[{t:'리서치 목표 정리 중...',b:['AI가 입력하신 내용을 바탕으로 리서치의 목표, 알아내야 할 것들, 의사결정 포인트를 정리하고 있어요.',"전문 리서처가 프로젝트 시작 전에 하는 '리서치 기획서' 작성 과정이에요."]}]}],preview:'prompt',hl:'리서치 목표 정리 중',dwell:700},
-   {chat:[{role:'ai',briefcard:{t:'리서치 기획서 완료',open:'briefdocC',
-        title:"K뷰티 미국 MZ 여성 '향후 3개월 구매 의향·구매 결정 요인' 정량조사 프로젝트 브리프",
+ {id:'C',label:'미국 진출 K뷰티 컨셉 검증 설문 설계',tagline:'한 줄 요청이 목적부터 정리된 검증 설문으로, 10분 만에',hook:'이런 설문, 우리 제품으로 설계하려면',scenes:[
+   {chat:[{role:'user',text:'미국 시장 진출용으로 잡은 K뷰티 컨셉, 현지 MZ 여성에게 통할지 검증할 설문 만들어줘'}],preview:'prompt',hl:'설문 요청',dwell:200},
+   {chat:[{role:'ai',process:[{t:'설문 목적부터 정리 중...',b:['좋은 설문을 만들려면 무엇을 검증할지·누구에게 물을지부터 정리해요.','잡으신 컨셉이 현지에서 실제 구매로 이어질지, 가설과 측정 포인트를 먼저 잡고 있어요.']}]}],preview:'prompt',hl:'설문 목적 정리 중',dwell:700},
+   {chat:[{role:'ai',briefcard:{t:'설문 목적·설계 방향 정리 완료',open:'briefdocC',
+        title:"미국 진출 K뷰티 컨셉 검증 — 설문 목적·설계 방향",
         sec:'1. 배경',
         body:["미국 뷰티 시장에서 K-컬처 확산과 TikTok·Instagram·YouTube 바이럴, 인플루언서·리뷰 기반 구매가 강화되며 K뷰티 관심이 확대되고 있습니다.","다만 '관심·호감'이 실제 단기 구매(향후 3개월)로 전환되는지는 별개이며, 가격 수용도·성분/효능 신뢰·브랜드 신뢰·리뷰/인플루언서·채널 접근성 등 핵심 요인을 정량 검증해야 합니다."]},
-      text:"이어서 리서치 설계서(누구에게 물어볼지, 어떻게 조사할지)도 정리해드릴까요?",
-      followups:['설문 문항 설계해줘','리서치 설계서 만들어줘','표본 설계(패널/표본수)부터 먼저 추천해줘','구매 결정 요인 분석을 위해 어떤 문항/척도 쓰면 좋을지 추천해줘']}],
-    preview:'briefdocC',hl:'리서치 기획서 완료',open:'briefdocC',press:'.cc-more',chipAfter:'.cc-follow-chip'},
+      text:"이 방향으로 바로 설문 문항을 설계해드릴까요?",
+      followups:['설문 문항 설계해줘','컨셉 검증 가설(인지→호감→구매의향)부터 정리해줘','표본 설계(패널/표본수)부터 먼저 추천해줘','구매 결정 요인은 어떤 문항/척도로 측정하면 좋을지 추천해줘']}],
+    preview:'briefdocC',hl:'설문 목적·설계 방향 정리',open:'briefdocC',press:'.cc-more',chipAfter:'.cc-follow-chip'},
    {chat:[{role:'user',text:'설문 문항 설계해줘'},
       {role:'ai',
         text:"가능합니다. 우선 유사 레퍼런스로는 **미국 K-뷰티 트렌드 데이터**, 미국 뷰티 트렌드 데이터(2023) 등이 확인됩니다.[[1]]\n\n다음 내용으로 설문을 설계해 생성하겠습니다 (약 25~30문항, 7~9분 내외).\n- **스크리닝/프로필**: 미국 거주, 성별/연령(18–35), 최근 6–12개월 뷰티 구매 여부\n- **K뷰티 인지·경험**: 인지, 사용/구매 경험, 최근 구매 카테고리\n- **구매의향**: 향후 3개월(또는 6개월) 구매의향, 카테고리(스킨케어/메이크업)별 의향\n- **채널 선호/이용**: 주 구매 채널(Sephora/Ulta/Amazon/자사몰/기타), 채널별 장단점, 병행 패턴\n- **채널 선택 요인**: 정품 신뢰, 배송, 가격/프로모션, 리뷰, 체험 가능, 반품 용이성 등 중요도\n- **전환 트리거/장벽**: 구매를 늘리는 조건과 방해 요인(가격, 피부 적합성, 정보 부족 등)\n- **정보원/콘텐츠**: TikTok/Instagram/YouTube/리뷰/지인 추천 등 영향도\n\n이 골자로 바로 설문을 생성해도 될까요? (원하시면 '구매의향 기간'을 3개월/6개월 중 무엇으로 할지도 지정해 주세요.)",
@@ -29,9 +29,9 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
     preview:'surveydoc',hl:'설문 생성 완료',open:'surveydoc',press:'.cc-data'},
  ]},
  /* ② 분석 (was A) — 리서치 흐름: 수집 → 분석 · 디폴트 자동재생 */
- {id:'A',label:'설문 로데이터 주요 인사이트 요약·연령대별 분석',tagline:'로데이터를 올리면, 가공 없이 바로 분석이 시작됩니다',hook:'내 설문 데이터로 직접 분석해 보려면',scenes:[
-   {chat:[{role:'system',text:'설문 파일이 업로드되었습니다.'},{role:'file',name:'survey_rawdata_2025.xlsx',sub:'설문 원데이터 · 스프레드시트',badge:'+2,400 rows',ftype:'csv'}],preview:'upload',hl:'데이터 업로드'},
-   {chat:[{role:'user',text:'이 설문 데이터의 주요 인사이트를 요약해줘'}],preview:'prompt',hl:'자연어 질문'},
+ {id:'A',label:'구글폼 설문 응답 주요 인사이트 요약·연령대별 분석',tagline:'구글폼만 연동하면, 가공 없이 바로 분석이 시작됩니다',hook:'내 구글폼 설문으로 직접 분석해 보려면',scenes:[
+   {chat:[{role:'system',text:'구글폼 설문 응답이 연동되었습니다.'},{role:'file',name:'브랜드 인지도 설문 (Google Forms)',sub:'구글폼 응답 · 임포트',badge:'응답 2,400건',ftype:'gform'}],preview:'upload',hl:'구글폼 연동'},
+   {chat:[{role:'user',text:'이 구글폼 응답의 주요 인사이트를 요약해줘'}],preview:'prompt',hl:'자연어 질문'},
    {chat:[{role:'ai',text:'**Summary**\n1. 브랜드 인지도는 20대(78%)에서 가장 높고, 50대(41%)에서 가장 낮습니다.\n2. 구매 경험자의 재구매 의향은 82%로 높은 충성도를 보입니다.\n3. 주요 구매 채널은 온라인(64%)이며, 오프라인 대비 빠르게 성장 중입니다.',source:'Source 1'}],preview:'insights',hl:'데이터 기반 인사이트'},
    {chat:[{role:'user',text:'20대 응답자만 별도로 분석해줘'},{role:'ai',text:'**Korea | 20s (20–29): key insights**\n\n브랜드 인지도 TOP2: **78%** (전체 평균 대비 +18%p)\n재구매 의향: **89%**\n주요 채널: 인스타그램 광고(41%), 유튜브(33%)',source:'Source 1'}],preview:'filter',hl:'세그먼트 필터'},
    {chat:[{role:'user',text:'연령대별 결과를 bar chart로 보여줘'},{role:'file',name:'연령대별_브랜드인지도.chart',sub:'시각화 · 막대 차트',badge:'Chart 생성',open:'chart'}],preview:'chart',hl:'차트 자동 생성'},
@@ -75,19 +75,19 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'ai',text:'**TOP2 60%+ 컨셉 3개 · 연령대별 구매의향(TOP2)**\n3개 컨셉 모두 **30–39세가 가장 높고(약 70%)**, 40–49세가 가장 낮은 패턴이 공통으로 나타납니다.[[1]]\n색상은 신뢰수준 80%에서 통계적으로 유의한 차이입니다.',block:'agecross',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'agecross',hl:'세그먼트 유의차 검정'},
  ]},
  /* ③ 탐색·트래킹 — 이수민 마케터(예산·시간 없이 근거) · media3 */
- {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 라이브러리로 근거를 만듭니다',hook:'우리 카테고리 트렌드를 직접 찾아보려면',scenes:[
-   {chat:[{role:'system',text:'분석할 자체 데이터가 없어 라이브러리에서 탐색합니다.'},{role:'file',name:'건강기능식품 트렌드 데이터 (2025·2026)',sub:'트렌드 리포트 · 라이브러리',badge:'출처 2건',open:'library',ftype:'trend'}],preview:'library',hl:'라이브러리 데이터'},
+ {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 마켓플레이스 데이터로 근거를 만듭니다',hook:'우리 카테고리 트렌드를 직접 찾아보려면',scenes:[
+   {chat:[{role:'system',text:'트렌드 데이터를 마켓플레이스에서 가지고 오겠습니다.'},{role:'file',name:'건강기능식품 트렌드 데이터 (2025·2026)',sub:'트렌드 리포트 · 마켓플레이스',badge:'출처 2건',open:'library',ftype:'trend'}],preview:'library',hl:'마켓플레이스 데이터'},
    {chat:[{role:'user',text:'건강기능식품에서 2025 대비 2026에 뜨는 카테고리 알려줘'}],preview:'prompt',hl:'트렌드 질문'},
    {chat:[{role:'ai',text:'**2025 → 2026 섭취율 증가 카테고리** (단위 %p, 복수응답)\n- **오메가3 (+2.7%p)**, 수면 케어 (+1.0%p), 항산화/노화방지 (+0.7%p) 순으로 증가[[1,2]]\n- 참고: 2026엔 ‘모발/탈모 영양제’(11.8%)가 신규 포함되어 직접 비교는 주의가 필요합니다.',block:'wave',source:'출처 1·2',sources:[{n:1,title:'2025 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'},{n:2,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'wave',hl:'웨이브 트래킹 비교'},
    {chat:[{role:'user',text:'30대 타깃으로 더 깊이 분석해줘'}],preview:'prompt',hl:'세그먼트 딥다이브'},
    {chat:[{role:'ai',text:'**30대 핵심 인사이트**\n- **속성**: 효능·성분·후기를 최우선 (효능 48.8%)[[1]]\n- **제형**: 알약/캡슐 79.8%, ‘먹기 편함’으로 소형 캡슐·스틱 보조\n- **채널**: 네이버 46.2% · 쿠팡 44.9% + 약국/대형마트(신뢰)\n- **가격**: 5~10만원 25%가 최다',source:'출처 1',sources:[{n:1,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'trendins',hl:'세그먼트 인사이트'},
  ]},
  /* ⑦ Proof Seeker — 소형 K뷰티 브랜드 마케터 · 미국 진출 (가설→근거→보고서) */
- {id:'proof',label:'미국 진출 가설 근거 탐색 → 투자자용 기회 보고서',persona:'이서연 · 소형 K뷰티 브랜드 마케터',tagline:'내가 세운 가설을, 출처 있는 근거로 백업합니다',hook:'내 가설을 데이터 근거로 백업하려면',scenes:[
+ {id:'proof',label:'미국 진출 가설 근거 탐색 → 투자자용 기회 보고서',persona:'이서연 · 소형 K뷰티 브랜드 마케터',tagline:'내가 세운 가설을, 출처 있는 근거로 백업합니다',hook:'내 가설을 데이터 근거로 백업하려면',panel:false,scenes:[
    {chat:[{role:'user',text:'미국 진출 덱 쓰는 중인데, K뷰티 루틴이 미국에서 뜰 거고 그 중에 토너패드나 스팟케어가 유망하단 근거 있어?'}],preview:'prompt',hl:'가설 + 근거 요청'},
-   {chat:[{role:'ai',text:'네, 출처에 바로 있어요. **2025 미국 K-뷰티 트렌드 데이터** 기준이에요.[[1,2]]\n- **토너패드는 ‘쓸 의향’이 35.2%인데 지금 쓰는 사람은 21.0%** — 14%p가 비어 있어요. 부스팅 에센스는 의향 35.5% vs 현재 18.4%로 격차가 더 큽니다.\n- ‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위가 딱 부스팅 에센스·토너패드라, 가설이 숫자로 그대로 맞아요.',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'proofgap'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'proofgap'}],followups:['‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘','경쟁 K뷰티 브랜드 인지도도 같이 볼게요','이 근거로 투자자 덱용 보고서 만들어줘']}],preview:'proofgap',hl:'인접 근거 확인 (의향-보급 Gap)',chipAfter:'.cc-follow-chip'},
+   {chat:[{role:'ai',text:'네, 출처에 바로 있어요. **2025 미국 K-뷰티 트렌드 데이터** 기준이에요.[[1,2]]\n- **토너패드는 ‘쓸 의향’이 35.2%인데 지금 쓰는 사람은 21.0%** — 14%p가 비어 있어요. 부스팅 에센스는 의향 35.5% vs 현재 18.4%로 격차가 더 큽니다.\n- ‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위가 딱 부스팅 에센스·토너패드라, 가설이 숫자로 그대로 맞아요.',block:'proofgap',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}],followups:['‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘','경쟁 K뷰티 브랜드 인지도도 같이 볼게요','이 근거로 투자자 덱용 보고서 만들어줘']}],preview:'prompt',hl:'인접 근거 확인 (의향-보급 Gap)',chipAfter:'.cc-follow-chip'},
    {chat:[{role:'user',text:'‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘'}],preview:'prompt',hl:'세그먼트 교차 요청'},
-   {chat:[{role:'ai',text:'**핵심 타깃은 30대**예요. 토너패드 포함 확장 카테고리 4개 전부에서 향후·신규 사용 의향이 제일 높아요.[[1]]\n- **40대는 ‘필요하면 쓴다’는 잠재층** — 지금은 덜 쓰지만, 토너패드·기초에서 ‘쓸 의향’과의 격차가 특히 큽니다.\n- 색칠된 칸은 신뢰수준 80%에서 의미 있는 차이예요.',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'proofcross'}],followups:['이 근거로 투자자 덱용 보고서 만들어줘','첫 구매로 넘어오는 지점도 짚어줘']}],preview:'proofcross',hl:'연령대별 교차 (30대 코어·40대 Gap)',chipAfter:'.cc-follow-chip'},
+   {chat:[{role:'ai',text:'**핵심 타깃은 30대**예요. 토너패드 포함 확장 카테고리 4개 전부에서 향후·신규 사용 의향이 제일 높아요.[[1]]\n- **40대는 ‘필요하면 쓴다’는 잠재층** — 지금은 덜 쓰지만, 토너패드·기초에서 ‘쓸 의향’과의 격차가 특히 큽니다.\n- 30대 코어·40대 잠재 패턴이 또렷합니다.',block:'proofcross',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}],followups:['이 근거로 투자자 덱용 보고서 만들어줘','첫 구매로 넘어오는 지점도 짚어줘']}],preview:'prompt',hl:'연령대별 교차 (30대 코어·40대 Gap)',chipAfter:'.cc-follow-chip'},
    {chat:[{role:'user',text:'이 근거로 투자자 덱용 보고서 만들어줘'}],preview:'prompt',hl:'보고서 생성 요청'},
    {chat:[{role:'ai',process:[{t:'보고서 작성 중...',b:['근거와 차트를 헤드라인 중심으로 묶고, 숫자마다 출처를 붙이고 있어요.','투자자·바이어가 그대로 인용할 수 있는 형태로 맞추는 중이에요.']}]}],preview:'prompt',hl:'보고서 작성 중',dwell:1600},
    {chat:[{role:'ai',datarow:{name:'미국 스킨케어 기회 지도 — 성장 카테고리·연령 타깃·진입 우선순위',meta:'보고서 · 방금 생성됨',open:'report'},text:'**투자자용 기회 보고서 나왔어요.** 헤드라인 인사이트 5개에 차트랑 출처(데이터 2개·표본/표본오차)까지 다 붙였어요. 우측에서 전체 확인해보세요.',followups:['슬라이드용 한 줄로 요약해줘','바이어용 1페이저로 만들어줘']}],hl:'기회 보고서 완성',open:'report',press:'.cc-data'},
