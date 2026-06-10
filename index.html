@@ -311,6 +311,15 @@ a { text-decoration: none; color: inherit; }
 .app.artifact-open:has(.rail:hover) {
   grid-template-columns: 200px 200px 1fr 42%;
 }
+/* 모바일: 시나리오(아티팩트) 패널 닫고, 사이드 시나리오 목록 접힘(레일 아이콘만) — 챗 풀폭 */
+@media (max-width: 820px) {
+  .app, .app.artifact-open, .app:has(.rail:hover), .app.artifact-open:has(.rail:hover) {
+    grid-template-columns: 52px 0px 1fr 0px !important;
+  }
+  .app .sidebar { display: none !important; }
+  .app.artifact-open .artifact-panel { display: none !important; }
+  .app.artifact-open .chat-inner, .app.artifact-open .chat-input-area { padding-left: 16px !important; padding-right: 16px !important; }
+}
 
 /* ═══════════════════════════════════════════════
    TOPBAR
@@ -434,7 +443,7 @@ a { text-decoration: none; color: inherit; }
   padding: 6px 10px;
   margin: 0 8px 5px;
   font-size: 12.5px;
-  color: rgba(0,0,0,0.5);          /* 미선택: 블랙 50% */
+  color: rgba(0,0,0,0.66);         /* 미선택: 블랙 66% (조금 진하게) */
   cursor: pointer;
   gap: 8px;
   transition: color var(--t-fast);
@@ -442,7 +451,7 @@ a { text-decoration: none; color: inherit; }
 .chat-item:hover { background: none; color: #000; }   /* 호버 = 선택과 동일(블랙) */
 .chat-item.active {
   background: none;
-  color: #000;                     /* 선택: 블랙 */
+  color: #000;                     /* 선택: 모노톤(블랙) */
   font-weight: 600;
 }
 .chat-item-label {
@@ -1230,7 +1239,10 @@ a { text-decoration: none; color: inherit; }
 .sc-status { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .sc-spinner { display: none; width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--blue-light); border-top-color: var(--blue); animation: sc-spin .8s linear infinite; }
 .sc-done { display: none; font-size: 12px; color: var(--text-tertiary); }
-.chat-item-sub { font-size: 11px; color: var(--blue); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.chat-item-sub { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; max-width: 100%;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: -0.2px;
+  color: rgba(0,0,0,0.5);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .chat-item-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 @keyframes sc-spin { 100% { transform: rotate(360deg); } }
 
@@ -1239,6 +1251,7 @@ a { text-decoration: none; color: inherit; }
 /* walk: 결과 카드 부드러운 페이드·슬라이드 인 */
 .walk-in { animation: walkIn .36s cubic-bezier(.32,.72,0,1) both; }
 @keyframes walkIn { from { opacity:0; transform: translateY(9px); } to { opacity:1; transform:none; } }
+.walk-hidden { display: none !important; }   /* walk: 등장 전 공간 차지 안 함 → 등장 시 챗이 위로 */
 @keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 /* 파일 칩: 살짝 위에서 떨어져 자리잡는 드래그&드롭 업로드 느낌 */
 @keyframes fileDrop {
@@ -1757,6 +1770,88 @@ a { text-decoration: none; color: inherit; }
 .rp-bar-track { flex:1; height:10px; background:#F0F2F6; border-radius:999px; overflow:hidden; }
 .rp-bar-fill { height:100%; border-radius:999px; background:var(--blue); transition:width 600ms cubic-bezier(.32,.72,0,1); }  /* 시퀀셜 색조는 인라인 */
 .rp-bar-val { width:42px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:var(--text-primary); }
+
+/* ═══════════════════════════════════════════════
+   설문 편집 — 풀 프레임 3패널 화면으로 전환 (아티팩트처럼 슬라이드 인)
+═══════════════════════════════════════════════ */
+.ed-screen{
+  position:absolute; inset:0; z-index:50;
+  background:var(--bg-canvas);
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:translateX(7%); opacity:0; pointer-events:none;
+  transition:transform .5s cubic-bezier(.32,.72,0,1), opacity .42s ease;
+}
+.ed-screen.open{ transform:none; opacity:1; pointer-events:auto; }
+/* 상단 바 */
+.ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
+.ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
+.ed-back{ color:var(--text-secondary); display:flex; font-size:16px; }
+.ed-doc-name{ font-size:13px; font-weight:700; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ed-saved{ font-size:11px; color:#9A9A9A; flex:none; }
+.ed-tabs{ display:flex; gap:2px; background:#E7E7E7; border-radius:8px; padding:3px; flex:none; }
+.ed-tabs span{ font-size:12px; font-weight:600; color:var(--text-secondary); padding:5px 14px; border-radius:6px; }
+.ed-tabs span.active{ background:#fff; color:var(--text-primary); box-shadow:0 1px 2px rgba(0,0,0,.07); }
+.ed-bar-r{ display:flex; align-items:center; gap:10px; flex:1; justify-content:flex-end; }
+.ed-prev{ font-size:12px; color:var(--blue); font-weight:600; display:flex; align-items:center; gap:5px; }
+.ed-x{ width:28px; height:28px; border:none; background:none; color:var(--text-secondary); border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.ed-x:hover{ background:var(--bg-hover); color:var(--text-primary); }
+/* 3패널 그리드 */
+.ed-grid{ flex:1; display:grid; grid-template-columns:228px 1fr 248px; min-height:0; }
+.ed-list{ border-right:1px solid var(--border); padding:16px 12px; overflow:auto; background:var(--bg-sidebar); }
+.ed-canvas{ overflow:auto; padding:26px 30px; background:var(--bg-page); }
+.ed-set{ border-left:1px solid var(--border); padding:18px 16px; overflow:auto; background:var(--bg-canvas); }
+.ed-list-head{ font-size:12px; font-weight:700; color:var(--text-primary); padding:0 6px 10px; display:flex; justify-content:space-between; align-items:center; }
+.ed-list-head .a{ font-size:11px; color:var(--blue); font-weight:600; }
+.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:#9A9A9A; padding:12px 6px 5px; }
+.ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:8px; border-radius:7px; line-height:1.3; cursor:default; }
+.ed-li:hover{ background:var(--bg-hover); }
+.ed-li.active{ background:var(--bg-active); color:var(--text-primary); font-weight:600; }
+.ed-li-tag{ font-size:9.5px; font-weight:700; color:#fff; background:var(--border-strong); border-radius:4px; padding:2px 5px; flex:none; letter-spacing:.02em; }
+.ed-li.active .ed-li-tag{ background:var(--blue); }
+.ed-li-txt{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* 우: 문항 설정 */
+.ed-set-head{ font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
+.ed-set-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.ed-set-row .k{ color:var(--text-secondary); flex:none; }
+.ed-set-row .v{ color:var(--text-primary); font-weight:600; display:flex; align-items:center; gap:6px; text-align:right; }
+.ed-toggle{ width:28px; height:16px; border-radius:9px; background:var(--blue); position:relative; flex:none; }
+.ed-toggle::after{ content:''; position:absolute; top:2px; right:2px; width:12px; height:12px; border-radius:50%; background:#fff; }
+.ed-toggle.off{ background:var(--border-strong); }
+.ed-toggle.off::after{ left:2px; right:auto; }
+.ed-logic-chip{ font-size:11px; color:var(--blue); background:var(--blue-soft); border-radius:6px; padding:3px 8px; line-height:1.4; text-align:right; }
+/* 중앙: 문항 카드 — 전체 설문이 위아래로 이어지는 스택(스크롤 시 스크리닝 문항이 그 안에 있음을 인지) */
+.ed-canvas-col{ max-width:620px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
+.ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:.04em; padding:6px 2px 0; }
+.ed-canvas-sec:first-child{ padding-top:0; }
+.ed-card{ background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px 18px; }
+.ed-card.focus{ border-color:var(--blue); box-shadow:0 0 0 3px rgba(71,129,255,.13); }
+.ed-card.compact{ padding:13px 16px; opacity:.72; }
+.ed-card.compact:hover{ opacity:1; }
+.ed-card-top{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.ed-card.compact .ed-card-top{ margin-bottom:8px; }
+.ed-qn{ font-size:11px; font-weight:700; color:#fff; background:var(--blue); border-radius:6px; padding:3px 9px; }
+.ed-card.compact .ed-qn{ background:var(--text-secondary); }
+.ed-qtype{ font-size:11px; color:var(--text-secondary); border:1px solid var(--border-strong); border-radius:6px; padding:3px 9px; display:flex; align-items:center; gap:5px; }
+.ed-card-tools{ margin-left:auto; display:flex; gap:9px; color:#BDBDBD; font-size:14px; }
+.ed-qtitle{ font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.5; margin-bottom:3px; }
+.ed-card.compact .ed-qtitle{ font-size:12.5px; margin-bottom:8px; }
+.ed-qhint{ font-size:11px; color:#9A9A9A; margin-bottom:13px; }
+.ed-copts{ display:flex; flex-wrap:wrap; gap:6px; }
+.ed-copt{ font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:5px 10px; }
+.ed-opts{ display:flex; flex-direction:column; }
+.ed-opt{ display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:13px; color:var(--text-primary);
+  transition:transform .42s cubic-bezier(.32,.72,0,1), box-shadow .2s ease, border-color .2s ease, background .2s ease; }
+.ed-opt + .ed-opt{ margin-top:8px; }
+.ed-grip{ color:#C8C8C8; font-size:15px; display:flex; flex:none; cursor:grab; }
+.ed-opt-num{ width:20px; height:20px; border-radius:6px; background:var(--bg-hover); color:var(--text-secondary); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none; }
+.ed-opt-txt{ flex:1; }
+.ed-opt-act{ display:flex; gap:9px; color:#D0D0D0; font-size:14px; flex:none; }
+.ed-opt.dragging{ box-shadow:0 13px 30px rgba(13,13,13,.20); border-color:var(--blue); position:relative; z-index:5; }
+.ed-opt.dragging .ed-grip{ color:var(--blue); cursor:grabbing; }
+.ed-opt.just-moved{ border-color:var(--blue); background:var(--blue-faint); }
+.ed-opt.just-moved .ed-opt-num{ background:var(--blue); color:#fff; }
+.ed-add-opt{ display:flex; align-items:center; gap:6px; margin-top:11px; font-size:12.5px; color:var(--blue); font-weight:600; padding:7px 4px; }
+.ed-quote{ margin-top:15px; border-left:2px solid #CCDCFF; background:var(--blue-faint); border-radius:0 8px 8px 0; padding:8px 11px; font-size:11.5px; color:#717D98; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -1859,6 +1954,8 @@ a { text-decoration: none; color: inherit; }
 
   </main>
 </div>
+<!-- 설문 편집 — 풀 프레임 3패널 화면 (JS로 주입, 슬라이드 인) -->
+<div class="ed-screen" id="ed-screen"></div>
 </div>
 </div><!-- /frame-wrap -->
 </div><!-- /stage 섹션 -->
@@ -1963,7 +2060,7 @@ function ccDone(items){
       ${it.sec?`<div class="cc-doc-sec">${it.sec}</div>`:''}
       ${it.b?`<ul class="cc-doc-ul">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
       <div class="cc-fade"></div>
-      <div class="cc-more"${it.open?` onclick="openPanel('${it.open}')"`:''}>더 보기 <i class="ph ph-caret-down" style="font-size:10px"></i></div>
+      <div class="cc-more"${it.open?` onclick="openPanel('${it.open}')"`:''}><i class="ph ph-caret-down" style="font-size:15px"></i></div>
     </div>`;
   }).join('')+'</div>';
 }
@@ -2249,7 +2346,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
         const aiEl=inner.lastElementChild;
         if(scene.walk){
           /* walk: 유닛을 숨겨두고 showScene이 하나씩 노출 */
-          aiEl.querySelectorAll('.cc-card, .cc-data, .ai-prose').forEach(u=>u.classList.add('rv-hide'));
+          aiEl.querySelectorAll('.cc-card, .cc-data, .ai-prose').forEach(u=>u.classList.add('walk-hidden'));
         } else {
           streamReveal(aiEl, !!(m.followups && scene.open));
           /* 아바타: 생성 중 애니메이션 → 생성 끝나면 솔리드 로고로 멈춤.
@@ -2713,6 +2810,125 @@ function openArtifact(){ document.querySelector('.app').classList.add('artifact-
 function closeArtifact(){ document.querySelector('.app').classList.remove('artifact-open'); }
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 
+/* ── 설문 편집 플로팅 창 ──
+   designsurvey(미리보기)가 뜬 뒤, 앞으로 한 겹 떠오르는 편집 창.
+   스크리닝 문항의 보기를 끌어서 재정렬하는 모션으로 '실제 에디팅'을 전달. */
+const ED_OPTS=['스킨케어','메이크업','헤어/바디','기타','향수'];   /* 초기 순서 — '향수'를 '기타' 위로 끌어 올려 '기타'를 맨 끝으로 */
+function editorOptHTML(){
+  return ED_OPTS.map((t,i)=>`<div class="ed-opt">
+      <span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span>
+      <span class="ed-opt-num">${i+1}</span>
+      <span class="ed-opt-txt">${t}</span>
+      <span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span>
+    </div>`).join('');
+}
+/* 포커스 외 문항 — 위아래로 전체 설문을 채워 '스크리닝이 그 안에 있음'을 인지시키는 컴팩트 카드 */
+function edCompactCard(qn,type,title,opts){
+  const tIcon=type==='평가형'?'ph-sliders-horizontal':(type==='단수 선택'?'ph-radio-button':'ph-list-checks');
+  return `<div class="ed-card compact">
+      <div class="ed-card-top">
+        <span class="ed-qn">${qn}</span>
+        <span class="ed-qtype"><i class="ph ${tIcon}"></i>${type}</span>
+        <span class="ed-card-tools"><i class="ph ph-dots-three"></i></span>
+      </div>
+      <div class="ed-qtitle">${title}</div>
+      <div class="ed-copts">${opts.map(o=>`<span class="ed-copt">${o}</span>`).join('')}</div>
+    </div>`;
+}
+/* 풀 프레임 3패널 설문 편집 화면 (목록 · 캔버스 · 설정) */
+function editorHTML(){
+  return `<div class="ed-bar">
+      <div class="ed-bar-l">
+        <span class="ed-back"><i class="ph ph-caret-left"></i></span>
+        <span class="ed-doc-name">K-beauty 미국 MZ 여성 U&amp;A 설문</span>
+        <span class="ed-saved">· 방금 저장됨</span>
+      </div>
+      <div class="ed-tabs"><span class="active">편집</span><span>수집</span><span>레포트</span></div>
+      <div class="ed-bar-r"><span class="ed-prev"><i class="ph ph-eye"></i>설문 미리보기</span></div>
+    </div>
+    <div class="ed-grid">
+      <div class="ed-list">
+        <div class="ed-list-head">문항 목록<span class="a">전체 편집</span></div>
+        <div class="ed-sec-label">스크리닝</div>
+        <div class="ed-li"><span class="ed-li-tag">SQ1</span><span class="ed-li-txt">카테고리 구매 경험</span></div>
+        <div class="ed-li active"><span class="ed-li-tag">SQ2</span><span class="ed-li-txt">구매 카테고리</span></div>
+        <div class="ed-sec-label">본 문항</div>
+        <div class="ed-li"><span class="ed-li-tag">Q1</span><span class="ed-li-txt">브랜드 인지도</span></div>
+        <div class="ed-li"><span class="ed-li-tag">Q2</span><span class="ed-li-txt">브랜드 선호도</span></div>
+        <div class="ed-li"><span class="ed-li-tag">Q3</span><span class="ed-li-txt">비구매 이유</span></div>
+        <div class="ed-li"><span class="ed-li-tag">Q4</span><span class="ed-li-txt">브랜드 이미지 평가</span></div>
+        <div class="ed-li"><span class="ed-li-tag">Q11</span><span class="ed-li-txt">추천 의향 (NPS)</span></div>
+      </div>
+      <div class="ed-canvas">
+        <div class="ed-canvas-col">
+          <div class="ed-canvas-sec">스크리닝</div>
+          ${edCompactCard('SQ1','단수 선택','최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?',['① 있다','② 없다'])}
+          <div class="ed-card focus" id="ed-focus-card">
+            <div class="ed-card-top">
+              <span class="ed-qn">SQ2</span>
+              <span class="ed-qtype"><i class="ph ph-list-checks"></i>복수 선택</span>
+              <span class="ed-card-tools"><i class="ph ph-copy"></i><i class="ph ph-trash"></i><i class="ph ph-dots-three"></i></span>
+            </div>
+            <div class="ed-qtitle">최근 3개월 내 구매하신 뷰티 카테고리를 모두 선택해 주세요.</div>
+            <div class="ed-qhint">스크리닝 · 보기를 끌어 순서를 바꿀 수 있어요</div>
+            <div class="ed-opts">${editorOptHTML()}</div>
+            <div class="ed-add-opt"><i class="ph ph-plus"></i>보기 추가</div>
+            <div class="ed-quote">'기타'는 항상 맨 끝에 두는 게 응답 편향을 줄여요 — 보기를 끌어 정리했어요.</div>
+          </div>
+          <div class="ed-canvas-sec">본 문항</div>
+          ${edCompactCard('Q1','복수 선택','다음 중 알고 계신 브랜드를 모두 선택해 주세요.',['브랜드 A','브랜드 B','브랜드 C','브랜드 D','모두 모름'])}
+          ${edCompactCard('Q2','단수 선택','가장 선호하는 브랜드 하나를 골라 주세요.',['브랜드 A','브랜드 B','브랜드 C','브랜드 D'])}
+          ${edCompactCard('Q3','복수 선택','이 브랜드를 구매하지 않은 이유는 무엇인가요?',['품질이 낮아 보여서','디자인이 별로라서','익숙하지 않아서','가격이 비싸서','기타'])}
+          ${edCompactCard('Q4','평가형','이 브랜드에 대한 인상을 평가해 주세요.',['트렌디하다','신뢰감 있다','가성비 있다'])}
+          ${edCompactCard('Q11','평가형','이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?',['0 — 전혀 추천 안 함','···','10 — 적극 추천'])}
+        </div>
+      </div>
+      <div class="ed-set">
+        <div class="ed-set-head">SQ2 설정</div>
+        <div class="ed-set-row"><span class="k">응답 설정</span><span class="v">복수 응답</span></div>
+        <div class="ed-set-row"><span class="k">보기 정렬</span><span class="v">입력 순서</span></div>
+        <div class="ed-set-row"><span class="k">보기 무작위 배치</span><span class="v"><span class="ed-toggle off"></span></span></div>
+        <div class="ed-set-row"><span class="k">문항 표시 로직</span><span class="v"><span class="ed-logic-chip">SQ1 '있다' 응답 시</span></span></div>
+        <div class="ed-set-row"><span class="k">이동 설정</span><span class="v">다음 문항</span></div>
+        <div class="ed-set-row"><span class="k">필수 응답</span><span class="v"><span class="ed-toggle"></span></span></div>
+      </div>
+    </div>`;
+}
+function openEditorScreen(myGen, done){
+  const sc=$('ed-screen'); if(!sc){ done&&done(); return; }
+  ED_OPTS.splice(0, ED_OPTS.length, '스킨케어','메이크업','헤어/바디','기타','향수');  /* 매번 초기 순서로 리셋 */
+  sc.innerHTML=editorHTML();
+  requestAnimationFrame(()=>sc.classList.add('open'));
+  /* 스크리닝(SQ2) 카드를 가운데로 들여놓고(위/아래 문항이 살짝 보이게) → 보기 재정렬 */
+  setTimeout(()=>{ if(!playing||myGen!==gen) return; const fc=$('ed-focus-card'); if(fc) fc.scrollIntoView({behavior:'smooth',block:'center'}); }, 700);
+  setTimeout(()=>{ if(!playing||myGen!==gen) return; runReorder(myGen, done); }, 1200);
+}
+function closeEditorScreen(){ const sc=$('ed-screen'); if(sc) sc.classList.remove('open'); }
+/* 보기 재정렬 모션: '향수'(맨 끝)를 '기타'(위) 위로 한 칸 끌어 올려 '기타'를 맨 끝으로 */
+function runReorder(myGen, done){
+  const list=document.querySelector('#ed-screen .ed-opts');
+  if(!list){ done&&done(); return; }
+  const opts=[...list.querySelectorAll('.ed-opt')];
+  const moving=opts[opts.length-1], over=opts[opts.length-2];   /* 향수 ↔ 기타 */
+  if(!moving||!over){ done&&done(); return; }
+  const rowH=moving.offsetHeight+8;
+  moving.classList.add('dragging');
+  setTimeout(()=>{ if(myGen!==gen) return;
+    moving.style.transform=`translateY(${-rowH}px)`;
+    over.style.transform=`translateY(${rowH}px)`;
+  }, 360);
+  setTimeout(()=>{ if(myGen!==gen) return;
+    moving.style.transition='none'; over.style.transition='none';
+    moving.style.transform=''; over.style.transform='';
+    list.insertBefore(moving, over);                 /* 향수를 기타 앞으로 */
+    moving.classList.remove('dragging'); moving.classList.add('just-moved');
+    [...list.querySelectorAll('.ed-opt')].forEach((o,i)=>{ const n=o.querySelector('.ed-opt-num'); if(n) n.textContent=i+1; });
+    requestAnimationFrame(()=>{ moving.style.transition=''; over.style.transition=''; });
+    setTimeout(()=>moving.classList.remove('just-moved'), 1000);
+  }, 360+560);
+  setTimeout(()=>{ if(myGen===gen) done&&done(); }, 360+560+760);
+}
+
 /* ── playback ── */
 /* 자동 클릭: 다음 씬의 유저 메시지와 일치하는 꼬리질문 칩을 선택(시나리오 기반) */
 function autoTapFollowup(myGen){
@@ -2752,17 +2968,29 @@ function skimArtifact(myGen, done){
 function showScene(skipFirstTyping=false){
   const sc=SCENARIOS[sIdx], scene=sc.scenes[scIdx];
   renderSidebar();
-  if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
+  if(!scene.editor) closeEditorScreen();      // 편집 씬이 아니면 편집 화면 닫기
+  if(scene.editor){ /* 편집 화면이 풀 프레임으로 슬라이드 인 — 패널 처리 불필요 */ }
+  else if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
   else if(scene.press){ closeArtifact(); }    // 더보기/클릭으로 여는 흐름 → 완료 카드까진 패널 닫힘, press 때 오픈
   else updateArtifact(scene);
   playSceneMessages(scene, ()=>{ if(!playing) return; clearTimeout(timer);
+    if(scene.editor){
+      const myGen=gen;
+      setTimeout(()=>{ if(!playing||myGen!==gen) return;
+        /* 화면이 풀 프레임 편집 뷰로 전환(아티팩트처럼 슬라이드 인) → 보기 재정렬 → 홀드 → 닫고 다음 */
+        openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
+          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 2600);
+        });
+      }, 700);
+      return;
+    }
     if(scene.walk){
       /* 생성중 → 완료가 끊김 없이 이어지도록: 결과 카드 하나씩 부드럽게 등장 + 그때마다 아티팩트 노출.
          첫 카드는 즉시(프로세스 제거와 동시 → 공백 없음), 마지막 datarow는 본문과 한번에. */
       const myGen=gen; const el=document.querySelector('#live-chat .msg-ai:last-child');
       const units=el?[...el.querySelectorAll('.cc-card, .cc-data')]:[];
       const prose=el?el.querySelector('.ai-prose'):null;
-      const reveal=u=>{ if(u){ u.classList.remove('rv-hide'); u.classList.add('walk-in'); } };
+      const reveal=u=>{ if(u){ u.classList.remove('walk-hidden'); u.classList.add('walk-in'); } };
       let k=0;
       const step=()=>{ if(!playing||myGen!==gen) return;
         if(k>=scene.walk.length){ if(el) settleAvatar(el); timer=setTimeout(advance, 450); return; }
@@ -2831,11 +3059,11 @@ function advance(){
 }
 /* 상단 탭 ↔ 시나리오 동기화 (v2: 3탭 매핑) */
 /* 탭별 노출 시나리오 — Researcher=C / Analyst=design·analyze·explore·proof / Consumer=persona (A·B 비노출) */
-const TAB_SCENARIOS={researcher:[0], analyst:[3,4,5,6], consumer:[7]};
+const TAB_SCENARIOS={researcher:[0,3], analyst:[4,5,6], consumer:[7]};
 let activeTab='researcher';
 function syncHeroTab(i){
   const sc=SCENARIOS[i]; if(!sc) return;
-  const cat=({C:'researcher',design:'analyst',A:'analyst',B:'analyst',analyze:'analyst',explore:'analyst',proof:'analyst',persona:'consumer'})[sc.id]||'researcher';
+  const cat=({C:'researcher',design:'researcher',A:'analyst',B:'analyst',analyze:'analyst',explore:'analyst',proof:'analyst',persona:'consumer'})[sc.id]||'researcher';
   activeTab=cat;
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
   const stg=document.querySelector('.stage');
