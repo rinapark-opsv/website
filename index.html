@@ -44,6 +44,7 @@
   --blue:            #4781FF;   /* Blue-07 */
   --blue-light:      #E0EAFF;   /* Blue-02 */
   --blue-soft:       #F0F5FF;   /* Blue-01 */
+  --blue-faint:      #F6F8FC;   /* Blue-00 — 표/노트/인용 등 옅은 정보 면 */
   --blue-hover:      #2469FF;   /* Blue-08 */
   --blue-deep:       #0050FF;   /* Blue-09 */
   --navy:            #1E293B;
@@ -1228,7 +1229,7 @@ a { text-decoration: none; color: inherit; }
 .av-up-status { font-size: 11px; color: var(--chart-green); font-weight: 500; }
 
 /* av: insights */
-.av-ins { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #F6F8FC; border: 1px solid var(--border); border-radius: 13px; margin-bottom: 7px; font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
+.av-ins { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--blue-faint); border: 1px solid var(--border); border-radius: 13px; margin-bottom: 7px; font-size: 12px; color: var(--text-secondary); line-height: 1.45; }
 .av-ins.hl { border-color: var(--blue); background: var(--bg-active); }
 .av-ins strong { color: var(--text-primary); font-weight: 700; }
 .av-ins-num { font-size: 18px; font-weight: 700; color: var(--blue-deep); flex-shrink: 0; min-width: 42px; }
@@ -1239,7 +1240,7 @@ a { text-decoration: none; color: inherit; }
 
 /* av: overview */
 .av-ov-cards { display: flex; gap: 8px; }
-.av-ov-card { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 6px; background: #F6F8FC; border: 1px solid var(--border); border-radius: 13px; }
+.av-ov-card { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 6px; background: var(--blue-faint); border: 1px solid var(--border); border-radius: 13px; }
 .av-ov-card.hl { border-color: var(--blue); background: var(--bg-active); }
 .av-ov-ico { width: 28px; height: 28px; border-radius: 7px; background: var(--blue-light); display: flex; align-items: center; justify-content: center; }
 .av-ov-label { font-size: 10px; color: var(--text-tertiary); }
@@ -1622,16 +1623,16 @@ a { text-decoration: none; color: inherit; }
 .ps-search { margin:12px 0 4px; display:flex; flex-direction:column; gap:8px; }
 .ps-seg { display:flex; gap:11px; align-items:flex-start; padding:13px 15px; background:#fff; border:1px solid var(--border); border-radius:13px; }
 .ps-seg-rank { width:20px; height:20px; border-radius:6px; background:var(--blue-light); color:var(--blue); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
-.ps-seg.b .ps-seg-rank { background:rgba(31,182,166,0.14); color:#119b8d; }
+.ps-seg.b .ps-seg-rank { background:var(--green-bg); color:var(--green); }
 .ps-seg-body { flex:1; min-width:0; }
 .ps-seg-head { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
 .ps-seg-tag { font-size:12px; font-weight:700; color:var(--blue); }
-.ps-seg.b .ps-seg-tag { color:#119b8d; }
+.ps-seg.b .ps-seg-tag { color:var(--green); }
 .ps-seg-name { font-size:13px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; }
 .ps-seg-size { margin-left:auto; font-size:12px; font-weight:700; color:var(--text-primary); }
 .ps-seg-size em { font-style:normal; font-weight:500; color:var(--text-tertiary); font-size:11px; margin-left:3px; }
 .ps-seg-desc { font-size:12px; color:var(--text-secondary); line-height:1.55; margin-top:4px; letter-spacing:-0.2px; }
-.ps-seg-note { display:flex; align-items:flex-start; gap:6px; font-size:11.5px; color:var(--text-secondary); background:#F6F8FC; border-radius:9px; padding:9px 11px; line-height:1.5; }
+.ps-seg-note { display:flex; align-items:flex-start; gap:6px; font-size:11.5px; color:var(--text-secondary); background:var(--blue-faint); border-radius:9px; padding:9px 11px; line-height:1.5; }
 .ps-seg-note i { color:var(--blue); font-size:13px; margin-top:1px; flex-shrink:0; }
 
 /* 가상 소비자 카드 (좌측 채팅) */
@@ -1643,9 +1644,9 @@ a { text-decoration: none; color: inherit; }
 .pc-id { display:flex; flex-direction:column; gap:3px; min-width:0; }
 .pc-name { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
 .pc-sub { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-.pc-tag { font-size:11px; font-weight:600; color:var(--blue); background:var(--blue-light); padding:2px 8px; border-radius:20px; }
+.pc-tag { font-size:11px; font-weight:600; color:var(--blue); background:var(--blue-light); padding:2px 8px; border-radius:var(--r-pill); }
 .pc-size { font-size:11px; color:var(--text-tertiary); font-weight:600; }
-.pc-quote { font-size:12.5px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.2px; margin:12px 0 14px; padding:11px 13px; background:#F6F8FC; border-radius:11px; }
+.pc-quote { font-size:12.5px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.2px; margin:12px 0 14px; padding:11px 13px; background:var(--blue-faint); border-radius:11px; }
 .pc-btns { display:flex; justify-content:flex-end; gap:8px; }
 .pc-detail { height:30px; padding:0 13px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font-size:12px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:border-color var(--t-fast), color var(--t-fast); }
 .pc-detail:hover, .pc-detail.pressing { border-color:var(--blue); color:var(--blue); }
@@ -1656,32 +1657,32 @@ a { text-decoration: none; color: inherit; }
 .msg-persona { margin:10px 0; }
 .pb-head { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
 .pb-name { font-size:13px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
-.pb-bubble { display:inline-block; max-width:88%; font-size:13px; color:var(--text-primary); line-height:1.6; letter-spacing:-0.2px; background:#EEF3FF; border-radius:4px 14px 14px 14px; padding:11px 14px; }
+.pb-bubble { display:inline-block; max-width:88%; font-size:13px; color:var(--text-primary); line-height:1.6; letter-spacing:-0.2px; background:#EEF3FF; border-radius:4px var(--r-md) var(--r-md) var(--r-md); padding:11px 14px; }
 
 /* 페르소나 상세 패널 (우측) */
-.pp-name { font-size:21px; font-weight:700; color:var(--text-primary); letter-spacing:-0.4px; margin-bottom:14px; }
+.pp-name { font-size:22px; font-weight:700; color:var(--text-primary); letter-spacing:-0.4px; margin-bottom:14px; }
 .pp-quote { font-size:13px; color:var(--text-secondary); line-height:1.7; letter-spacing:-0.2px; padding:0 0 0 13px; border-left:3px solid var(--blue); margin-bottom:16px; }
 .pp-bullets { margin:0 0 16px; padding-left:17px; }
 .pp-bullets li { font-size:12.5px; color:var(--text-secondary); line-height:1.7; }
 .pp-attr { width:100%; border-collapse:collapse; margin-bottom:8px; }
-.pp-attr th { width:42%; text-align:left; vertical-align:top; font-size:12px; font-weight:600; color:var(--text-secondary); padding:9px 10px; background:#F6F8FC; border:1px solid var(--border); }
+.pp-attr th { width:42%; text-align:left; vertical-align:top; font-size:12px; font-weight:600; color:var(--text-secondary); padding:9px 10px; background:var(--blue-faint); border:1px solid var(--border); }
 .pp-attr td { font-size:12px; color:var(--text-primary); padding:9px 10px; border:1px solid var(--border); line-height:1.5; }
 .pp-sec { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; margin:22px 0 9px; }
 .pp-think { font-size:12.5px; color:var(--text-secondary); line-height:1.75; letter-spacing:-0.2px; padding:0 0 0 13px; border-left:3px solid var(--border-strong); }
 .pp-evnote { font-size:12px; color:var(--text-secondary); line-height:1.6; margin-bottom:9px; }
 .pp-ev { width:100%; border-collapse:collapse; font-size:11.5px; }
-.pp-ev thead th { text-align:left; vertical-align:top; font-size:11px; font-weight:600; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); background:#F6F8FC; line-height:1.4; }
+.pp-ev thead th { text-align:left; vertical-align:top; font-size:11px; font-weight:600; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); background:var(--blue-faint); line-height:1.4; }
 .pp-ev tbody th { text-align:left; font-size:11.5px; font-weight:600; color:var(--text-primary); padding:8px 9px; border:1px solid var(--border); background:#FBFCFE; white-space:nowrap; }
 .pp-ev td { font-size:11.5px; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); }
 
 /* ════ 신규: Proof Seeker 보고서 패널 ════ */
 .rp-meta { font-size:11.5px; color:var(--text-tertiary); margin:-14px 0 0; }
-.rp-src { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; padding:7px 11px; background:#F6F8FC; border:1px solid var(--border); border-radius:9px; margin-bottom:6px; }
+.rp-src { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; padding:7px 11px; background:var(--blue-faint); border:1px solid var(--border); border-radius:9px; margin-bottom:6px; }
 .rp-src-name { font-size:12px; font-weight:600; color:var(--text-primary); }
 .rp-src-spec { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
 .rp-head { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.5; margin:22px 0 8px; padding-top:18px; border-top:1px solid var(--border); }
 .rp-tag { display:inline-block; font-size:9.5px; font-weight:700; color:var(--blue); background:var(--blue-light); padding:1px 7px; border-radius:6px; margin-left:4px; vertical-align:middle; }
-.rp-chart { margin:8px 0 4px; padding:14px 15px; background:#F6F8FC; border:1px solid var(--border); border-radius:12px; }
+.rp-chart { margin:8px 0 4px; padding:14px 15px; background:var(--blue-faint); border:1px solid var(--border); border-radius:12px; }
 .rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:12px; letter-spacing:-0.2px; }
 .rp-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
 .rp-bar-row:last-child { margin-bottom:0; }
@@ -2001,7 +2002,7 @@ function ccSearch(o){
 /* 가상 소비자(페르소나) 데이터 — Figma DS·AI Draft 28093/28119 */
 const PERSONAS={
   hn:{av:'김',avc:'#4781FF',name:'김도윤 과장',tag:'‘맛 타협 불가’ 제로 섭취층 대표',size:'32.5% (130명)',quote:'저는 건강하게 먹는 데 관심이 많아요. 체질에 안 맞는 고기나 단 음료는 가급적 피하는 편이고요. 그래도 다이어트 콜라는 일하다 스트레스 받으면 종종 마시게 되더라고요.'},
-  jh:{av:'박',avc:'#1FB6A6',name:'박준영 대리',tag:'‘죄책감 방어형’ 라이트 섭취층 대표',size:'23.7% (95명)',quote:'햄버거나 치킨 먹을 때는 탄산을 꼭 같이 마시는데, 늘 칼로리랑 건강이 걸려요. 그래서 다이어트 콜라로 마시면 죄책감이 덜해서 좋더라고요.'}
+  jh:{av:'박',avc:'#40B08E',name:'박준영 대리',tag:'‘죄책감 방어형’ 라이트 섭취층 대표',size:'23.7% (95명)',quote:'햄버거나 치킨 먹을 때는 탄산을 꼭 같이 마시는데, 늘 칼로리랑 건강이 걸려요. 그래서 다이어트 콜라로 마시면 죄책감이 덜해서 좋더라고요.'}
 };
 function ccPersonas(){
   const card=(k,cls)=>{const p=PERSONAS[k];return `<div class="pc-card">

@@ -25,6 +25,7 @@
 | `--text-tertiary` | `#8F8F8F` | 캡션·메타·비활성 |
 | `--blue` | `#4781FF` | 메인(Blue-07) |
 | `--blue-soft` | `#F0F5FF` | 연한 면(Blue-01) |
+| `--blue-faint` | `#F6F8FC` | 표·노트·인용 등 옅은 정보 면(Blue-00) |
 | `--blue-light` | `#E0EAFF` | 아이콘 배경(Blue-02) |
 | `--blue-hover` | `#2469FF` | 호버(Blue-08) |
 | `--blue-deep` | `#0050FF` | 전송 버튼 활성(Blue-09) |
@@ -91,6 +92,9 @@
 | **꼬리질문** | `ccFollowups(arr)` | `followups:[string]` | 라인형(보더 없음), 선두 블루 ↗, 호버=블랙 6% 채움. 첫 칩이 다음 씬 유저 메시지와 매칭→자동 클릭. 위에 구분 bar(등장 시 노출). |
 | **인라인 근거 칩** | `md()` `[[n]]`·`[[1,2]]` → `.cite` | 본문 텍스트에 마커 | 문장/불릿 끝의 작은 회색 번호 칩(18px·라운드5). 번호=출처 번호와 매칭. 호버 시 블루. |
 | **출처** | `srcRows(list)` | `sources:[{n,title,type,kind,emoji,os,open}]` | "출처"(11/회색 라벨) + 행: **번호 칩** + 아이콘 + 제목 + 타입(우측) + 끝 ↗. 번호·타입·↗는 **모노폰트 + tertiary @ 0.7 동일 톤**. kind=survey→SURVEY_ICON, trend/os→OS_ICON. **순서: 본문 → 출처 → 꼬리질문.** |
+| **검색 세그먼트** | `ccSearch(o)` | `search:{segs:[{tag,name,size,n,desc}], note}` | 데이터에서 도출한 세그먼트 비교 카드(랭크 배지+태그+이름+비율). 1순위=블루, 2순위=`--green`. 하단 노트는 `--blue-faint` 면. reveal는 `.ps-seg` 단위. |
+| **가상 소비자 카드** | `ccPersonas()` + `PERSONAS{}` | `personas:'<set>'`(truthy 플래그) | 프로필 카드(아바타·이름·태그·대표성·인용) + [특징 보기](패널)·[대화 시작하기]. 아바타색=person별(blue/`--green`). reveal `.pc-card` 단위. |
+| **가상 소비자 발화** | `msgHTML` `role:'persona'` | `{role:'persona', who, text}` | 좌측 인커밍 버블(`.pb-bubble` `--r-md`, 헤더 아바타+이름). AI 아바타 경로 아님(사람형). |
 | **프로즈** | `md(t)` → `.ai-prose` | `text:'**굵게**\n- 불릿'` | 문단/불릿. 본문은 **한 번에 페이드**, 칩 버블은 하나씩(위→아래 순). |
 | **인라인 표** | `chatBlock(type)` | `block:'<key>'` | 미니 표. → ②③⑤⑥ 리워크 시 단일 `Table` 스타일로 통일. |
 | 시스템/파일/유저 | `msgHTML` role 분기 | `role:'system'\|'file'\|'user'` | 유저 버블 `#F1F6FF`/`#003BDD`. |
@@ -108,6 +112,9 @@
 | **프로젝트 데이터(ProjectData)** | `.pd-*` — `projectdata` | 데이터 목록(아이콘·이름·메타·Dataspace AI 아웃라인 버튼·진행 배지) | design |
 | **수집 조건(Collect)** | `collectdoc` | 쿼터/대상 | design |
 | **데이터 인사이트(DataInsight)** *(신설)* | → `insights·insights2·filter·overview·crosstab·concepts·agecross·wave·trendins` 통합 | 헤더 + 표/요약 + 출처. 분석 시나리오 패널을 한 템플릿으로 | ②③⑤⑥ 리워크 대상 |
+| **기회 보고서(Report)** | `.av.rp` — `report` | 문서 위계 재사용(`.cc-doc-title`/`.cc-doc-sec`/`.cc-doc-ul`) + 출처 행(`.rp-src`) + 헤드라인(`.rp-head`, border-top) + 막대차트(`.rp-chart`/`.rp-bar-*`, hi=블루→시안 그라데). 투자자/바이어용 산출물 | ⑦ proof |
+| **연령 교차·Gap**(분석) | `proofgap`/`proofcross` | `.av-ct` 크로스탭 재사용(`.av-hi`/`.av-lo`/`.av-sig-badge`/`.av-src`). proof는 사이드 패널 사용(≠ analyze 인라인) | ⑦ proof |
+| **가상 소비자 상세(Persona)** | `.av.pp` — `personaHn`/`personaJh` | 이름(22/700) + 인용(`.pp-quote`) + 속성표(`.pp-attr`) + ‘생각’(`.pp-think`) + 생성 근거표(`.pp-ev`). 표 헤더=`--blue-faint` | ⑧ persona |
 
 - 패널 컨테이너: `.artifact-inner`(radius 13, 보더) · `.artifact-body`(padding 36, 좁은 화면 32) · `.artifact-title`(11/600/secondary, 제목 아래 bar 제거).
 - 진입: 그리드 0→42% 보간(`cubic-bezier`), 콘텐츠 `avUp` 페이드업.
