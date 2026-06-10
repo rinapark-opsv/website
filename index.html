@@ -607,6 +607,13 @@ a { text-decoration: none; color: inherit; }
   flex-shrink: 0;
 }
 .ai-avatar svg { width: 100%; height: 100%; display: block; }
+.ai-avatar .ai-hex { transform: scale(0.9); }   /* 정적 로고는 인디케이터보다 10% 작게 */
+/* 생성중(애니메이션) → 완료(정적 로고) 리니어 스무스 크로스페이드 */
+.ai-avatar.gen { position: relative; }
+.ai-avatar.gen > .ai-ind, .ai-avatar.gen > .ai-hex { position: absolute; inset: 0; transition: opacity 520ms linear; }
+.ai-avatar.gen > .ai-hex { opacity: 0; }
+.ai-avatar.gen.settled > .ai-ind { opacity: 0; }
+.ai-avatar.gen.settled > .ai-hex { opacity: 1; }
 /* 챗 아바타 기준 내용 인덴트 — padding 기반(우측 넘침 방지) */
 .ai-ind {
   display: inline-block;
@@ -1687,15 +1694,14 @@ a { text-decoration: none; color: inherit; }
 .rp-src-spec { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
 .rp-head { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.5; margin:22px 0 8px; padding-top:18px; border-top:1px solid var(--border); }
 .rp-tag { display:inline-block; font-size:9.5px; font-weight:700; color:var(--blue); background:var(--blue-light); padding:1px 7px; border-radius:6px; margin-left:4px; vertical-align:middle; }
-.rp-chart { margin:8px 0 4px; padding:14px 15px; background:var(--blue-faint); border:1px solid var(--border); border-radius:12px; }
-.rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:12px; letter-spacing:-0.2px; }
-.rp-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.rp-chart { margin:10px 0 4px; padding:18px 18px 15px; background:#fff; border:1px solid var(--border); border-radius:var(--r-md); }
+.rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:15px; letter-spacing:-0.2px; }
+.rp-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
 .rp-bar-row:last-child { margin-bottom:0; }
-.rp-bar-lab { width:84px; flex-shrink:0; font-size:11px; color:var(--text-secondary); letter-spacing:-0.3px; }
-.rp-bar-track { flex:1; height:14px; background:#E7EBF2; border-radius:7px; overflow:hidden; }
-.rp-bar-fill { height:100%; border-radius:7px; background:#C3CEDF; }
-.rp-bar-fill.hi { background:linear-gradient(90deg,#4781FF,#22C0E0); }
-.rp-bar-val { width:38px; flex-shrink:0; text-align:right; font-size:11.5px; font-weight:700; color:var(--blue-deep); }
+.rp-bar-lab { width:84px; flex-shrink:0; font-size:11.5px; color:var(--text-secondary); letter-spacing:-0.3px; }
+.rp-bar-track { flex:1; height:10px; background:#F0F2F6; border-radius:999px; overflow:hidden; }
+.rp-bar-fill { height:100%; border-radius:999px; background:var(--blue); transition:width 600ms cubic-bezier(.32,.72,0,1); }  /* 시퀀셜 색조는 인라인 */
+.rp-bar-val { width:42px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:var(--text-primary); }
 </style>
 </head>
 <body>
@@ -2047,7 +2053,7 @@ function settleAvatar(el){
   if(!el) return;
   const av=el.querySelector('.ai-avatar'); if(!av || av.dataset.settled) return;
   av.dataset.settled='1';
-  av.innerHTML=STATIC_HEX;
+  av.classList.add('settled');   /* 애니메이션→정적 로고 리니어 크로스페이드(CSS transition) */
 }
 
 /* ── sidebar scenario list ── */
@@ -2164,7 +2170,7 @@ function msgHTML(m, skipBody=false){
     } else { body=m.text?md(m.text):''; }
   }
   return `<div class="msg-ai msg-enter">
-    <div class="ai-header"><div class="ai-avatar">${STAR}</div>
+    <div class="ai-header"><div class="ai-avatar gen">${STAR}${STATIC_HEX}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
     ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.search?ccSearch(m.search):''}${m.personas?ccPersonas():''}
     ${m.block?chatBlock(m.block):''}
@@ -2205,9 +2211,12 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       if(m.role==='ai'){
         const aiEl=inner.lastElementChild;
         streamReveal(aiEl, !!(m.followups && scene.open));
-        /* 아바타: 생성 중 애니메이션 → 생성 끝나면 솔리드 로고로 멈춤 (전역 규칙). 생성중 상태 0.5s 더 길게 */
-        const myG=gen, settleAt=Math.max(1150, revealMs+750);
-        setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
+        /* 아바타: 생성 중 애니메이션 → 생성 끝나면 솔리드 로고로 멈춤.
+           단, '...중' process 메시지는 결과가 나올 때까지 계속 회전(스피너와 싱크) — settle 안 함. */
+        if(!m.process){
+          const myG=gen, settleAt=Math.max(1150, revealMs+750);
+          setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
+        }
       }
       scrollChat();
       setTimeout(next, m.role==='ai'?Math.max(720, revealMs+150):420);
@@ -2571,10 +2580,10 @@ function previewHTML(type){
       <div class="rp-src"><span class="rp-src-name">2025 Eat Buy Play 미국 K-뷰티</span><span class="rp-src-spec">n=600 · 표본오차 ±2.62%p (95%)</span></div>
       <div class="rp-head">요약 — ‘의향 대비 보급이 낮은’ 부스팅 에센스·토너패드가 카테고리 확장 기회 1순위</div>
       <div class="rp-chart"><div class="rp-chart-cap">‘쓰고 싶은데 아직 안 쓰는’ 격차 — 향후 의향 − 현재 사용 (%p)</div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">부스팅 에센스</span><div class="rp-bar-track"><div class="rp-bar-fill hi" style="width:95%"></div></div><span class="rp-bar-val">+17.1</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">토너패드</span><div class="rp-bar-track"><div class="rp-bar-fill hi" style="width:79%"></div></div><span class="rp-bar-val">+14.2</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">스킨케어(기초)</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:50%"></div></div><span class="rp-bar-val">+9.0</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">마스크팩</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:29%"></div></div><span class="rp-bar-val">+5.2</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">부스팅 에센스</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:95%;background:#0050FF"></div></div><span class="rp-bar-val">+17.1</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">토너패드</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:79%;background:#2E6BFF"></div></div><span class="rp-bar-val">+14.2</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">스킨케어(기초)</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:50%;background:#6E9BFF"></div></div><span class="rp-bar-val">+9.0</span></div>
+        <div class="rp-bar-row"><span class="rp-bar-lab">마스크팩</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:29%;background:#A9C3FF"></div></div><span class="rp-bar-val">+5.2</span></div>
       </div>
       <div class="rp-head">코어 타깃은 30대 — 4개 확장 카테고리 전반에서 향후/신규 의향이 가장 강함</div>
       <ul class="cc-doc-ul"><li>30대 향후/신규 의향이 부스팅·토너패드·마스크팩·스킨케어 모두에서 최고</li><li>커뮤니케이션·SKU 우선순위를 30대 코어에 정렬 <span class="rp-tag">Q16</span></li></ul>
