@@ -451,13 +451,14 @@ a { text-decoration: none; color: inherit; }
   color: rgba(0,0,0,0.66);         /* 미선택: 블랙 66% (조금 진하게) */
   cursor: pointer;
   gap: 8px;
-  transition: color var(--t-fast);
+  transition: color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
 }
-.chat-item:hover { background: none; color: #000; }   /* 호버 = 선택과 동일(블랙) */
+.chat-item:hover { color: #000; }   /* 호버 = 선택과 동일(블랙) */
 .chat-item.active {
-  background: none;
-  color: #000;                     /* 선택: 모노톤(블랙) */
+  background: #fff;                /* 선택 = 화이트 박스 (레일 활성과 동일, 그림자 없음) */
+  color: #000;
   font-weight: 600;
+  border-radius: 9px;
 }
 .chat-item-label {
   flex: 1; font-size: 12px; line-height: 1.45;
@@ -600,10 +601,10 @@ a { text-decoration: none; color: inherit; }
   transition: opacity var(--t-fast);
   flex-shrink: 0;
 }
-.send-btn:hover { opacity: 0.82; }                              /* 호버: 블루 유지, 살짝 흐리게 */
-.send-btn:active { opacity: 0.7; }
+.send-btn:hover { opacity: 0.9; }                              /* 호버/클릭: 오퍼시티 −10%만 (은은하게) */
+.send-btn:active { opacity: 0.9; }
 .send-btn.idle { background: #0050FF; color: #fff; }            /* idle도 브랜드 블루 디폴트 */
-.send-btn.idle:hover { opacity: 0.82; }
+.send-btn.idle:hover { opacity: 0.9; }
 .send-btn svg { width: 12px; height: 12px; fill: none; }
 
 /* ── 추천 질문 칩 — 컬러 서클 아이콘 + 대시 커넥터 (제품 컴포저) ── */
@@ -1003,7 +1004,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ── File attach ── */
 .file-attach-row {
-  padding: 20px 24px 4px;
+  padding: 20px 24px 18px;
 }
 .file-chip {
   display: flex; align-items: center; gap: 11px;
@@ -1424,10 +1425,10 @@ a { text-decoration: none; color: inherit; }
 .cc-spinner { width:13px; height:13px; border-radius:50%; border:2px solid var(--blue-light); border-top-color:var(--blue); animation:sc-spin .8s linear infinite; flex-shrink:0; }
 .cc-btn-row { display:flex; gap:8px; margin-top:12px; }
 .btn-blue { display:inline-flex; align-items:center; justify-content:center; background:var(--blue); color:#fff; font-size:12px; font-weight:600; height:30px; padding:0 14px; border-radius:8px; letter-spacing:-0.2px; transition:opacity var(--t-fast); text-decoration:none; cursor:pointer; }
-.btn-blue:hover { opacity:0.82; }                                    /* 호버: 블루 유지, 살짝 흐리게 */
-.btn-blue:active, .btn-blue.pressing { background:var(--blue) !important; opacity:0.7; }   /* 클릭: 회색 X, 오퍼시티만 */
+.btn-blue:hover { opacity:0.9; }                                    /* 호버/클릭: 오퍼시티 −10%만 */
+.btn-blue:active, .btn-blue.pressing { background:var(--blue) !important; opacity:0.9; }
 .btn-blue.soft { background:var(--blue); color:#fff; }   /* 디폴트: 메인 블루 */
-.btn-blue.soft:hover { opacity:0.82; color:#fff; }
+.btn-blue.soft:hover { opacity:0.9; color:#fff; }
 .btn-blue-outline { display:inline-flex; align-items:center; justify-content:center; background:#fff; border:1px solid #8FB2FF; color:var(--blue); font-size:12px; font-weight:600; height:30px; padding:0 13px; border-radius:8px; letter-spacing:-0.2px; transition:background var(--t-fast); cursor:pointer; }
 .btn-blue-outline:hover { background:var(--blue-soft); }
 .cc-data { background:#F1F6FF; border:none; border-radius:13px; padding:10px 12px; display:flex; align-items:center; gap:10px; width:100%; cursor:pointer; transition:background var(--t-fast), box-shadow var(--t-fast); }
@@ -1560,7 +1561,7 @@ a { text-decoration: none; color: inherit; }
 .sd-q { border-top:1px solid var(--border); padding:20px 0 18px; }
 .sd-qn { font-weight:700; color:var(--text-primary); margin-right:7px; letter-spacing:-0.3px; }
 .sd-qq { font-size:15px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; }
-.sd-qtype { display:inline-block; font-size:9.5px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:2px 6px; letter-spacing:0; margin:6px 0 9px; }
+.sd-qtype { display:inline-block; font-size:9px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:1px 6px; letter-spacing:0; margin-left:7px; vertical-align:middle; white-space:nowrap; }
 .sd-opts { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; }
 .sd-opt { display:flex; align-items:center; gap:9px; padding:3px 0; font-size:13px; color:var(--text-secondary); line-height:1.45; }
 .sd-opt-mark { width:13px; height:13px; flex-shrink:0; border:1.5px solid #C9CDD5; background:#fff; }
@@ -1589,8 +1590,8 @@ a { text-decoration: none; color: inherit; }
 .co-desc { font-size:13px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.3px; }
 .co-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
 .co-rec { position:absolute; top:-10px; right:12px; background:var(--blue); color:#fff; font-size:11px; font-weight:600; height:22px; padding:0 11px; border-radius:999px; display:flex; align-items:center; letter-spacing:-0.2px; }
-.co-start { width:100%; height:40px; border-radius:10px; background:#0050FF; color:#fff; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:background var(--t-fast); margin-top:2px; }
-.co-start:hover { background:#0046E0; color:#fff; }
+.co-start { width:100%; height:40px; border-radius:10px; background:#0050FF; color:#fff; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:opacity var(--t-fast); margin-top:2px; }
+.co-start:hover, .co-start:active { opacity:0.9; color:#fff; }   /* 호버/클릭: 오퍼시티 −10%만 */
 
 /* ── 설문 미리보기 문서 (아티팩트) ── */
 .sv-sec { font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:.04em; margin:16px 0 8px; }
@@ -1641,9 +1642,9 @@ a { text-decoration: none; color: inherit; }
   display: inline-flex; align-items: center; gap: 4px;
   background: var(--blue); color: #fff; font-size: 12.5px; font-weight: 600;
   padding: 8px 16px; border-radius: var(--r-pill); text-decoration: none;
-  transition: background var(--t-fast);
+  transition: opacity var(--t-fast);
 }
-.cta-btn:hover { background: var(--blue-hover); }
+.cta-btn:hover, .cta-btn:active { opacity: 0.9; }   /* 호버/클릭: 오퍼시티 −10%만 */
 .cta-btn.lg { font-size: 14px; padding: 11px 22px; margin-top: 4px; }
 .end-cta-card {
   margin: 18px 0 8px; padding: 24px 20px; text-align: center;
@@ -1765,7 +1766,7 @@ a { text-decoration: none; color: inherit; }
 .pc-detail { height:30px; padding:0 13px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font-size:12px; font-weight:600; color:var(--text-secondary); cursor:pointer; transition:border-color var(--t-fast), color var(--t-fast); }
 .pc-detail:hover, .pc-detail.pressing { border-color:var(--blue); color:var(--blue); }
 .pc-talk { height:30px; padding:0 14px; border:none; border-radius:8px; background:var(--blue); color:#fff; font-size:12px; font-weight:600; cursor:pointer; transition:opacity var(--t-fast); }
-.pc-talk:hover { opacity:0.85; }
+.pc-talk:hover, .pc-talk:active { opacity:0.9; }   /* 호버/클릭: 오퍼시티 −10%만 */
 
 /* 가상 소비자 대화 버블 (좌측 채팅) */
 .msg-persona { margin:10px 0; }
@@ -1854,7 +1855,7 @@ a { text-decoration: none; color: inherit; }
 .ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--text-primary); padding:9px 6px 5px; }   /* 카테고리 타이틀 = 블랙 */
 .ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:8px; border-radius:7px; line-height:1.3; cursor:default; }
 .ed-li:hover{ background:var(--bg-hover); }
-.ed-li.active{ background:rgba(0,80,255,.10); color:var(--blue-deep); font-weight:600; }   /* 하이라이팅 문항 = 브랜드 블루 #0050FF, fill 10% */
+.ed-li.active{ background:rgba(0,80,255,.10); color:var(--blue-deep); font-weight:500; }   /* 하이라이팅 문항 = 브랜드 블루 #0050FF, fill 10% */
 .ed-li-tag{ font-size:9.5px; font-weight:700; color:var(--text-tertiary); flex:none; letter-spacing:.02em; }   /* 넘버 박스 제거 */
 .ed-li.active .ed-li-tag{ color:var(--blue-deep); }
 .ed-li-txt{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -1873,7 +1874,8 @@ a { text-decoration: none; color: inherit; }
 .ed-set-sec:first-of-type{ margin-top:10px; }
 .ed-set-sec i{ font-size:14px; }
 .ed-info{ font-size:12px; color:var(--text-tertiary); margin-left:3px; vertical-align:-1px; }
-.ed-set-btn{ font-size:11px; font-weight:600; color:var(--text-secondary); border:1px solid var(--border-strong); border-radius:6px; padding:3px 11px; }
+.ed-set-btn{ display:inline-flex; align-items:center; justify-content:center; font-size:14px; color:var(--text-tertiary); border:1px solid var(--border-strong); border-radius:6px; padding:4px 7px; cursor:pointer; transition:color var(--t-fast), border-color var(--t-fast); }
+.ed-set-btn:hover{ color:var(--text-secondary); border-color:var(--text-tertiary); }
 .ed-num{ font-size:11px; font-weight:600; color:var(--text-primary); border:1px solid var(--border-strong); border-radius:6px; padding:3px 8px; background:#fff; }
 .ed-set-row.col{ flex-direction:column; align-items:stretch; gap:9px; }
 .ed-set-rowtop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
@@ -2004,7 +2006,6 @@ a { text-decoration: none; color: inherit; }
       <div class="artifact-header">
         <span class="artifact-title" id="artifact-title">결과물</span>
         <div class="artifact-actions">
-          <button class="artifact-edit" id="artifact-edit-btn" onclick="manualOpenEditor()" hidden>설문 편집</button>
           <button class="artifact-close" onclick="closeArtifact()" aria-label="닫기">
             <i class="ph-light ph-x" style="font-size:14px"></i>
           </button>
@@ -2257,14 +2258,14 @@ function ccPersonas(){
 function chipAdvance(){ clearTimeout(resumeT); clearTimeout(timer); if(!playing){ playing=true; statuses[sIdx]='active'; renderSidebar(); } advance(); }
 /* 풀 설문 문서 렌더 (메인 뷰 — 문항 유형·제약·로직 노출) */
 function renderSurveyDoc(){
-  const d=SURVEY_C; let h=`<div class="av sd"><div class="sd-title">${d.title}</div><div class="sd-meta">${d.meta}</div>`;
+  const d=SURVEY_C; let h=`<div class="av sd" ondblclick="manualOpenEditor()" title="더블클릭하여 편집"><div class="sd-title">${d.title}</div><div class="sd-meta">${d.meta}</div>`;
   d.sections.forEach(sec=>{
     h+=`<div class="sd-sec">${sec.name}</div>`;
     if(sec.note) h+=`<div class="sd-secnote">⎇ ${sec.note}</div>`;
     if(sec.end){ h+=`<div class="sd-end">참여해 주셔서 감사합니다.</div>`; return; }
     (sec.qs||[]).forEach(q=>{
       const multi = (q.type||'').includes('다중');
-      h+=`<div class="sd-q"><div class="sd-qq"><span class="sd-qn">${q.n}</span>${q.q}</div><div class="sd-qtype">${q.type}${q.cons?` · ${q.cons}`:''}</div>`;
+      h+=`<div class="sd-q"><div class="sd-qq"><span class="sd-qn">${q.n}</span>${q.q}<span class="sd-qtype">${q.type}${q.cons?` · ${q.cons}`:''}</span></div>`;
       if(q.scale){ h+=`<div class="sd-scale">${q.scale.map(s=>`<span class="sd-sc"><span class="sd-radio"></span>${s}</span>`).join('')}</div>`; }
       else if(q.opts){ h+=`<ul class="sd-opts">${q.opts.map(o=>`<li class="sd-opt"><span class="sd-opt-mark ${multi?'check':'radio'}"></span>${o}</li>`).join('')}</ul>`; }
       else if(q.text){ h+=`<div class="sd-textbox">자유 응답 (long text)</div>`; }
@@ -2431,7 +2432,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
     if(!playing || myGen!==gen) return;   // 시나리오 전환 시 이전 타이머 차단
     if(idx>=scene.chat.length){ done&&done(); return; }
     const m=scene.chat[idx++];
-    if(m.done||m.briefcard||m.datarow){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
+    if(m.done||m.briefcard||m.datarow||m.clearProcess){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
     if(m.role==='user' && !m.name){
       isFirstUserMsg=false;
       if(m.typed){
@@ -2757,7 +2758,7 @@ function previewHTML(type){
     case 'designsurvey': {
       const opt=(o,multi)=>`<li class="sd-opt"><span class="sd-opt-mark ${multi?'check':'radio'}"></span>${o}</li>`;
       const scale=labels=>`<div class="sd-scale">${labels.map(s=>`<span class="sd-sc"><span class="sd-radio"></span>${s}</span>`).join('')}</div>`;
-      return `<div class="av sd">
+      return `<div class="av sd" ondblclick="manualOpenEditor()" title="더블클릭하여 편집">
       <div class="sd-title">MZ세대 브랜드 인식 조사</div>
       <div class="sd-meta">설문 · 18문항 · 약 5분 · 합성 패널</div>
       <div class="sd-sec">스크리닝</div>
@@ -2944,7 +2945,9 @@ function edTypeIcon(t){ t=t||''; return t.includes('평가')?'ph-sliders-horizon
 /* 연속 편집 시나리오: 보기 추가(타이핑) → 척도·문항유형 편집 → 표시로직·파이핑 */
 const ED_STEPS=[
   {n:'Q1',  kind:'addopt', add:'Personal care / wellness'},
+  /* 아카이브 — 데모가 너무 길어 첫 편집(보기 추가)만 사용. 필요 시 아래 복원
   {n:'Q6',  kind:'scale',  relabel:'Neutral (3)'},
+  */
 ];
 function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-opt-num">${i+1}</span><span class="ed-opt-txt">${t}</span></div>`; }
 /* 컴팩트 카드 — 전체 설문을 위아래로 채워 맥락을 보여줌 */
@@ -2993,7 +2996,7 @@ function edSettings(q){
       ? edSetRow('순위 개수', `<span class="ed-num">${(q.cons||'TOP 3').replace(/[^0-9]/g,'').charAt(0)||'3'}개</span>`, true)
       : m ? edSetRow('선택 가능한 보기 개수', `<span class="ed-num">최소 ${m[1]}</span><span class="ed-num">최대 ${m[2]}</span>`, true)
       : edSetRow('선택 가능한 보기 개수', `<span class="ed-num">${t.includes('단일')?'1개':'제한 없음'}</span>`, true);
-    const optLogic = q.ref ? edLogicRow('보기 제시 로직','이전 문항 기반 보기',q.ref.replace(/\s*\(보기 파이핑\)/,'')) : edSetRow('보기 제시 로직','<span class="ed-set-btn">설정</span>', true);
+    const optLogic = q.ref ? edLogicRow('보기 제시 로직','이전 문항 기반 보기',q.ref.replace(/\s*\(보기 파이핑\)/,'')) : edSetRow('보기 제시 로직','<span class="ed-set-btn" title="설정"><i class="ph ph-gear-six"></i></span>', true);
     resp=`<div class="ed-set-sec">응답 설정</div>
       ${countRow}
       ${optLogic}
@@ -3002,10 +3005,10 @@ function edSettings(q){
       ${edSetRow('보기 이미지', edToggle(false))}`;
   }
   /* ── 문항 설정 (공통) ── */
-  const present = (q.logic&&q.logic.length) ? edLogicRow('문항 제시 로직','문항 제시 조건',q.logic[0]) : edSetRow('문항 제시 로직','<span class="ed-set-btn">설정</span>', true);
+  const present = (q.logic&&q.logic.length) ? edLogicRow('문항 제시 로직','문항 제시 조건',q.logic[0]) : edSetRow('문항 제시 로직','<span class="ed-set-btn" title="설정"><i class="ph ph-gear-six"></i></span>', true);
   const ques=`<div class="ed-set-sec">문항 설정</div>
     ${present}
-    ${edSetRow('이동 로직','<span class="ed-set-btn">설정</span>', true)}
+    ${edSetRow('이동 로직','<span class="ed-set-btn" title="설정"><i class="ph ph-gear-six"></i></span>', true)}
     ${edSetRow('최소 제시 시간', edToggle(false), true)}
     ${edSetRow('필수 응답', edToggle(true), true)}`;
   return `<div class="ed-set-head">${q.n} 설정</div>${resp}${ques}`;
@@ -3179,9 +3182,8 @@ function showScene(skipFirstTyping=false){
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        /* 미리보기 한 번 스크롤(skim) → '설문 편집' 버튼 누름 → 풀 프레임 편집 뷰 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
+        /* 미리보기 한 번 스크롤(skim) → (설문 더블클릭) → 풀 프레임 편집 뷰 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
         skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
-          pressLast('#artifact-edit-btn');   /* 설문 편집 버튼 누르는 액션 */
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
             openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
               timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
@@ -3453,7 +3455,7 @@ document.querySelectorAll('.hero-tab').forEach(t=>t.addEventListener('click',()=
   var s=document.createElement('style');
   // 문서 자체 스크롤 잠금 → scrollIntoView 가 iframe 전체를 밀어올리는 현상 방지
   // (채팅·아티팩트 내부 스크롤 컨테이너는 그대로 동작)
-  s.textContent='html,body{overflow:hidden!important;}.page-nav,.page-headline{display:none!important;}';
+  s.textContent='html,body{overflow:hidden!important;background:transparent!important;}.page-nav,.page-headline{display:none!important;}';
   document.head.appendChild(s);
 })();
 </script>
