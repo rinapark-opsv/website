@@ -1812,7 +1812,7 @@ a { text-decoration: none; color: inherit; }
 /* 편집 중 rail 펼치면(호버/클릭) 편집창이 우측으로 밀리며 반응형 축소 (.ed-screen은 .app의 형제) */
 .app.editing:has(.rail:hover) ~ .ed-screen, .app.editing.rail-open ~ .ed-screen{ left:214px; }
 /* 상단 바 */
-.ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
+.ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-canvas); flex:none; }
 .ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
 .ed-back{ color:var(--text-secondary); display:flex; font-size:16px; cursor:pointer; border-radius:6px; padding:2px; transition:background .15s, color .15s; }
 .ed-back:hover{ background:var(--bg-hover); color:var(--text-primary); }
@@ -1827,8 +1827,8 @@ a { text-decoration: none; color: inherit; }
 .ed-x:hover{ background:var(--bg-hover); color:var(--text-primary); }
 /* 3패널 그리드 */
 .ed-grid{ flex:1; display:grid; grid-template-columns:228px 1fr 248px; min-height:0; }
-.ed-list{ border-right:1px solid var(--border); padding:16px 12px; overflow:auto; background:var(--bg-sidebar); }
-.ed-canvas{ overflow:auto; padding:26px 30px; background:var(--bg-page); }
+.ed-list{ border-right:1px solid var(--border); padding:16px 12px; overflow:auto; background:var(--bg-canvas); }
+.ed-canvas{ overflow:auto; padding:26px 30px; background:var(--bg-canvas); }
 .ed-set{ border-left:1px solid var(--border); padding:18px 16px; overflow:auto; background:var(--bg-canvas); }
 .ed-list-head{ font-size:12px; font-weight:700; color:var(--text-primary); padding:0 6px 10px; display:flex; justify-content:space-between; align-items:center; }
 .ed-list-head .a{ font-size:11px; color:var(--text-secondary); font-weight:600; }
@@ -1879,8 +1879,8 @@ a { text-decoration: none; color: inherit; }
 .ed-card.compact:hover{ opacity:1; }
 .ed-card-top{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
 .ed-card.compact .ed-card-top{ margin-bottom:8px; }
-.ed-qn{ font-size:11px; font-weight:700; color:var(--text-secondary); background:var(--bg-hover); border-radius:6px; padding:3px 9px; }
-.ed-card.compact .ed-qn{ background:var(--bg-hover); }
+.ed-qn{ font-size:11px; font-weight:700; color:var(--blue); background:var(--blue-soft); border-radius:6px; padding:3px 9px; }   /* 문항 넘버만 블루 액센트 */
+.ed-card.compact .ed-qn{ color:var(--blue); background:var(--blue-soft); }
 .ed-qtype{ font-size:11px; color:var(--text-tertiary); padding:3px 0; display:flex; align-items:center; gap:5px; }
 .ed-card-tools{ margin-left:auto; display:flex; gap:9px; color:#C8C8C8; font-size:14px; }
 .ed-qtitle{ font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.5; margin-bottom:3px; }
@@ -2400,7 +2400,8 @@ function typeInto(el, text, cb){
     if(i>=text.length){ clearInterval(typingTimer); el.classList.remove('is-typing'); cb&&cb(); }
   }, TYPE_MS);
 }
-function clearInput(){ const el=$('live-input'); if(el){ el.value=''; el.style.height='auto'; } }
+function clearInput(){ const el=$('live-input'); if(el && el===document.activeElement) return;   /* 사용자가 입력 중이면 지우지 않음 */
+  if(el){ el.value=''; el.style.height='auto'; } }
 
 /* ── play a scene's messages in order (user prompts type into the input) ── */
 function playSceneMessages(scene, done, skipFirstTyping=false){
@@ -2996,8 +2997,6 @@ function editorHTML(){
   });
   return `<div class="ed-bar">
       <div class="ed-bar-l"><span class="ed-back" onclick="exitEditor()" title="채팅으로 돌아가기"><i class="ph ph-caret-left"></i></span><span class="ed-doc-name">${d.title}</span><span class="ed-saved">· 방금 저장됨</span></div>
-      <div class="ed-tabs"><span class="active">편집</span><span>수집</span><span>레포트</span></div>
-      <div class="ed-bar-r"><span class="ed-prev">설문 미리보기</span></div>
     </div>
     <div class="ed-grid">
       <div class="ed-list">${list}</div>
@@ -3339,7 +3338,8 @@ function wireInputs(){
   updateSendState();
   const li=$('live-input');
   if(li){
-    li.addEventListener('focus', ()=>{ userTyping=true; pauseForUser(); showCTA(); });
+    /* 포커스·타이핑 중에는 인터랙션을 멈추지 않음 — 실제 전송(Enter/클릭) 시에만 멈춤 */
+    li.addEventListener('focus', ()=>{ showCTA(); });
     li.addEventListener('input', ()=>{ userTyping=true; });
     li.addEventListener('keydown', (e)=>{
       if(e.isComposing || e.keyCode===229) return;   /* 한글 IME 조합 중 Enter 중복 방지 */
