@@ -143,3 +143,6 @@ const SURVEY_C = {
 };
 
 const ANALYSIS_IDX=4;          // default autoplay = concept-test results analysis (new · inline)
+
+/* UI chrome 번역 로더 — index.html 수정 없이 ?lang=en|ja 에서 동작 */
+(function(){try{var s=document.createElement('script');s.src='ui-i18n.js';document.head.appendChild(s);}catch(e){}})();
