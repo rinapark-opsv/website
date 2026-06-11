@@ -1446,7 +1446,7 @@ a { text-decoration: none; color: inherit; }
 .cc-data-meta { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; margin-top:1px; }
 .cc-data-arrow { font-size:14px; color:var(--blue-deep); flex-shrink:0; }
 .cc-data:hover .cc-data-arrow { color:var(--blue-deep); }
-.cc-done-arrow { margin-left:auto; font-size:14px; color:var(--blue-deep); flex-shrink:0; }   /* 완료 카드 = 데이터 카드와 동일한 ↗ */
+.cc-done-arrow { margin-left:auto; font-size:15px; color:var(--border-strong); flex-shrink:0; }   /* 흰 카드 = 보더색(중성 그레이) > 셰브론 */
 
 /* ── 프로젝트 데이터 테이블 (아티팩트 — Figma 685:4833) ── */
 .pd-sec { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:10px; }
@@ -1564,9 +1564,14 @@ a { text-decoration: none; color: inherit; }
 .sd-meta { font-size:11.5px; font-weight:500; color:var(--text-tertiary); margin:5px 0 2px; }
 .sd-sec { font-size:13.5px; font-weight:600; color:var(--blue); letter-spacing:-0.3px; margin:24px 0 8px; }
 .sd-secnote { font-size:11px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:6px 9px; margin-bottom:6px; line-height:1.5; }
-.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:10px; background:transparent; transition:box-shadow .2s ease, transform .2s ease, opacity .12s ease; }
-.sd-q:hover, .sd-q.sd-q-hover { background:#fff; box-shadow:0 6px 22px rgba(13,13,13,.10); transform:translateY(-2px); position:relative; z-index:1; }   /* 호버: 은은한 드롭쉐도우로 떠오름 */
-.sd-q:active, .sd-q.sd-q-press { opacity:0.9; }   /* 클릭: 오퍼시티 살짝 낮춤 */
+.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:12px; background:transparent; transition:background .22s ease, border-color .22s ease; }
+/* 클릭(편집 진입): 쉐도우 없이 블루 fill + 보더로 선택 강조 */
+.sd-q.sd-q-sel { background:var(--blue-soft); border:1px solid var(--blue); }
+/* 선택 문항 아래 '설문 편집' CTA (가운데, gap 5px) */
+.sd-edit-cta { display:flex; flex-direction:column; align-items:center; gap:5px; margin:5px 0 0; }
+.sd-edit-cta button { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--blue); background:var(--blue-soft); border:1px solid var(--blue-light); border-radius:8px; padding:6px 13px; cursor:pointer; transition:background .15s ease, transform .12s ease; }
+.sd-edit-cta button i { font-size:13px; }
+.sd-edit-cta button.pressing { background:var(--blue-light); transform:scale(.96); }
 .sd-qn { font-weight:700; color:var(--text-primary); margin-right:7px; letter-spacing:-0.3px; }
 .sd-qq { font-size:15px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; }
 .sd-qtype { display:inline-block; font-size:9px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:1px 6px; letter-spacing:0; margin-left:7px; vertical-align:middle; white-space:nowrap; }
@@ -2137,7 +2142,7 @@ function ccData(d){
   return `<div class="cc-data" role="button" onclick="openPanel('${d.open||'designsurvey'}')">
     <span class="cc-data-icon svg">${SURVEY_ICON}</span>
     <span class="cc-data-info"><span class="cc-data-title">${d.name}</span><span class="cc-data-meta">${d.meta}</span></span>
-    <i class="ph ph-arrow-up-right cc-data-arrow"></i>
+    <i class="ph ph-caret-right cc-data-arrow"></i>
   </div>`;
 }
 function ccCollect(){
@@ -2173,7 +2178,7 @@ function ccDone(items){
   return '<div class="cc-stack">'+items.map(it=>{
     if(it.collapsed) return `<div class="cc-card cc-done collapsed"><div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div></div>`;
     return `<div class="cc-card cc-done${it.open?' clickable':''}"${it.open?` role="button" onclick="openPanel('${it.open}')"`:''}>
-      <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span>${it.open?'<i class="ph ph-arrow-up-right cc-done-arrow"></i>':''}</div>
+      <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span>${it.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}</div>
       ${it.title?`<div class="cc-doc-title cc-doc-title-sm">${it.title}</div>`:''}
     </div>`;
   }).join('')+'</div>';
@@ -3212,19 +3217,19 @@ function showScene(skipFirstTyping=false){
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        /* (스크롤 없음) 1번 문항 떠오름(호버)·누름(클릭) → 풀 프레임 편집 뷰 전환 → 시연 → 닫고 다음 */
+        /* 1번 문항 선택(블루 fill+보더) → 아래 '설문 편집' CTA 등장 → 누름 → 풀 프레임 편집 뷰 전환 */
         const q1=document.querySelector('#artifact-body .sd-q');
-        if(q1) q1.classList.add('sd-q-hover');                          /* 떠오름 */
+        if(q1){ q1.classList.add('sd-q-sel'); q1.scrollIntoView({behavior:'smooth', block:'center'});
+          q1.insertAdjacentHTML('afterend', '<div class="sd-edit-cta"><button><i class="ph ph-pencil-simple"></i>설문 편집</button></div>'); }
         timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-          if(q1) q1.classList.add('sd-q-press');                        /* 클릭(오퍼시티) */
+          const btn=document.querySelector('#artifact-body .sd-edit-cta button'); if(btn) btn.classList.add('pressing');   /* 클릭 */
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-            if(q1) q1.classList.remove('sd-q-hover','sd-q-press');
             openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
               timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
             });
-          }, 420);
-        }, 480);
-      }, 700);   /* 미리보기 등장 → 잠깐 뒤 1번 문항 클릭 */
+          }, 460);
+        }, 900);   /* CTA 등장 후 잠깐 뒤 클릭 */
+      }, 700);   /* 미리보기 등장 → 잠깐 뒤 1번 문항 선택 */
       return;
     }
     {
@@ -3249,7 +3254,7 @@ function showScene(skipFirstTyping=false){
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
             if(it.done){
               card.classList.add('cc-done'); if(it.done.open){ card.classList.add('clickable'); card.setAttribute('role','button'); card.setAttribute('onclick',`openPanel('${it.done.open}')`); }
-              card.innerHTML=`<div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.done.t}</span></div>${it.done.title?`<div class="cc-doc-title cc-doc-title-sm">${it.done.title}</div>`:''}`;
+              card.innerHTML=`<div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.done.t}</span>${it.done.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}</div>${it.done.title?`<div class="cc-doc-title cc-doc-title-sm">${it.done.title}</div>`:''}`;
               card.style.animation='docStream .34s cubic-bezier(.4,0,.2,1) forwards';
               /* 브리프·설계서 아티팩트는 자동으로 열지 않음 — 카드 클릭 시에만 (위 두 개) */
             } else {
