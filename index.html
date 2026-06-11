@@ -493,6 +493,17 @@ a { text-decoration: none; color: inherit; }
 @keyframes shimmer {
   0%,100% { opacity: 0.5 } 50% { opacity: 1 }
 }
+/* 아티팩트 생성중 스켈레톤 — 생성 과정 동안 우측 패널에 표시 */
+.av-skel { padding: 4px 2px; }
+.skel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.skel-title { height: 18px; border-radius: 6px; width: 60%; }
+.skel-badge { height: 18px; width: 66px; border-radius: 6px; margin-left: auto; }
+.skel-sec { height: 12px; width: 34%; border-radius: 5px; margin: 22px 0 12px; }
+.skel-line { height: 11px; border-radius: 5px; margin-bottom: 9px; }
+.skel-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.skel-chip { height: 24px; border-radius: 7px; display: inline-block; margin: 0 6px 6px 0; vertical-align: top; }
+.skel-blk { background: linear-gradient(100deg, #E1E4EA 25%, #EFF1F5 50%, #E1E4EA 75%); background-size: 200% 100%; animation: skelSlide 1.4s ease-in-out infinite; }
+@keyframes skelSlide { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
 /* ═══════════════════════════════════════════════
    CANVAS
@@ -2418,6 +2429,24 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
 /* ── artifact panel previews ── */
 function previewHTML(type){
   switch(type){
+    case 'cskel': return `<div class="av av-skel">
+      <div class="skel-row"><div class="skel-title skel-blk"></div><div class="skel-badge skel-blk"></div></div>
+      <div class="skel-line skel-blk" style="width:100%"></div>
+      <div class="skel-line skel-blk" style="width:93%"></div>
+      <div class="skel-line skel-blk" style="width:76%"></div>
+      <div class="skel-sec skel-blk"></div>
+      <div class="skel-card">
+        <div class="skel-line skel-blk" style="width:68%;height:13px;margin-bottom:0"></div>
+        <div style="margin-top:13px">
+          <span class="skel-chip skel-blk" style="width:84px"></span><span class="skel-chip skel-blk" style="width:112px"></span><span class="skel-chip skel-blk" style="width:70px"></span><span class="skel-chip skel-blk" style="width:98px"></span><span class="skel-chip skel-blk" style="width:76px"></span>
+        </div></div>
+      <div class="skel-card">
+        <div class="skel-line skel-blk" style="width:60%;height:13px;margin-bottom:0"></div>
+        <div class="skel-line skel-blk" style="width:100%;margin-top:13px"></div>
+        <div class="skel-line skel-blk" style="width:88%"></div></div>
+      <div class="skel-sec skel-blk" style="width:28%"></div>
+      <div class="skel-line skel-blk" style="width:97%"></div>
+      <div class="skel-line skel-blk" style="width:90%"></div></div>`;
     case 'upload': return `<div class="av av-upload">
       <div class="av-up-icon">📋</div><div class="av-up-name">브랜드 인지도 설문 (Google Forms)</div>
       <div class="av-up-meta">2,400 responses · 34 questions</div>
@@ -2823,7 +2852,7 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
+const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
