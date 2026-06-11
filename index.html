@@ -1572,6 +1572,8 @@ a { text-decoration: none; color: inherit; }
 .sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:0; background:transparent; transition:background .22s ease, border-color .22s ease; }
 /* 클릭(편집 진입): 쉐도우 없이 블루 fill + 보더로 선택 강조 */
 .sd-q.sd-q-sel { background:var(--blue-soft); border:1px solid var(--blue); border-radius:6px; }   /* R값 반으로(12→6) */
+.sd-q.sd-q-tap { animation: sdTap .22s cubic-bezier(.4,0,.2,1); }
+@keyframes sdTap { 40% { transform: scale(.974); } }
 /* 선택 문항 아래 '설문 편집' CTA (가운데, gap 5px) */
 .sd-edit-cta { display:flex; flex-direction:column; align-items:center; gap:5px; margin:5px 0 0; }
 .sd-edit-cta button { display:inline-flex; justify-content:center; align-items:center; gap:10px; padding:3px 8px 2px; font-weight:600; font-size:8px; line-height:1.35; color:#FFFFFF; background:#89AAF3; border:none; border-radius:2.95px; cursor:pointer; transition:background .15s ease; }
@@ -2925,7 +2927,7 @@ function previewHTML(type){
 function streamPanel(type){
   if(type==='cskel') return;   /* 스켈레톤(생성중)만 제외 — 나머지 모든 아티팩트는 공통 스트리밍 */
   const ab=$('artifact-body'); const doc=ab&&ab.querySelector('.av'); if(!doc) return;
-  [...doc.children].forEach((b,i)=>{ b.style.opacity='0'; b.style.animation=`docStream .42s cubic-bezier(.4,0,.2,1) ${Math.min(i,14)*70}ms forwards`; });
+  [...doc.children].forEach((b,i)=>{ b.style.opacity='0'; b.style.animation=`docStream .5s cubic-bezier(.4,0,.2,1) ${Math.min(i,18)*140}ms forwards`; });
 }
 function updateArtifact(scene){
   if(!scene.preview){ closeArtifact(); return; }
@@ -3232,25 +3234,35 @@ function showScene(skipFirstTyping=false){
         const qs=document.querySelectorAll('#artifact-body .sd-q');
         const q1=qs[0], q4=qs[3]||qs[qs.length-1];
         /* 1) 생성된 설문을 4번 문항까지 1.5초간 천천히 스크롤(skim) */
-        const goEdit=()=>{ if(!playing||myGen!==gen) return;
-          if(q1){ q1.scrollIntoView({behavior:'smooth', block:'center'}); q1.classList.add('sd-q-sel'); }   /* 1번으로 복귀 + 선택 */
-          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-            openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-              /* 편집 완료 → 1.5초 홀드 → 다음 시나리오로. 목업은 유지하고 배경만 크로스페이드.
-                 편집창은 클립 애니메이션 없이 즉시 닫아 중간 글리치(닫히는 편집창+새 배경) 노출 방지 */
-              timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-                const ed=$('ed-screen'); if(ed) ed.style.transition='none';
-                statuses[sIdx]='done';
-                const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
-                playScenario(nx, true);   /* 편집창 즉시 닫힘 + 배경 wavy 크로스페이드 + 다음 시나리오 콘텐츠 (목업 유지) */
-                requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
-              }, 1500);
-            });
-          }, 800);   /* 1번 선택 후 잠깐 뒤 편집 뷰 전환 */
+        const tap=()=>{ if(q1){ q1.classList.remove('sd-q-tap'); void q1.offsetWidth; q1.classList.add('sd-q-tap'); } };
+        const enterEditor=()=>{ if(!playing||myGen!==gen) return;
+          openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
+            /* 편집 완료 → 1.5초 홀드 → 다음 시나리오로. 목업 유지·배경만 크로스페이드, 편집창 즉시 닫음 */
+            timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+              const ed=$('ed-screen'); if(ed) ed.style.transition='none';
+              statuses[sIdx]='done';
+              const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
+              playScenario(nx, true);
+              requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
+            }, 1500);
+          });
         };
-        if(ab && q4){
-          const start=ab.scrollTop, target=start + 180;   /* 아주 살짝만 */
-          const steps=48, dt=1900/steps; let k=0;   /* 아주 천천히 */
+        const goEdit=()=>{ if(!playing||myGen!==gen) return;
+          if(q1) q1.scrollIntoView({behavior:'smooth', block:'center'});
+          /* 1번 문항 더블클릭 느낌(탭 ×2) → 선택 강조 → 편집창 */
+          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+            tap();
+            timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+              tap(); if(q1) q1.classList.add('sd-q-sel');
+              timer=setTimeout(enterEditor, 600);
+            }, 190);
+          }, 360);
+        };
+        if(ab && qs.length>=3){
+          const q3=qs[2]; const start=ab.scrollTop;
+          let target=start + (q3.getBoundingClientRect().top - ab.getBoundingClientRect().top) - (ab.clientHeight - 300);   /* 3번 문항까지 보이게 */
+          target=Math.max(0, Math.min(target, ab.scrollHeight - ab.clientHeight));
+          const steps=32, dt=1150/steps; let k=0;   /* 지금보다 빠르게 */
           const iv=setInterval(()=>{ if(!playing||myGen!==gen){ clearInterval(iv); return; }
             k++; const p=k/steps, e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; ab.scrollTop=start+(target-start)*e;
             if(k>=steps){ clearInterval(iv); timer=setTimeout(goEdit, 300); }
@@ -3397,7 +3409,7 @@ function syncHeroTab(i){
   activeTab=cat;
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
   const stg=document.querySelector('.stage');
-  const def=cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.png')":'none';
+  const def=cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.webp')":'none';
   if(stg) setStageBg(stg, sc.bg?`url('${sc.bg}')`:(BG_OVERRIDE[cat] || def));   /* 시나리오별 배경 우선(있으면 크로스페이드) */
 }
 /* 배경 더블버퍼 크로스페이드: 들어오는 레이어를 위로 올려 페이드인 → 이전 레이어를 내림.
