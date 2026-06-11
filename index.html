@@ -1783,10 +1783,11 @@ a { text-decoration: none; color: inherit; }
   position:absolute; inset:0; z-index:50;
   background:var(--bg-canvas);
   display:flex; flex-direction:column; overflow:hidden;
-  transform:translateX(7%); opacity:0; pointer-events:none;
+  border-radius:14px; box-shadow:0 20px 56px rgba(15,23,42,.18), 0 0 0 1px var(--border);
+  transform:translateX(7%) scale(.9); transform-origin:center; opacity:0; pointer-events:none;
   transition:transform .5s cubic-bezier(.32,.72,0,1), opacity .42s ease;
 }
-.ed-screen.open{ transform:none; opacity:1; pointer-events:auto; }
+.ed-screen.open{ transform:scale(.9); opacity:1; pointer-events:auto; }
 /* 상단 바 */
 .ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
 .ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
