@@ -104,6 +104,8 @@ body {
 button  { font-family: inherit; cursor: pointer; border: none; background: none; }
 input, textarea { font-family: inherit; }
 a { text-decoration: none; color: inherit; }
+/* 클릭 가능한 요소는 포인터(손가락) 커서 */
+[onclick], [role="button"], .clickable, .hero-tab, .chat-item, .rail-row, .sd-q, .ed-li, .co-option, .co-start, .cc-data, .file-chip.clickable, .cc-card.cc-done.clickable, .send-btn, .composer-attach, .artifact-close, .av-ds, .sd-edit-cta button { cursor: pointer; }
 
 /* ═══════════════════════════════════════════════
    PAGE BACKGROUND
@@ -1446,7 +1448,7 @@ a { text-decoration: none; color: inherit; }
 .cc-data-meta { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; margin-top:1px; }
 .cc-data-arrow { font-size:14px; color:var(--blue-deep); flex-shrink:0; }
 .cc-data:hover .cc-data-arrow { color:var(--blue-deep); }
-.cc-done-arrow { margin-left:auto; font-size:15px; color:var(--border-strong); flex-shrink:0; }   /* 흰 카드 = 보더색(중성 그레이) > 셰브론 */
+.cc-done-arrow { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:15px; color:#BDBDBD; }   /* 흰 카드 > 셰브론 — 보더 그레이(약간 진하게), 세로 중앙 정렬 */
 
 /* ── 프로젝트 데이터 테이블 (아티팩트 — Figma 685:4833) ── */
 .pd-sec { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:10px; }
@@ -1571,7 +1573,7 @@ a { text-decoration: none; color: inherit; }
 .sd-edit-cta { display:flex; flex-direction:column; align-items:center; gap:5px; margin:5px 0 0; }
 .sd-edit-cta button { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--blue); background:var(--blue-soft); border:1px solid var(--blue-light); border-radius:8px; padding:6px 13px; cursor:pointer; transition:background .15s ease, transform .12s ease; }
 .sd-edit-cta button i { font-size:13px; }
-.sd-edit-cta button.pressing { background:var(--blue-light); transform:scale(.96); }
+.sd-edit-cta button.pressing { background:rgba(71,129,255,.16); border-color:var(--blue); transform:scale(.97); }   /* 누름: 아주 살짝 진한 블루 */
 .sd-qn { font-weight:700; color:var(--text-primary); margin-right:7px; letter-spacing:-0.3px; }
 .sd-qq { font-size:15px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; }
 .sd-qtype { display:inline-block; font-size:9px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:1px 6px; letter-spacing:0; margin-left:7px; vertical-align:middle; white-space:nowrap; }
@@ -3220,7 +3222,7 @@ function showScene(skipFirstTyping=false){
         /* 1번 문항 선택(블루 fill+보더) → 아래 '설문 편집' CTA 등장 → 누름 → 풀 프레임 편집 뷰 전환 */
         const q1=document.querySelector('#artifact-body .sd-q');
         if(q1){ q1.classList.add('sd-q-sel'); q1.scrollIntoView({behavior:'smooth', block:'center'});
-          q1.insertAdjacentHTML('afterend', '<div class="sd-edit-cta"><button><i class="ph ph-pencil-simple"></i>설문 편집</button></div>'); }
+          q1.insertAdjacentHTML('afterend', '<div class="sd-edit-cta"><button>설문 편집</button></div>'); }
         timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
           const btn=document.querySelector('#artifact-body .sd-edit-cta button'); if(btn) btn.classList.add('pressing');   /* 클릭 */
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
