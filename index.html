@@ -1284,6 +1284,8 @@ a { text-decoration: none; color: inherit; }
 /* walk: 결과 카드 부드러운 페이드·슬라이드 인 */
 .walk-in { animation: walkIn .36s cubic-bezier(.32,.72,0,1) both; }
 @keyframes walkIn { from { opacity:0; transform: translateY(9px); } to { opacity:1; transform:none; } }
+/* 패널 문서가 문단 단위로 순차 생성되는 느낌 (스트리밍) */
+@keyframes docStream { from { opacity:0; transform: translateY(7px); } to { opacity:1; transform:none; } }
 .walk-hidden { display: none !important; }   /* walk: 등장 전 공간 차지 안 함 → 등장 시 챗이 위로 */
 @keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 /* 파일 칩: 살짝 위에서 떨어져 자리잡는 드래그&드롭 업로드 느낌 */
@@ -1420,9 +1422,12 @@ a { text-decoration: none; color: inherit; }
 .cc-head { display:flex; align-items:center; gap:8px; }
 .cc-title { font-size:14px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.45; }
 .cc-sub { font-size:12.5px; color:var(--text-secondary); margin-top:3px; line-height:1.55; letter-spacing:-0.2px; }
-.cc-bullets { margin:6px 0 0; padding-left:16px; }
-.cc-bullets li { font-size:12px; color:#717D98; line-height:1.6; letter-spacing:-0.2px; margin-bottom:2px; }
+.cc-bullets { margin:6px 0 0; padding-left:0; list-style:none; }   /* 불릿 제거 */
+.cc-bullets li { font-size:12px; color:#717D98; line-height:1.6; letter-spacing:-0.2px; margin-bottom:2px; list-style:none; }
 .cc-spinner { width:13px; height:13px; border-radius:50%; border:2px solid var(--blue-light); border-top-color:var(--blue); animation:sc-spin .8s linear infinite; flex-shrink:0; }
+/* 생성 과정 카드 — 보더 없이 (하나씩 천천히 등장) */
+.cc-proc-stack { gap:3px; }
+.cc-proc { border:none !important; background:transparent !important; box-shadow:none !important; padding:8px 2px; }
 .cc-btn-row { display:flex; gap:8px; margin-top:12px; }
 .btn-blue { display:inline-flex; align-items:center; justify-content:center; background:var(--blue); color:#fff; font-size:12px; font-weight:600; height:30px; padding:0 14px; border-radius:8px; letter-spacing:-0.2px; transition:opacity var(--t-fast); text-decoration:none; cursor:pointer; }
 .btn-blue:hover { opacity:0.9; }                                    /* 호버/클릭: 오퍼시티 −10%만 */
@@ -1518,7 +1523,7 @@ a { text-decoration: none; color: inherit; }
 .cc-peek-sub { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cc-peek-arrow { font-size:13px; color:var(--text-tertiary); flex-shrink:0; }
 .cc-peek:hover .cc-peek-arrow { color:var(--blue); }
-.cc-doc-title-sm { font-size:13px; font-weight:500; }
+.cc-doc-title-sm { font-size:12px; font-weight:500; color:var(--text-secondary); margin:6px 0 0; }   /* 헤더(14px) 아래 위계 — 작게 */
 
 /* 꼬리물기 라벨 + 추천 태그 */
 .cc-follow-label { display:flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--text-tertiary); margin:2px 0 7px; padding-left:2px; }
@@ -2122,10 +2127,9 @@ function ccProject(){
   </div>`;
 }
 function ccProcess(items){
-  return '<div class="cc-stack">'+items.map(it=>`<div class="cc-card">
+  return '<div class="cc-stack cc-proc-stack">'+items.map(it=>`<div class="cc-card cc-proc">
     <div class="cc-head"><span class="cc-spinner"></span><span class="cc-title">${it.t}</span></div>
     ${it.sub?`<div class="cc-sub">${it.sub}</div>`:''}
-    ${it.b?`<ul class="cc-bullets">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
   </div>`).join('')+'</div>';
 }
 function ccData(d){
@@ -2169,11 +2173,7 @@ function ccDone(items){
     if(it.collapsed) return `<div class="cc-card cc-done collapsed"><div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div></div>`;
     return `<div class="cc-card cc-done${it.open?' clickable':''}"${it.open?` role="button" onclick="openPanel('${it.open}')"`:''}>
       <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div>
-      <div class="cc-hr"></div>
       ${it.title?`<div class="cc-doc-title cc-doc-title-sm">${it.title}</div>`:''}
-      ${it.sec?`<div class="cc-doc-sec">${it.sec}</div>`:''}
-      ${it.b?`<ul class="cc-doc-ul">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
-      <div class="cc-fade"></div>
     </div>`;
   }).join('')+'</div>';
 }
@@ -2419,7 +2419,7 @@ function msgHTML(m, skipBody=false){
   return `<div class="msg-ai msg-enter">
     <div class="ai-header"><div class="ai-avatar gen">${STAR}${STATIC_HEX}</div>
       <button class="thinking-toggle">생성 과정 보기 <i class="ph-light ph-caret-down" style="font-size:11px"></i></button></div>
-    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.search?ccSearch(m.search):''}${m.personas?ccPersonas():''}
+    ${m.cardproj?ccProject():''}${m.briefcard?ccBrief(m.briefcard):''}${m.build?'<div class="cc-stack cc-build"></div>':''}${m.process?ccProcess(m.process):''}${m.done?ccDone(m.done):''}${m.collect?ccCollect():''}${m.datarow?ccData(m.datarow):''}${body?`<div class="ai-prose">${body}</div>`:''}${m.search?ccSearch(m.search):''}${m.personas?ccPersonas():''}
     ${m.block?chatBlock(m.block):''}
     ${m.sources?srcRows(m.sources):(m.source?`<div class="ai-source-line"><span class="system-dot"></span>${m.source} · 데이터 출처 인용</div>`:'')}${m.followups?ccFollowups(m.followups):''}
   </div>`;
@@ -2473,14 +2473,17 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
         if(scene.walk){
           /* walk: 유닛을 숨겨두고 showScene이 하나씩 노출 */
           aiEl.querySelectorAll('.cc-card, .cc-data, .ai-prose').forEach(u=>u.classList.add('walk-hidden'));
+        } else if(m.build){
+          /* build: showScene 핸들러가 단계별로 채움 — 여기선 리빌/세틀 안 함(아바타 계속 생성중) */
+        } else if(m.process){
+          /* 생성 과정 카드: 공통 docStream으로 하나씩 천천히 등장 (스피너는 계속 회전) */
+          const cards=[...aiEl.querySelectorAll('.cc-card')];
+          cards.forEach((c,i)=>{ c.style.opacity='0'; c.style.animation=`docStream .42s cubic-bezier(.4,0,.2,1) ${i*340}ms forwards`; });
+          revealMs = cards.length*340 + 420;
         } else {
           streamReveal(aiEl, !!(m.followups && scene.open));
-          /* 아바타: 생성 중 애니메이션 → 생성 끝나면 솔리드 로고로 멈춤.
-             단, '...중' process 메시지는 결과가 나올 때까지 계속 회전(스피너와 싱크) — settle 안 함. */
-          if(!m.process){
-            const myG=gen, settleAt=Math.max(1150, revealMs+750);
-            setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
-          }
+          const myG=gen, settleAt=Math.max(1150, revealMs+750);
+          setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
         }
       }
       /* 파일(설문) 연동 모션: 네모 박스 스켈레톤 → 완성될 때 연동 메시지가 카드와 함께 등장 */
@@ -2903,13 +2906,19 @@ function previewHTML(type){
     default: return '';
   }
 }
+/* 패널 문서를 문단 단위로 순차 등장(스트리밍 느낌) — 스크롤되는 긴 설문 문서는 제외 */
+function streamPanel(type){
+  if(type==='cskel') return;   /* 스켈레톤(생성중)만 제외 — 나머지 모든 아티팩트는 공통 스트리밍 */
+  const ab=$('artifact-body'); const doc=ab&&ab.querySelector('.av'); if(!doc) return;
+  [...doc.children].forEach((b,i)=>{ b.style.opacity='0'; b.style.animation=`docStream .42s cubic-bezier(.4,0,.2,1) ${Math.min(i,14)*70}ms forwards`; });
+}
 function updateArtifact(scene){
   if(!scene.preview){ closeArtifact(); return; }
   if(scene.preview==='prompt'){ if(!lastArtifact) closeArtifact(); $('artifact-title').textContent='분석 중…'; return; }
   lastArtifact=scene.preview;
   $('artifact-title').textContent=scene.hl;
   $('artifact-body').innerHTML=previewHTML(scene.preview);
-  openArtifact(); edBtnFor(scene.preview);
+  openArtifact(); edBtnFor(scene.preview); streamPanel(scene.preview);
   if(scene.preview==='chart'){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
@@ -2919,7 +2928,7 @@ const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 T
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   const ab=$('artifact-body'); ab.innerHTML=previewHTML(type); ab.scrollTop=0;   /* 항상 최상단부터 */
-  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type);
+  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type); streamPanel(type);
   setTimeout(scrollChat, 200); setTimeout(scrollChat, 500);
 }
 function pressLast(sel){
@@ -2946,7 +2955,7 @@ function openPanel(type){
   resumeT=setTimeout(()=>{ if(!userTyping && !playing){ playing=true; statuses[sIdx]='active'; renderSidebar(); advance(); } }, 6000);
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   $('artifact-body').innerHTML=previewHTML(type);
-  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type);
+  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type); streamPanel(type);
   if(type==='chart') setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(bb=>{bb.style.width=bb.dataset.w+'%';}),60);
 }
 function openArtifact(){ document.querySelector('.app').classList.add('artifact-open'); }
@@ -3223,6 +3232,46 @@ function showScene(skipFirstTyping=false){
         }, 1500);   /* 6문항까지 스크롤 보여주는 시간 */
       }, 60);   /* 미리보기 등장 → 스크롤 시작 */
       return;
+    }
+    {
+      /* build: 단계별 '정리 중'(스피너) → 완료되면 그 자리에서 '완료 카드 + 아티팩트'로 전환 → 다음 단계 */
+      const bm=scene.chat && scene.chat.find(x=>x.build);
+      if(bm){
+        const myGen=gen;
+        const el=document.querySelector('#live-chat .msg-ai:last-child');
+        const container=el && el.querySelector('.cc-build');
+        if(!container){ timer=setTimeout(advance, 400); return; }
+        const items=bm.build; let k=0;
+        const step=()=>{ if(!playing||myGen!==gen) return;
+          if(k>=items.length){ if(el) settleAvatar(el); timer=setTimeout(advance, 700); return; }
+          const it=items[k];
+          /* 1) '정리 중' 스피너 카드 등장 */
+          container.insertAdjacentHTML('beforeend', `<div class="cc-card cc-build-card"><div class="cc-head"><span class="cc-spinner"></span><span class="cc-title">${it.proc}</span></div></div>`);
+          const card=container.lastElementChild;
+          card.style.animation='docStream .4s cubic-bezier(.4,0,.2,1) forwards';
+          if(k>0) card.scrollIntoView({behavior:'smooth', block:'center'}); else scrollChat();
+          /* 2) 정리 완료 → 그 자리에서 완료 카드 + 아티팩트 (마지막은 datarow + 본문) */
+          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+            if(it.done){
+              card.classList.add('cc-done'); if(it.done.open){ card.classList.add('clickable'); card.setAttribute('role','button'); card.setAttribute('onclick',`openPanel('${it.done.open}')`); }
+              card.innerHTML=`<div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.done.t}</span></div>${it.done.title?`<div class="cc-doc-title cc-doc-title-sm">${it.done.title}</div>`:''}`;
+              card.style.animation='docStream .34s cubic-bezier(.4,0,.2,1) forwards';
+              if(it.done.open) showPanel(it.done.open);
+            } else {
+              card.remove();
+              container.insertAdjacentHTML('beforeend', ccData(it.datarow));
+              container.lastElementChild.style.animation='docStream .34s cubic-bezier(.4,0,.2,1) forwards';
+              if(it.text) el.insertAdjacentHTML('beforeend', `<div class="ai-prose">${md(it.text)}</div>`);
+              const open=it.open||(it.datarow&&it.datarow.open); if(open) showPanel(open);
+            }
+            const ab=$('artifact-body'); if(ab) ab.scrollTop=0;
+            scrollChat();
+            k++; timer=setTimeout(step, 650);
+          }, 1200);   /* '정리 중' 표시 시간 */
+        };
+        step();
+        return;
+      }
     }
     if(scene.walk){
       /* 생성중 → 완료가 끊김 없이 이어지도록: 결과 카드 하나씩 부드럽게 등장 + 그때마다 아티팩트 노출.
