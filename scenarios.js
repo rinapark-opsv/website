@@ -9,12 +9,12 @@
    ════════════════════════════════════════════════════ */
 const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  {id:'C',label:'K뷰티 미국 진출 설문 설계',tagline:'한 줄 요청이 로직까지 살아있는 검증 설문으로',hook:'이런 설문, 우리 제품으로 설계하려면',scenes:[
-   {chat:[{role:'user',text:'지금 미국 진출 하려는데, K뷰티 컨셉 조사 설계해줘.'}],preview:'cskel',hl:'설문 요청',dwell:80},
+   {chat:[{role:'user',text:'지금 미국 진출 하려는데, K뷰티 컨셉 조사 설계해줘.'}],hl:'설문 요청',dwell:80},
    {chat:[{role:'ai',build:[
      {proc:'리서치 목표 정리 중...',done:{t:'프로젝트 브리프 완료',title:'미국 진출 K뷰티 컨셉 검증 프로젝트 브리프',open:'briefdocC'}},
      {proc:'설문 개요 정리 중...',done:{t:'설문 설계서 완료',title:'미국 진출 K뷰티 컨셉 검증 정량조사 설계서',open:'plandocC'}},
-     {proc:'설문지에 문항 작성 중...',datarow:{name:'K-beauty 미국 MZ 여성 U&A 설문',meta:'설문 · 33문항 · 방금 생성됨',open:'surveydoc'},text:'검증된 문항뱅크 기반으로 **33문항 설문**을 생성했어요. 스크리닝 통과 조건·보기 파이핑·척도까지 자동 설계했습니다. 우측에서 전체 설문을 확인하세요.'}
-   ]}],preview:'cskel',hl:'설문 생성 중'},
+     {proc:'설문지에 문항 작성 중...',procPanel:'cskel',datarow:{name:'K-beauty 미국 MZ 여성 U&A 설문',meta:'설문 · 33문항 · 방금 생성됨',open:'surveydoc'},text:'검증된 문항뱅크 기반으로 **33문항 설문**을 생성했어요. 스크리닝 통과 조건·보기 파이핑·척도까지 자동 설계했습니다. 우측에서 전체 설문을 확인하세요.'}
+   ]}],hl:'설문 생성 중'},
    {chat:[],editor:true,hl:'설문 편집'},
  ]},
  /* ② 분석 (was A) — 리서치 흐름: 수집 → 분석 · 디폴트 자동재생 */
