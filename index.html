@@ -2914,7 +2914,7 @@ const ED_STEPS=[
   {n:'Q6',  kind:'scale',  relabel:'Neutral (3)'},
   {n:'Q11', kind:'piping', from:'Q10', items:['COSRX','Beauty of Joseon','Laneige','Innisfree','Dr. Jart+']},
 ];
-function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span><span class="ed-opt-num">${i+1}</span><span class="ed-opt-txt">${t}</span><span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span></div>`; }
+function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-opt-num">${i+1}</span><span class="ed-opt-txt">${t}</span></div>`; }
 /* 컴팩트 카드 — 전체 설문을 위아래로 채워 맥락을 보여줌 */
 function edCompactCard(q){
   let body='';
@@ -2922,10 +2922,10 @@ function edCompactCard(q){
   else if(q.opts){ const shown=q.opts.slice(0,5).map(o=>`<span class="ed-copt">${o}</span>`); if(q.opts.length>5) shown.push(`<span class="ed-copt ed-copt-more">+${q.opts.length-5}</span>`); body=`<div class="ed-copts">${shown.join('')}</div>`; }
   else if(q.text) body=`<div class="ed-copts"><span class="ed-copt">자유 응답 (long text)</span></div>`;
   else if(q.ref) body=`<div class="ed-copts"><span class="ed-copt ed-copt-more">↑ 보기 파이핑</span></div>`;
-  return `<div class="ed-card compact"><div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype"><i class="ph ${edTypeIcon(q.type)}"></i>${q.type}</span><span class="ed-card-tools"><i class="ph ph-dots-three"></i></span></div><div class="ed-qtitle">${q.q}</div>${body}</div>`;
+  return `<div class="ed-card compact"><div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype">${q.type}</span></div><div class="ed-qtitle">${q.q}</div>${body}</div>`;
 }
 /* 포커스(편집) 카드 — 유형별 */
-function edCardHead(q){ return `<div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype"><i class="ph ${edTypeIcon(q.type)}"></i>${q.type}</span><span class="ed-card-tools"><i class="ph ph-copy"></i><i class="ph ph-trash"></i><i class="ph ph-dots-three"></i></span></div>`; }
+function edCardHead(q){ return `<div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype">${q.type}</span></div>`; }
 function edFocusCard(step){
   const q=edQ(step.n);
   if(step.kind==='scale'){
@@ -2936,16 +2936,16 @@ function edFocusCard(step){
   if(step.kind==='piping'){
     return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">이전 문항 응답에서 보기를 가져옵니다 (파이핑)</div><div class="ed-pipe" id="ed-pipe"></div></div>`;
   }
-  return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">보기를 추가하거나 끌어 정렬할 수 있어요</div>
+  return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">보기를 추가할 수 있어요</div>
     <div class="ed-opts">${(q.opts||[]).map((t,i)=>edOptRow(t,i)).join('')}</div>
-    <div class="ed-add-opt"><i class="ph ph-plus"></i>보기 추가</div></div>`;
+    <div class="ed-add-opt">보기 추가</div></div>`;
 }
 /* 우측 설정 — 포커스 문항 유형에 따라 '응답 설정' 섹션 구조가 통째로 바뀜 (제품 충실) */
-function edSetRow(k, v, info){ return `<div class="ed-set-row"><span class="k">${k}${info?'<i class="ph ph-info ed-info"></i>':''}</span><span class="v">${v}</span></div>`; }
+function edSetRow(k, v){ return `<div class="ed-set-row"><span class="k">${k}</span><span class="v">${v}</span></div>`; }
 function edToggle(on){ return `<span class="ed-toggle ${on?'':'off'}"></span>`; }
-/* 제시 로직이 설정돼 있으면 [설정] 버튼 대신 조건 칩 + 편집 아이콘으로 펼침 */
+/* 제시 로직이 설정돼 있으면 [설정] 버튼 대신 조건 칩으로 펼침 */
 function edLogicRow(label, cap, cond){
-  return `<div class="ed-set-row col"><div class="ed-set-rowtop"><span class="k">${label}<i class="ph ph-info ed-info"></i></span><span class="ed-set-acts"><i class="ph ph-pencil-simple"></i><i class="ph ph-trash"></i></span></div>
+  return `<div class="ed-set-row col"><div class="ed-set-rowtop"><span class="k">${label}</span></div>
     <div class="ed-logic-box"><div class="ed-logic-cap">${cap}</div><div class="ed-logic-cond">${cond}</div></div></div>`;
 }
 function edSettings(q){
@@ -2955,7 +2955,7 @@ function edSettings(q){
   /* ── 응답 설정 ── */
   let resp='';
   if(isText){
-    resp=`<div class="ed-set-sec"><i class="ph ph-text-aa"></i>응답 설정</div>
+    resp=`<div class="ed-set-sec">응답 설정</div>
       ${edSetRow('글자 수 제한', `<span class="ed-num">최소 1</span><span class="ed-num">최대 500</span>`, true)}
       ${edSetRow('응답 붙여넣기 제한', edToggle(false), true)}`;
   } else if(isChoice){
@@ -2965,7 +2965,7 @@ function edSettings(q){
       : m ? edSetRow('선택 가능한 보기 개수', `<span class="ed-num">최소 ${m[1]}</span><span class="ed-num">최대 ${m[2]}</span>`, true)
       : edSetRow('선택 가능한 보기 개수', `<span class="ed-num">${t.includes('단일')?'1개':'제한 없음'}</span>`, true);
     const optLogic = q.ref ? edLogicRow('보기 제시 로직','보기 파이핑',q.ref) : edSetRow('보기 제시 로직','<span class="ed-set-btn">설정</span>', true);
-    resp=`<div class="ed-set-sec"><i class="ph ph-list-checks"></i>응답 설정</div>
+    resp=`<div class="ed-set-sec">응답 설정</div>
       ${countRow}
       ${optLogic}
       <div class="ed-set-row col"><div class="ed-set-rowtop"><span class="k">보기 순서 랜덤화</span>${edToggle(true)}</div>
@@ -2974,7 +2974,7 @@ function edSettings(q){
   }
   /* ── 문항 설정 (공통) ── */
   const present = (q.logic&&q.logic.length) ? edLogicRow('문항 제시 로직','문항 제시 조건',q.logic[0]) : edSetRow('문항 제시 로직','<span class="ed-set-btn">설정</span>', true);
-  const ques=`<div class="ed-set-sec"><i class="ph ph-faders"></i>문항 설정</div>
+  const ques=`<div class="ed-set-sec">문항 설정</div>
     ${present}
     ${edSetRow('이동 로직','<span class="ed-set-btn">설정</span>', true)}
     ${edSetRow('최소 제시 시간', edToggle(false), true)}
@@ -2996,7 +2996,7 @@ function editorHTML(){
   return `<div class="ed-bar">
       <div class="ed-bar-l"><span class="ed-back" onclick="exitEditor()" title="채팅으로 돌아가기"><i class="ph ph-caret-left"></i></span><span class="ed-doc-name">${d.title}</span><span class="ed-saved">· 방금 저장됨</span></div>
       <div class="ed-tabs"><span class="active">편집</span><span>수집</span><span>레포트</span></div>
-      <div class="ed-bar-r"><span class="ed-prev"><i class="ph ph-eye"></i>설문 미리보기</span></div>
+      <div class="ed-bar-r"><span class="ed-prev">설문 미리보기</span></div>
     </div>
     <div class="ed-grid">
       <div class="ed-list">${list}</div>
@@ -3040,7 +3040,7 @@ function edRunAddOpt(step, myGen, cb){
   const opts=document.querySelector('#ed-q-'+step.n+' .ed-opts'); if(!opts){ cb&&cb(); return; }
   const idx=opts.querySelectorAll('.ed-opt').length;
   const row=document.createElement('div'); row.className='ed-opt adding';
-  row.innerHTML=`<span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span><span class="ed-opt-num">${idx+1}</span><span class="ed-opt-txt"></span><span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span>`;
+  row.innerHTML=`<span class="ed-opt-num">${idx+1}</span><span class="ed-opt-txt"></span>`;
   opts.appendChild(row);
   setTimeout(()=>{ if(!playing||myGen!==gen) return;
     edType(row.querySelector('.ed-opt-txt'), step.add, myGen, ()=>{ row.classList.remove('adding'); row.classList.add('just-moved'); setTimeout(()=>row.classList.remove('just-moved'),1200); cb&&cb(); });
