@@ -1466,7 +1466,7 @@ a { text-decoration: none; color: inherit; }
 .pd-act { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border:1px solid #D3D7DF; border-radius:6px; font-size:11px; font-weight:500; color:var(--text-secondary); white-space:nowrap; flex-shrink:0; background:#fff; }
 
 /* ── 생성 완료 카드 (Figma 657:6556 — 문서 미리보기 + 더 보기) ── */
-.cc-done { position:relative; max-height:208px; overflow:hidden; padding-bottom:34px; }
+.cc-done { position:relative; max-height:188px; overflow:hidden; padding-bottom:14px; }
 .cc-done.collapsed { max-height:none; padding-bottom:14px; }
 .cc-check { font-size:15px; color:var(--blue); flex-shrink:0; }
 .cc-hr { height:1px; background:var(--border); margin:14px 0; }
@@ -1479,7 +1479,7 @@ a { text-decoration: none; color: inherit; }
 .cc-doc-ul { margin:0; padding-left:16px; }
 .cc-doc-ul li { font-size:13px; color:var(--text-secondary); line-height:1.7; letter-spacing:-0.2px; margin-bottom:5px; }
 .cc-doc-ul li strong { font-weight:600; color:var(--text-primary); }
-.cc-fade { position:absolute; left:1px; right:1px; bottom:0; height:78px; background:linear-gradient(rgba(255,255,255,0) 0%, #fff 58%); pointer-events:none; }
+.cc-fade { position:absolute; left:1px; right:1px; bottom:0; height:48px; background:linear-gradient(rgba(255,255,255,0) 0%, #fff 70%); pointer-events:none; }
 .cc-more { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; justify-content:center; gap:3px; padding:5px 12px; border-radius:8px; font-size:11px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:background var(--t-fast); }
 .cc-more:hover { background:rgba(0,0,0,0.06); }
 .cc-done.clickable { cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
@@ -1850,8 +1850,8 @@ a { text-decoration: none; color: inherit; }
 .ed-set{ border-left:1px solid var(--border); padding:18px 16px; overflow:auto; background:var(--bg-canvas); }
 .ed-list-head{ font-size:12px; font-weight:700; color:var(--text-primary); padding:0 6px 10px; display:flex; justify-content:space-between; align-items:center; }
 .ed-list-head .a{ font-size:11px; color:var(--text-secondary); font-weight:600; }
-.ed-li-group{ background:#F7F7F8; border:1px solid #F0F0F1; border-radius:10px; padding:2px 6px 6px; margin-bottom:8px; }   /* 블록별 옅은 그레이 그룹 */
-.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--blue-deep); padding:9px 6px 5px; }
+.ed-li-group{ background:#FBFBFC; border:none; border-radius:10px; padding:2px 6px 6px; margin-bottom:8px; }   /* 블록별 옅은 그레이 그룹 (보더 없음) */
+.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--text-primary); padding:9px 6px 5px; }   /* 카테고리 타이틀 = 블랙 */
 .ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:8px; border-radius:7px; line-height:1.3; cursor:default; }
 .ed-li:hover{ background:var(--bg-hover); }
 .ed-li.active{ background:rgba(0,80,255,.10); color:var(--blue-deep); font-weight:600; }   /* 하이라이팅 문항 = 브랜드 블루 #0050FF, fill 10% */
@@ -1890,7 +1890,7 @@ a { text-decoration: none; color: inherit; }
 .ed-radio-opt.on .ed-radio{ border-color:var(--blue-deep); background:radial-gradient(circle, var(--blue-deep) 0 4px, #fff 4px); }
 /* 중앙: 문항 카드 — 전체 설문이 위아래로 이어지는 스택(스크롤 시 스크리닝 문항이 그 안에 있음을 인지) */
 .ed-canvas-col{ max-width:620px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
-.ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--blue-deep); letter-spacing:.04em; padding:6px 2px 0; }
+.ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--text-primary); letter-spacing:.04em; padding:6px 2px 0; }
 .ed-canvas-sec:first-child{ padding-top:0; }
 .ed-card{ background:#fff; border:1px solid var(--border); border-radius:13px; padding:16px 18px 18px; }
 .ed-card.focus{ border-color:var(--border-strong); box-shadow:0 6px 22px rgba(13,13,13,.07); }
@@ -3013,7 +3013,7 @@ function edSettings(q){
 /* 풀 프레임 3패널 — 모든 문항을 컴팩트로 렌더하고, 데모가 문항별로 편집 카드로 전환 */
 function editorHTML(){
   const d=SURVEY_C;
-  let list='<div class="ed-list-head">문항 목록<span class="a">전체 편집</span></div>', canvas='';
+  let list='<div class="ed-list-head">문항 목록</div>', canvas='';
   d.sections.forEach(sec=>{ if(sec.end) return;
     canvas+=`<div class="ed-canvas-sec">${sec.name}</div>`;
     let liItems='';
@@ -3179,13 +3179,16 @@ function showScene(skipFirstTyping=false){
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        /* 편집창 열기 전, 설문 미리보기를 한 번 스크롤(skim)로 훑어준 뒤 → 풀 프레임 편집 뷰로 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
+        /* 미리보기 한 번 스크롤(skim) → '설문 편집' 버튼 누름 → 풀 프레임 편집 뷰 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
         skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
-          openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-            timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
-          });
+          pressLast('#artifact-edit-btn');   /* 설문 편집 버튼 누르는 액션 */
+          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+            openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
+              timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
+            });
+          }, 460);
         });
-      }, 700);
+      }, 60);   /* 미리보기 등장 → 텀 없이 바로 스크롤(skim) 시작 */
       return;
     }
     if(scene.walk){
@@ -3197,14 +3200,15 @@ function showScene(skipFirstTyping=false){
       const reveal=u=>{ if(u){ u.classList.remove('walk-hidden'); u.classList.add('walk-in'); } };
       let k=0;
       const step=()=>{ if(!playing||myGen!==gen) return;
-        if(k>=scene.walk.length){ if(el) settleAvatar(el); timer=setTimeout(advance, 450); return; }
+        if(k>=scene.walk.length){ if(el) settleAvatar(el); timer=setTimeout(advance, 100); return; }
         reveal(units[k]);
-        if(k===scene.walk.length-1) reveal(prose);   /* 설문 datarow + 본문 한번에 */
+        const isLast=(k===scene.walk.length-1);
+        if(isLast) reveal(prose);   /* 설문 datarow + 본문 한번에 */
         showPanel(scene.walk[k]); const ab=$('artifact-body'); if(ab) ab.scrollTop=0;
         /* 첫 카드는 그대로, 이후 카드(설문 설계서 등)는 챗 뷰포트 상단으로 올려 이전 카드를 위로 밀어냄 */
         if(k>0 && units[k]) units[k].scrollIntoView({behavior:'smooth', block:'start'});
         else scrollChat();
-        k++; timer=setTimeout(step, 1050);
+        k++; timer=setTimeout(step, isLast?100:1050);   /* 마지막 결과물(설문 미리보기) 후엔 텀 없이 바로 다음(스크롤)로 */
       };
       step();
       return;
@@ -3447,7 +3451,9 @@ document.querySelectorAll('.hero-tab').forEach(t=>t.addEventListener('click',()=
 (function(){
   if(!location.search.includes('bare')) return;
   var s=document.createElement('style');
-  s.textContent='.page-nav,.page-headline{display:none!important;}';
+  // 문서 자체 스크롤 잠금 → scrollIntoView 가 iframe 전체를 밀어올리는 현상 방지
+  // (채팅·아티팩트 내부 스크롤 컨테이너는 그대로 동작)
+  s.textContent='html,body{overflow:hidden!important;}.page-nav,.page-headline{display:none!important;}';
   document.head.appendChild(s);
 })();
 </script>
