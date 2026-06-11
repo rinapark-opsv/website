@@ -1004,7 +1004,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ── File attach ── */
 .file-attach-row {
-  padding: 20px 24px 18px;
+  padding: 20px 24px 26px;
 }
 .file-chip {
   display: flex; align-items: center; gap: 11px;
@@ -1558,7 +1558,9 @@ a { text-decoration: none; color: inherit; }
 .sd-meta { font-size:11.5px; font-weight:500; color:var(--text-tertiary); margin:5px 0 2px; }
 .sd-sec { font-size:13.5px; font-weight:600; color:var(--blue); letter-spacing:-0.3px; margin:24px 0 8px; }
 .sd-secnote { font-size:11px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:6px 9px; margin-bottom:6px; line-height:1.5; }
-.sd-q { border-top:1px solid var(--border); padding:20px 0 18px; }
+.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:10px; background:transparent; transition:box-shadow .2s ease, transform .2s ease, opacity .12s ease; }
+.sd-q:hover, .sd-q.sd-q-hover { background:#fff; box-shadow:0 6px 22px rgba(13,13,13,.10); transform:translateY(-2px); position:relative; z-index:1; }   /* 호버: 은은한 드롭쉐도우로 떠오름 */
+.sd-q:active, .sd-q.sd-q-press { opacity:0.9; }   /* 클릭: 오퍼시티 살짝 낮춤 */
 .sd-qn { font-weight:700; color:var(--text-primary); margin-right:7px; letter-spacing:-0.3px; }
 .sd-qq { font-size:15px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; }
 .sd-qtype { display:inline-block; font-size:9px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:1px 6px; letter-spacing:0; margin-left:7px; vertical-align:middle; white-space:nowrap; }
@@ -1852,8 +1854,8 @@ a { text-decoration: none; color: inherit; }
 .ed-list-head{ font-size:12px; font-weight:700; color:var(--text-primary); padding:0 6px 10px; display:flex; justify-content:space-between; align-items:center; }
 .ed-list-head .a{ font-size:11px; color:var(--text-secondary); font-weight:600; }
 .ed-li-group{ background:#FBFBFC; border:none; border-radius:10px; padding:2px 6px 6px; margin-bottom:8px; }   /* 블록별 옅은 그레이 그룹 (보더 없음) */
-.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--text-primary); padding:9px 6px 5px; }   /* 카테고리 타이틀 = 블랙 */
-.ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:8px; border-radius:7px; line-height:1.3; cursor:default; }
+.ed-sec-label{ font-size:10.5px; font-weight:500; letter-spacing:.04em; color:var(--text-primary); padding:8px 6px 4px; }   /* 카테고리 타이틀 = 블랙, 볼드 제거 */
+.ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:4px 8px; border-radius:7px; line-height:1.3; cursor:default; }   /* 문항 간 갭 축소 */
 .ed-li:hover{ background:var(--bg-hover); }
 .ed-li.active{ background:rgba(0,80,255,.10); color:var(--blue-deep); font-weight:500; }   /* 하이라이팅 문항 = 브랜드 블루 #0050FF, fill 10% */
 .ed-li-tag{ font-size:9.5px; font-weight:700; color:var(--text-tertiary); flex:none; letter-spacing:.02em; }   /* 넘버 박스 제거 */
@@ -1910,6 +1912,11 @@ a { text-decoration: none; color: inherit; }
 .ed-copts{ display:flex; flex-wrap:wrap; gap:6px; }
 .ed-copt{ font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:5px 10px; }
 .ed-copt-more{ color:var(--text-secondary); background:var(--bg-hover); font-weight:600; }
+/* 컴팩트 카드 보기 — 번호 행 리스트 (제품 에디터 레퍼런스) */
+.ed-optrows{ display:flex; flex-direction:column; gap:5px; }
+.ed-optrow{ display:flex; align-items:center; gap:9px; font-size:12px; color:var(--text-secondary); background:var(--bg-hover); border-radius:8px; padding:8px 11px; }
+.ed-optrow-n{ font-size:11px; font-weight:600; color:var(--text-tertiary); flex:none; min-width:11px; }
+.ed-optrow.more{ background:transparent; color:var(--text-tertiary); font-weight:600; padding:3px 2px; }
 /* 편집 액션 — 보기 추가(타이핑) */
 .ed-opt.adding{ border-color:var(--blue-deep); box-shadow:0 0 0 3px rgba(0,80,255,.14); }
 .ed-caret{ border-right:1.5px solid var(--text-primary); animation:edBlink 1s steps(1) infinite; padding-right:1px; }
@@ -2265,7 +2272,7 @@ function renderSurveyDoc(){
     if(sec.end){ h+=`<div class="sd-end">참여해 주셔서 감사합니다.</div>`; return; }
     (sec.qs||[]).forEach(q=>{
       const multi = (q.type||'').includes('다중');
-      h+=`<div class="sd-q"><div class="sd-qq"><span class="sd-qn">${q.n}</span>${q.q}<span class="sd-qtype">${q.type}${q.cons?` · ${q.cons}`:''}</span></div>`;
+      h+=`<div class="sd-q" onclick="manualOpenEditor()"><div class="sd-qq"><span class="sd-qn">${q.n}</span>${q.q}<span class="sd-qtype">${q.type}${q.cons?` · ${q.cons}`:''}</span></div>`;
       if(q.scale){ h+=`<div class="sd-scale">${q.scale.map(s=>`<span class="sd-sc"><span class="sd-radio"></span>${s}</span>`).join('')}</div>`; }
       else if(q.opts){ h+=`<ul class="sd-opts">${q.opts.map(o=>`<li class="sd-opt"><span class="sd-opt-mark ${multi?'check':'radio'}"></span>${o}</li>`).join('')}</ul>`; }
       else if(q.text){ h+=`<div class="sd-textbox">자유 응답 (long text)</div>`; }
@@ -2468,16 +2475,21 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           }
         }
       }
-      /* 파일(설문) 연동 모션: 스켈레톤으로 그려지다가 → 완성된 카드로 전환 */
+      /* 파일(설문) 연동 모션: 네모 박스 스켈레톤 → 완성될 때 연동 메시지가 카드와 함께 등장 */
       if(m.role==='file' && m.skel){
-        const chip=inner.lastElementChild.querySelector('.file-chip');
+        const row=inner.lastElementChild;
+        const chip=row.querySelector('.file-chip');
         if(chip){
           const real=chip.innerHTML;
           chip.classList.add('fc-skel');
           chip.innerHTML=`<span class="fc-skel-ico skel-blk"></span><span class="file-chip-info"><span class="skel-blk fc-skel-l1"></span><span class="skel-blk fc-skel-l2"></span></span>`;
           setTimeout(()=>{ if(!playing||myGen!==gen) return;
             chip.style.transition='opacity .18s ease'; chip.style.opacity='0';
-            setTimeout(()=>{ if(!playing||myGen!==gen) return; chip.classList.remove('fc-skel'); chip.innerHTML=real; chip.style.opacity=''; chip.classList.add('fc-pop'); }, 180);
+            setTimeout(()=>{ if(!playing||myGen!==gen) return;
+              chip.classList.remove('fc-skel'); chip.innerHTML=real; chip.style.opacity=''; chip.classList.add('fc-pop');
+              if(m.connectMsg){ row.insertAdjacentHTML('beforebegin', `<div class="msg-system msg-enter">${m.connectMsg}</div>`); }   /* 연동 완료 메시지 = 카드와 함께 */
+              scrollChat();
+            }, 180);
           }, 950);
         }
       }
@@ -2954,7 +2966,7 @@ function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-opt-num">${i
 function edCompactCard(q){
   let body='';
   if(q.scale) body=`<div class="ed-copts">${q.scale.map(o=>`<span class="ed-copt">${o}</span>`).join('')}</div>`;
-  else if(q.opts){ const shown=q.opts.slice(0,5).map(o=>`<span class="ed-copt">${o}</span>`); if(q.opts.length>5) shown.push(`<span class="ed-copt ed-copt-more">+${q.opts.length-5}</span>`); body=`<div class="ed-copts">${shown.join('')}</div>`; }
+  else if(q.opts){ const shown=q.opts.slice(0,5).map((o,i)=>`<div class="ed-optrow"><span class="ed-optrow-n">${i+1}</span><span class="ed-optrow-t">${o}</span></div>`); if(q.opts.length>5) shown.push(`<div class="ed-optrow more">+${q.opts.length-5}개 더보기</div>`); body=`<div class="ed-optrows">${shown.join('')}</div>`; }
   else if(q.text) body=`<div class="ed-copts"><span class="ed-copt">자유 응답 (long text)</span></div>`;
   else if(q.ref) body=`<div class="ed-copts"><span class="ed-copt ed-copt-more">↑ 이전 문항 보기 활용</span></div>`;
   return `<div class="ed-card compact"><div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype">${q.type}</span></div><div class="ed-qtitle">${q.q}</div>${body}</div>`;
@@ -3182,15 +3194,22 @@ function showScene(skipFirstTyping=false){
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        /* 미리보기 한 번 스크롤(skim) → (설문 더블클릭) → 풀 프레임 편집 뷰 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
-        skimArtifact(myGen, ()=>{ if(!playing||myGen!==gen) return;
+        /* 미리보기 살짝만 스크롤 → 1번 문항 클릭 → 풀 프레임 편집 뷰 전환 → 문항별 편집 시연 → 홀드 → 닫고 다음 */
+        const ab=$('artifact-body');
+        if(ab) ab.scrollTo({top:150, behavior:'smooth'});   /* 살짝만 */
+        timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+          const q1=document.querySelector('#artifact-body .sd-q');   /* 1번 문항 */
+          if(q1) q1.scrollIntoView({behavior:'smooth', block:'center'});
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-            openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-              timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
-            });
-          }, 460);
-        });
-      }, 60);   /* 미리보기 등장 → 텀 없이 바로 스크롤(skim) 시작 */
+            if(q1){ q1.classList.add('sd-q-press'); setTimeout(()=>q1.classList.remove('sd-q-press'), 560); }
+            timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+              openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
+                timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
+              });
+            }, 600);
+          }, 700);
+        }, 900);
+      }, 60);   /* 미리보기 등장 → 살짝 스크롤 시작 */
       return;
     }
     if(scene.walk){
@@ -3277,13 +3296,21 @@ function advance(){
 /* 탭별 노출 시나리오 — Researcher=C / Analyst=design·analyze·explore·proof / Consumer=persona (A·B 비노출) */
 const TAB_SCENARIOS={researcher:[0,3], analyst:[4,5,6], consumer:[7]};
 let activeTab='researcher';
+/* 카테고리별 배경 오버라이드: Framer 임베드가 ?rbg=/?abg=/?cbg= 로 이미지 URL 전달.
+   값이 있으면 해당 카테고리 배경을 그 이미지로, 없으면 번들 기본값 사용. */
+const BG_OVERRIDE=(function(){
+  const p=new URLSearchParams(location.search);
+  const cssUrl=v=>v?`url("${v.replace(/"/g,'%22')}")`:'';
+  return { researcher:cssUrl(p.get('rbg')), analyst:cssUrl(p.get('abg')), consumer:cssUrl(p.get('cbg')) };
+})();
 function syncHeroTab(i){
   const sc=SCENARIOS[i]; if(!sc) return;
   const cat=({C:'researcher',design:'researcher',A:'analyst',B:'analyst',analyze:'analyst',explore:'analyst',proof:'analyst',persona:'consumer'})[sc.id]||'researcher';
   activeTab=cat;
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
   const stg=document.querySelector('.stage');
-  if(stg) setStageBg(stg, cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.png')":'none');
+  const def=cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.png')":'none';
+  if(stg) setStageBg(stg, BG_OVERRIDE[cat] || def);
 }
 /* 배경 더블버퍼 크로스페이드: 들어오는 레이어를 위로 올려 페이드인 → 이전 레이어를 내림.
    researcher(none)는 버퍼를 모두 내려 .stage 기본 마블이 드러나게 함. */
