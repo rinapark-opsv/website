@@ -1562,15 +1562,15 @@ a { text-decoration: none; color: inherit; }
 .sd-qn { font-weight:700; color:var(--text-primary); margin-right:7px; letter-spacing:-0.3px; }
 .sd-qq { font-size:15px; font-weight:600; color:var(--text-primary); line-height:1.5; letter-spacing:-0.3px; }
 .sd-qtype { display:inline-block; font-size:9px; font-weight:600; color:var(--text-tertiary); background:var(--bg-hover); border-radius:4px; padding:1px 6px; letter-spacing:0; margin-left:7px; vertical-align:middle; white-space:nowrap; }
-.sd-opts { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; }
+.sd-opts { list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:0; }   /* 타이틀↔보기 옵션 간격 */
 .sd-opt { display:flex; align-items:center; gap:9px; padding:3px 0; font-size:13px; color:var(--text-secondary); line-height:1.45; }
 .sd-opt-mark { width:13px; height:13px; flex-shrink:0; border:1.5px solid #C9CDD5; background:#fff; }
 .sd-opt-mark.radio { border-radius:50%; }
 .sd-opt-mark.check { border-radius:4px; }
-.sd-scale { display:flex; gap:4px; margin:2px 0 2px; }
+.sd-scale { display:flex; gap:4px; margin:12px 0 2px; }   /* 타이틀↔척도 간격 */
 .sd-sc { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:9px; color:var(--text-tertiary); text-align:center; line-height:1.2; }
 .sd-radio { width:12px; height:12px; border-radius:50%; border:1.5px solid var(--border-strong); }
-.sd-textbox { font-size:11px; color:var(--text-tertiary); border:1px dashed var(--border-strong); border-radius:6px; padding:8px 10px; }
+.sd-textbox { font-size:11px; color:var(--text-tertiary); border:1px dashed var(--border-strong); border-radius:6px; padding:8px 10px; margin-top:12px; }
 .sd-ref { font-size:10.5px; color:var(--text-tertiary); margin-top:6px; }
 .sd-logic { font-size:10.5px; color:var(--text-tertiary); background:#F7F7F7; border-left:2px solid var(--border-strong); border-radius:0 6px 6px 0; padding:5px 8px; margin-top:6px; line-height:1.45; }
 .sd-end { font-size:12px; color:var(--text-secondary); padding:10px 0; }
@@ -2762,18 +2762,18 @@ function previewHTML(type){
       <div class="sd-title">MZ세대 브랜드 인식 조사</div>
       <div class="sd-meta">설문 · 18문항 · 약 5분 · 합성 패널</div>
       <div class="sd-sec">스크리닝</div>
-      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">SQ1</span>최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?</div><div class="sd-qtype">객관식 단일</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">SQ1</span>최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?<span class="sd-qtype">객관식 단일</span></div>
         <ul class="sd-opts">${opt('있다')}${opt('없다')}</ul>
         <div class="sd-logic">⎇ '없다' 응답 시 설문 종료</div></div>
       <div class="sd-sec">본 문항</div>
-      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q1</span>다음 중 알고 계신 브랜드를 모두 선택해 주세요.</div><div class="sd-qtype">객관식 다중</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q1</span>다음 중 알고 계신 브랜드를 모두 선택해 주세요.<span class="sd-qtype">객관식 다중</span></div>
         <ul class="sd-opts">${['브랜드 A','브랜드 B','브랜드 C','브랜드 D','모두 모름'].map(o=>opt(o,true)).join('')}</ul></div>
-      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q3</span>이 브랜드를 구매하지 않은 이유는 무엇인가요?</div><div class="sd-qtype">객관식 다중</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q3</span>이 브랜드를 구매하지 않은 이유는 무엇인가요?<span class="sd-qtype">객관식 다중</span></div>
         <ul class="sd-opts">${['품질이 낮아 보여서','디자인이 마음에 들지 않아서','익숙하지 않아서','가격이 비싸서','기타'].map(o=>opt(o,true)).join('')}</ul></div>
-      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q4</span>이 브랜드에 대한 인상을 평가해 주세요. (트렌디·신뢰감·가성비)</div><div class="sd-qtype">평가형 5점</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q4</span>이 브랜드에 대한 인상을 평가해 주세요. (트렌디·신뢰감·가성비)<span class="sd-qtype">평가형 5점</span></div>
         ${scale(['전혀','별로','보통','다소','매우'])}</div>
       <div class="sd-sec">NPS</div>
-      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q11</span>이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?</div><div class="sd-qtype">평가형 0–10</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q11</span>이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?<span class="sd-qtype">평가형 0–10</span></div>
         ${scale(Array.from({length:11},(_,i)=>String(i)))}</div>
       <div class="sd-sec">완료 페이지</div>
       <div class="sd-end">참여해 주셔서 감사합니다.</div>
