@@ -34,7 +34,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  /* ① 설계 — 김민정 팀장(리서치 수행자) · media1 */
  {id:'design',label:'MZ세대 설문 수집',persona:'김민정 팀장 · 리서치 수행',tagline:'설문이 곧장 응답 수집으로',hook:'우리 브랜드 조사를 직접 설계·수집하려면',scenes:[
    {chat:[{role:'user',text:'MZ세대 브랜드 인식 조사에 대한 설문을 바로 돌리고 싶어.',typed:true}],preview:'cskel',hl:'설문 미리보기',dwell:200},
-   {chat:[{role:'system',text:'MZ세대 브랜드 인식 조사 설문이 연동되었습니다.'},{role:'file',name:'MZ세대 브랜드 인식 조사',sub:'설문 · 18문항',badge:'방금 생성됨',open:'designsurvey',ftype:'survey'}],preview:'cskel',skelTo:'designsurvey',skelMs:1000,hl:'설문 미리보기',dwell:2400},
+   {chat:[{role:'system',text:'MZ세대 브랜드 인식 조사 설문이 연동되었습니다.'},{role:'file',name:'MZ세대 브랜드 인식 조사',sub:'설문 · 18문항',badge:'방금 생성됨',open:'designsurvey',ftype:'survey',skel:true}],preview:'cskel',skelTo:'designsurvey',skelMs:1100,hl:'설문 미리보기',dwell:2600},
    {chat:[{role:'ai',collect:true,text:'**누구에게 물어볼까요?** 브랜드 인식 조사는 탐색적 조사이기 때문에 빠르게 인사이트를 얻을 수 있는 **합성 패널**을 추천해요.'}],preview:'collectdoc',hl:'수집 대상 선택',open:'collectdoc',press:'.co-start'},
  ]},
  /* ② 분석 — 박준호 PM(결과 활용자) · media2 · 디폴트 */

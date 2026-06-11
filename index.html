@@ -504,6 +504,13 @@ a { text-decoration: none; color: inherit; }
 .skel-chip { height: 24px; border-radius: 7px; display: inline-block; margin: 0 6px 6px 0; vertical-align: top; }
 .skel-blk { background: linear-gradient(100deg, #E1E4EA 25%, #EFF1F5 50%, #E1E4EA 75%); background-size: 200% 100%; animation: skelSlide 1.4s ease-in-out infinite; }
 @keyframes skelSlide { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+/* 파일 카드 연동 모션 — 스켈레톤으로 그려지다 완성 */
+.file-chip.fc-skel { pointer-events: none; }
+.fc-skel-ico { width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0; display: block; }
+.fc-skel-l1 { display: block; height: 13px; width: 58%; border-radius: 5px; margin-bottom: 7px; }
+.fc-skel-l2 { display: block; height: 10px; width: 38%; border-radius: 5px; }
+.fc-pop { animation: fcPop .34s cubic-bezier(.34,1.4,.5,1) both; }
+@keyframes fcPop { from { transform: scale(.96); opacity: .4; } to { transform: none; opacity: 1; } }
 
 /* ═══════════════════════════════════════════════
    CANVAS
@@ -1102,6 +1109,15 @@ a { text-decoration: none; color: inherit; }
   color: var(--text-secondary);
   letter-spacing: 0.02em;
 }
+.artifact-actions { display:flex; align-items:center; gap:8px; }
+.artifact-edit {
+  font-size: 11.5px; font-weight: 600; color:#fff; background: var(--blue-deep);
+  border: none; border-radius: 7px; padding: 5px 11px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px; transition: background var(--t-fast), transform .12s ease;
+}
+.artifact-edit:hover { background:#0042D6; }
+.artifact-edit.pressing { transform: scale(.95); }
+.artifact-edit[hidden] { display:none; }
 .artifact-close {
   width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
@@ -1466,6 +1482,8 @@ a { text-decoration: none; color: inherit; }
 .cc-fade { position:absolute; left:1px; right:1px; bottom:0; height:78px; background:linear-gradient(rgba(255,255,255,0) 0%, #fff 58%); pointer-events:none; }
 .cc-more { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); display:inline-flex; align-items:center; justify-content:center; gap:3px; padding:5px 12px; border-radius:8px; font-size:11px; font-weight:500; color:var(--text-secondary); cursor:pointer; transition:background var(--t-fast); }
 .cc-more:hover { background:rgba(0,0,0,0.06); }
+.cc-done.clickable { cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
+.cc-done.clickable:hover { border-color:var(--border-strong); box-shadow:0 4px 16px rgba(13,13,13,.06); }
 
 /* 자동 시연 버튼 눌림 효과 */
 .pressing { background: rgba(0,0,0,0.06) !important; border-radius: 8px; transition: background 160ms ease; }
@@ -1525,8 +1543,8 @@ a { text-decoration: none; color: inherit; }
 .rv-in { animation: itemUp .34s ease both; }
 
 /* 클릭 affordance — 모든 인터랙티브 요소 */
-.file-chip.clickable { cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
-.file-chip.clickable:hover { border-color:var(--blue); background:var(--bg-active); }
+.file-chip.clickable { cursor:pointer; transition:box-shadow var(--t-fast), opacity var(--t-fast); }
+.file-chip.clickable:hover { box-shadow:0 4px 14px rgba(0,0,0,.11); }   /* 블루 대신 은은한 드롭섀도우 */
 .choice-btn { cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
 .choice-btn:hover { border-color:var(--blue); background:var(--bg-active); }
 .co-option { cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
@@ -1708,7 +1726,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ── 클릭형 파일칩 → 사이드 패널 오픈 (제품 미리보기 동작) ── */
 .file-chip.clickable { cursor:pointer; }
-.file-chip.clickable:hover { border-color:var(--border-strong); box-shadow:var(--shadow-sm); }
+.file-chip.clickable:hover { box-shadow:0 4px 14px rgba(0,0,0,.11); }   /* 블루 대신 은은한 드롭섀도우 */
 .file-open { display:inline-flex; align-items:center; gap:4px; flex-shrink:0; margin-left:2px;
   font-size:11px; font-weight:600; color:var(--blue); background:var(--blue-soft);
   border:1px solid var(--blue-light); border-radius:6px; padding:5px 9px; transition:background var(--t-fast); }
@@ -1832,19 +1850,20 @@ a { text-decoration: none; color: inherit; }
 .ed-set{ border-left:1px solid var(--border); padding:18px 16px; overflow:auto; background:var(--bg-canvas); }
 .ed-list-head{ font-size:12px; font-weight:700; color:var(--text-primary); padding:0 6px 10px; display:flex; justify-content:space-between; align-items:center; }
 .ed-list-head .a{ font-size:11px; color:var(--text-secondary); font-weight:600; }
-.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--blue); padding:12px 6px 5px; }
+.ed-li-group{ background:#F7F7F8; border:1px solid #F0F0F1; border-radius:10px; padding:2px 6px 6px; margin-bottom:8px; }   /* 블록별 옅은 그레이 그룹 */
+.ed-sec-label{ font-size:10.5px; font-weight:700; letter-spacing:.04em; color:var(--blue-deep); padding:9px 6px 5px; }
 .ed-li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-secondary); padding:8px; border-radius:7px; line-height:1.3; cursor:default; }
 .ed-li:hover{ background:var(--bg-hover); }
-.ed-li.active{ background:var(--blue-soft); color:var(--blue); font-weight:600; }   /* 하이라이팅 문항 = 브랜드 블루 */
+.ed-li.active{ background:rgba(0,80,255,.10); color:var(--blue-deep); font-weight:600; }   /* 하이라이팅 문항 = 브랜드 블루 #0050FF, fill 10% */
 .ed-li-tag{ font-size:9.5px; font-weight:700; color:var(--text-tertiary); flex:none; letter-spacing:.02em; }   /* 넘버 박스 제거 */
-.ed-li.active .ed-li-tag{ color:var(--blue); }
+.ed-li.active .ed-li-tag{ color:var(--blue-deep); }
 .ed-li-txt{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 /* 우: 문항 설정 */
 .ed-set-head{ font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
 .ed-set-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 0; border-bottom:1px solid var(--border); font-size:12px; }
 .ed-set-row .k{ color:var(--text-secondary); flex:none; }
 .ed-set-row .v{ color:var(--text-primary); font-weight:600; display:flex; align-items:center; gap:6px; text-align:right; }
-.ed-toggle{ width:28px; height:16px; border-radius:9px; background:var(--blue); position:relative; flex:none; }   /* ON = 브랜드 블루 */
+.ed-toggle{ width:28px; height:16px; border-radius:9px; background:var(--blue-deep); position:relative; flex:none; }   /* ON = 브랜드 블루 #0050FF */
 .ed-toggle::after{ content:''; position:absolute; top:2px; right:2px; width:12px; height:12px; border-radius:50%; background:#fff; }
 .ed-toggle.off{ background:var(--border-strong); }
 .ed-toggle.off::after{ left:2px; right:auto; }
@@ -1866,12 +1885,12 @@ a { text-decoration: none; color: inherit; }
 .ed-logic-cond{ font-size:11.5px; color:var(--text-primary); background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 9px; line-height:1.45; }
 .ed-radio-grp{ display:flex; flex-direction:column; gap:7px; }
 .ed-radio-opt{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:7px 10px; }
-.ed-radio-opt.on{ color:var(--blue); background:var(--blue-soft); font-weight:600; }
+.ed-radio-opt.on{ color:var(--blue-deep); background:rgba(0,80,255,.10); font-weight:600; }
 .ed-radio{ width:13px; height:13px; border-radius:50%; border:1.5px solid var(--border-strong); flex:none; }
-.ed-radio-opt.on .ed-radio{ border-color:var(--blue); background:radial-gradient(circle, var(--blue) 0 4px, #fff 4px); }
+.ed-radio-opt.on .ed-radio{ border-color:var(--blue-deep); background:radial-gradient(circle, var(--blue-deep) 0 4px, #fff 4px); }
 /* 중앙: 문항 카드 — 전체 설문이 위아래로 이어지는 스택(스크롤 시 스크리닝 문항이 그 안에 있음을 인지) */
 .ed-canvas-col{ max-width:620px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
-.ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--blue); letter-spacing:.04em; padding:6px 2px 0; }
+.ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--blue-deep); letter-spacing:.04em; padding:6px 2px 0; }
 .ed-canvas-sec:first-child{ padding-top:0; }
 .ed-card{ background:#fff; border:1px solid var(--border); border-radius:13px; padding:16px 18px 18px; }
 .ed-card.focus{ border-color:var(--border-strong); box-shadow:0 6px 22px rgba(13,13,13,.07); }
@@ -1879,8 +1898,8 @@ a { text-decoration: none; color: inherit; }
 .ed-card.compact:hover{ opacity:1; }
 .ed-card-top{ display:flex; align-items:center; gap:8px; margin-bottom:12px; }
 .ed-card.compact .ed-card-top{ margin-bottom:8px; }
-.ed-qn{ font-size:11px; font-weight:700; color:var(--blue); }   /* 문항 넘버 = 블루 텍스트, 박스 없음 */
-.ed-card.compact .ed-qn{ color:var(--blue); }
+.ed-qn{ font-size:11px; font-weight:700; color:var(--blue-deep); }   /* 문항 넘버 = 블루 텍스트, 박스 없음 */
+.ed-card.compact .ed-qn{ color:var(--blue-deep); }
 .ed-qtype{ font-size:11px; color:var(--text-tertiary); padding:3px 0; display:flex; align-items:center; gap:5px; }
 .ed-card-tools{ margin-left:auto; display:flex; gap:9px; color:#C8C8C8; font-size:14px; }
 .ed-qtitle{ font-size:13px; font-weight:600; color:var(--text-primary); line-height:1.5; margin-bottom:3px; }
@@ -1890,16 +1909,16 @@ a { text-decoration: none; color: inherit; }
 .ed-copt{ font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:5px 10px; }
 .ed-copt-more{ color:var(--text-secondary); background:var(--bg-hover); font-weight:600; }
 /* 편집 액션 — 보기 추가(타이핑) */
-.ed-opt.adding{ border-color:var(--border-strong); box-shadow:0 0 0 3px rgba(13,13,13,.05); }
+.ed-opt.adding{ border-color:var(--blue-deep); box-shadow:0 0 0 3px rgba(0,80,255,.14); }
 .ed-caret{ border-right:1.5px solid var(--text-primary); animation:edBlink 1s steps(1) infinite; padding-right:1px; }
 @keyframes edBlink{ 50%{ border-color:transparent; } }
 /* 편집 액션 — 척도·문항유형 */
 .ed-typebar{ display:inline-flex; gap:3px; background:#EEE; border-radius:8px; padding:3px; margin-bottom:14px; }
 .ed-typebtn{ font-size:11.5px; font-weight:600; color:var(--text-secondary); padding:4px 11px; border-radius:6px; }
-.ed-typebtn.active{ background:#fff; color:var(--blue); box-shadow:0 1px 2px rgba(0,0,0,.07); }
+.ed-typebtn.active{ background:#fff; color:var(--blue-deep); box-shadow:0 1px 2px rgba(0,0,0,.07); }
 .ed-scale{ display:flex; flex-direction:column; gap:8px; }
 .ed-scale-pt{ display:flex; align-items:center; gap:11px; background:#fff; border:1px solid var(--border); border-radius:9px; padding:9px 12px; font-size:12px; transition:border-color .2s, background .2s; }
-.ed-scale-pt.ed-edited-pt{ border-color:var(--blue); background:var(--blue-faint); }
+.ed-scale-pt.ed-edited-pt{ border-color:var(--blue-deep); background:rgba(0,80,255,.10); }
 .ed-scale-dot{ width:20px; height:20px; border-radius:50%; background:var(--bg-hover); color:var(--text-secondary); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none; }
 .ed-scale-lab{ color:var(--text-primary); }
 /* 편집 액션 — 표시로직·파이핑 */
@@ -1922,8 +1941,8 @@ a { text-decoration: none; color: inherit; }
 .ed-opt-act{ display:flex; gap:9px; color:#D0D0D0; font-size:14px; flex:none; }
 .ed-opt.dragging{ box-shadow:0 13px 30px rgba(13,13,13,.18); border-color:var(--border-strong); position:relative; z-index:5; }
 .ed-opt.dragging .ed-grip{ color:var(--text-secondary); cursor:grabbing; }
-.ed-opt.just-moved{ border-color:var(--border-strong); background:var(--bg-hover); }
-.ed-opt.just-moved .ed-opt-num{ background:var(--text-secondary); color:#fff; }
+.ed-opt.just-moved{ border-color:var(--blue-deep); background:rgba(0,80,255,.06); }
+.ed-opt.just-moved .ed-opt-num{ background:rgba(0,80,255,.2); color:var(--blue-deep); }
 .ed-add-opt{ display:flex; align-items:center; gap:6px; margin-top:11px; font-size:12px; color:var(--text-secondary); font-weight:600; padding:7px 4px; }
 .ed-quote{ margin-top:15px; border-left:2px solid var(--border-strong); background:var(--bg-hover); border-radius:0 8px 8px 0; padding:8px 11px; font-size:11.5px; color:var(--text-secondary); line-height:1.5; }
 </style>
@@ -1984,9 +2003,12 @@ a { text-decoration: none; color: inherit; }
     <div class="artifact-inner">
       <div class="artifact-header">
         <span class="artifact-title" id="artifact-title">결과물</span>
-        <button class="artifact-close" onclick="closeArtifact()" aria-label="닫기">
-          <i class="ph-light ph-x" style="font-size:14px"></i>
-        </button>
+        <div class="artifact-actions">
+          <button class="artifact-edit" id="artifact-edit-btn" onclick="manualOpenEditor()" hidden>설문 편집</button>
+          <button class="artifact-close" onclick="closeArtifact()" aria-label="닫기">
+            <i class="ph-light ph-x" style="font-size:14px"></i>
+          </button>
+        </div>
       </div>
       <div class="artifact-body" id="artifact-body"></div>
     </div>
@@ -2129,14 +2151,13 @@ function ccCollect(){
 function ccDone(items){
   return '<div class="cc-stack">'+items.map(it=>{
     if(it.collapsed) return `<div class="cc-card cc-done collapsed"><div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div></div>`;
-    return `<div class="cc-card cc-done">
+    return `<div class="cc-card cc-done${it.open?' clickable':''}"${it.open?` role="button" onclick="openPanel('${it.open}')"`:''}>
       <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div>
       <div class="cc-hr"></div>
       ${it.title?`<div class="cc-doc-title cc-doc-title-sm">${it.title}</div>`:''}
       ${it.sec?`<div class="cc-doc-sec">${it.sec}</div>`:''}
       ${it.b?`<ul class="cc-doc-ul">${it.b.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}
       <div class="cc-fade"></div>
-      <div class="cc-more"${it.open?` onclick="openPanel('${it.open}')"`:''}><i class="ph ph-caret-down" style="font-size:15px"></i></div>
     </div>`;
   }).join('')+'</div>';
 }
@@ -2446,6 +2467,19 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           }
         }
       }
+      /* 파일(설문) 연동 모션: 스켈레톤으로 그려지다가 → 완성된 카드로 전환 */
+      if(m.role==='file' && m.skel){
+        const chip=inner.lastElementChild.querySelector('.file-chip');
+        if(chip){
+          const real=chip.innerHTML;
+          chip.classList.add('fc-skel');
+          chip.innerHTML=`<span class="fc-skel-ico skel-blk"></span><span class="file-chip-info"><span class="skel-blk fc-skel-l1"></span><span class="skel-blk fc-skel-l2"></span></span>`;
+          setTimeout(()=>{ if(!playing||myGen!==gen) return;
+            chip.style.transition='opacity .18s ease'; chip.style.opacity='0';
+            setTimeout(()=>{ if(!playing||myGen!==gen) return; chip.classList.remove('fc-skel'); chip.innerHTML=real; chip.style.opacity=''; chip.classList.add('fc-pop'); }, 180);
+          }, 950);
+        }
+      }
       scrollChat();
       setTimeout(next, m.role==='ai'?(scene.walk?0:(m.process?300:Math.max(720, revealMs+150))):420);
     }
@@ -2720,40 +2754,28 @@ function previewHTML(type){
         <span class="pd-act"><i class="ph-light ph-chart-line" style="font-size:12px"></i>결과 분석</span>
       </div>
       </div>`;
-    case 'designsurvey': { const r5='<td><span class="sv-radio"></span></td>'.repeat(5);
-      const npsH=Array.from({length:11},(_,i)=>`<th>${i}</th>`).join('');
-      const npsR='<td><span class="sv-radio"></span></td>'.repeat(11);
-      return `<div class="av">
-      <div class="sv-sec">시작 페이지</div>
-      <div class="sv-q">안녕하세요! 브랜드 인식에 대한 짧은 설문입니다. 약 5분 정도 소요됩니다.</div>
-      <div class="sv-divider"></div>
-      <div class="sv-sec">스크리닝</div>
-      <div class="sv-q"><strong>SQ1.</strong> 최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?</div>
-      <div class="sv-opts">① 있다&nbsp;&nbsp;② 없다 <span class="sv-logic">→ ② 응답 시 설문 종료</span></div>
-      <div class="sv-quote">구매 경험이 없는 응답자를 걸러 데이터 품질을 높여요.</div>
-      <div class="sv-divider"></div>
-      <div class="sv-sec">본 문항</div>
-      <div class="sv-q"><strong>Q1.</strong> 다음 중 알고 계신 브랜드를 모두 선택해 주세요.</div>
-      <div class="sv-opts">① 브랜드 A&nbsp;&nbsp;② 브랜드 B&nbsp;&nbsp;③ 브랜드 C&nbsp;&nbsp;④ 브랜드 D&nbsp;&nbsp;⑤ 모두 모름</div>
-      <div class="sv-quote">보조 인지도를 측정해 연령대별 인지 격차를 파악해요.</div>
-      <div class="sv-q"><strong>Q3.</strong> 이 브랜드를 구매하지 않은 이유는 무엇인가요?</div>
-      <div class="sv-opts">① 품질이 낮아 보여서&nbsp;&nbsp;② 디자인이 마음에 들지 않아서&nbsp;&nbsp;③ 익숙하지 않아서&nbsp;&nbsp;<span class="sv-logic">⑤ 가격이 비싸서 — 방금 추가됨</span>&nbsp;&nbsp;④ 기타</div>
-      <div class="sv-quote">비구매 장벽을 확인해요 — 보기 추가 시 연결 로직도 자동 검수돼요.</div>
-      <div class="sv-divider"></div>
-      <div class="sv-q"><strong>Q4.</strong> 이 브랜드에 대한 인상을 평가해 주세요.</div>
-      <table class="sv-table"><thead><tr><th>속성</th><th>전혀</th><th>별로</th><th>보통</th><th>다소</th><th>매우</th></tr></thead><tbody>
-      <tr><td>트렌디하다</td>${r5}</tr>
-      <tr><td>신뢰감 있다</td>${r5}</tr>
-      <tr><td>가성비 있다</td>${r5}</tr></tbody></table>
-      <div class="sv-quote">브랜드 이미지 속성을 측정해 경쟁사 대비 포지셔닝 근거를 만들어요.</div>
-      <div class="sv-divider"></div>
-      <div class="sv-sec">NPS</div>
-      <div class="sv-q"><strong>Q11.</strong> 이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?</div>
-      <table class="sv-table"><thead><tr>${npsH}</tr></thead><tbody><tr>${npsR}</tr></tbody></table>
-      <div class="sv-cap">0: 전혀 추천 안 함 — 10: 적극 추천</div>
-      <div class="sv-divider"></div>
-      <div class="sv-sec">완료 페이지</div>
-      <div class="sv-q">참여해 주셔서 감사합니다!</div>
+    case 'designsurvey': {
+      const opt=(o,multi)=>`<li class="sd-opt"><span class="sd-opt-mark ${multi?'check':'radio'}"></span>${o}</li>`;
+      const scale=labels=>`<div class="sd-scale">${labels.map(s=>`<span class="sd-sc"><span class="sd-radio"></span>${s}</span>`).join('')}</div>`;
+      return `<div class="av sd">
+      <div class="sd-title">MZ세대 브랜드 인식 조사</div>
+      <div class="sd-meta">설문 · 18문항 · 약 5분 · 합성 패널</div>
+      <div class="sd-sec">스크리닝</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">SQ1</span>최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?</div><div class="sd-qtype">객관식 단일</div>
+        <ul class="sd-opts">${opt('있다')}${opt('없다')}</ul>
+        <div class="sd-logic">⎇ '없다' 응답 시 설문 종료</div></div>
+      <div class="sd-sec">본 문항</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q1</span>다음 중 알고 계신 브랜드를 모두 선택해 주세요.</div><div class="sd-qtype">객관식 다중</div>
+        <ul class="sd-opts">${['브랜드 A','브랜드 B','브랜드 C','브랜드 D','모두 모름'].map(o=>opt(o,true)).join('')}</ul></div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q3</span>이 브랜드를 구매하지 않은 이유는 무엇인가요?</div><div class="sd-qtype">객관식 다중</div>
+        <ul class="sd-opts">${['품질이 낮아 보여서','디자인이 마음에 들지 않아서','익숙하지 않아서','가격이 비싸서','기타'].map(o=>opt(o,true)).join('')}</ul></div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q4</span>이 브랜드에 대한 인상을 평가해 주세요. (트렌디·신뢰감·가성비)</div><div class="sd-qtype">평가형 5점</div>
+        ${scale(['전혀','별로','보통','다소','매우'])}</div>
+      <div class="sd-sec">NPS</div>
+      <div class="sd-q"><div class="sd-qq"><span class="sd-qn">Q11</span>이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?</div><div class="sd-qtype">평가형 0–10</div>
+        ${scale(Array.from({length:11},(_,i)=>String(i)))}</div>
+      <div class="sd-sec">완료 페이지</div>
+      <div class="sd-end">참여해 주셔서 감사합니다.</div>
       </div>`; }
     case 'conceptds': return `<div class="av"><div class="av-label">데이터셋 연동</div>
       <div class="av-ds active"><span class="av-ds-dot"></span>2026 K뷰티 신제품 컨셉 테스트<span class="av-ds-badge">n=1,164</span></div>
@@ -2866,7 +2888,7 @@ function updateArtifact(scene){
   lastArtifact=scene.preview;
   $('artifact-title').textContent=scene.hl;
   $('artifact-body').innerHTML=previewHTML(scene.preview);
-  openArtifact();
+  openArtifact(); edBtnFor(scene.preview);
   if(scene.preview==='chart'){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
@@ -2876,7 +2898,7 @@ const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 T
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   const ab=$('artifact-body'); ab.innerHTML=previewHTML(type); ab.scrollTop=0;   /* 항상 최상단부터 */
-  document.querySelector('.app').classList.add('artifact-open');
+  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type);
   setTimeout(scrollChat, 200); setTimeout(scrollChat, 500);
 }
 function pressLast(sel){
@@ -2903,11 +2925,15 @@ function openPanel(type){
   resumeT=setTimeout(()=>{ if(!userTyping && !playing){ playing=true; statuses[sIdx]='active'; renderSidebar(); advance(); } }, 6000);
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   $('artifact-body').innerHTML=previewHTML(type);
-  document.querySelector('.app').classList.add('artifact-open');
+  document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type);
   if(type==='chart') setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(bb=>{bb.style.width=bb.dataset.w+'%';}),60);
 }
 function openArtifact(){ document.querySelector('.app').classList.add('artifact-open'); }
-function closeArtifact(){ document.querySelector('.app').classList.remove('artifact-open'); }
+function closeArtifact(){ document.querySelector('.app').classList.remove('artifact-open'); edBtnFor(null); }
+/* 미리보기(설문 문서) 패널에서만 '설문 편집' 버튼 노출 */
+function edBtnFor(type){ const b=$('artifact-edit-btn'); if(b) b.hidden=!(type==='surveydoc'||type==='designsurvey'); }
+/* 실제 클릭(또는 데모 누름)으로 편집창 오픈 */
+function manualOpenEditor(){ pauseForUser(); const sc=$('ed-screen'); if(!sc) return; sc.innerHTML=editorHTML(); document.querySelector('.app').classList.add('editing'); requestAnimationFrame(()=>sc.classList.add('open')); }
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 /* 햄버거 → rail(사이드바) 펼침/접힘 토글. 편집 화면에선 편집창이 반응형으로 우측 축소됨 */
 function toggleRail(){ document.querySelector('.app').classList.toggle('rail-open'); }
@@ -2989,12 +3015,14 @@ function editorHTML(){
   const d=SURVEY_C;
   let list='<div class="ed-list-head">문항 목록<span class="a">전체 편집</span></div>', canvas='';
   d.sections.forEach(sec=>{ if(sec.end) return;
-    list+=`<div class="ed-sec-label">${sec.name}</div>`;
     canvas+=`<div class="ed-canvas-sec">${sec.name}</div>`;
+    let liItems='';
     (sec.qs||[]).forEach(q=>{
-      list+=`<div class="ed-li" id="ed-li-${q.n}"><span class="ed-li-tag">${q.n}</span><span class="ed-li-txt">${q.q}</span></div>`;
+      liItems+=`<div class="ed-li" id="ed-li-${q.n}"><span class="ed-li-tag">${q.n}</span><span class="ed-li-txt">${q.q}</span></div>`;
       canvas+=`<div class="ed-qslot" id="ed-q-${q.n}">${edCompactCard(q)}</div>`;
     });
+    /* 블록별 옅은 그레이 그룹 */
+    list+=`<div class="ed-li-group"><div class="ed-sec-label">${sec.name}</div>${liItems}</div>`;
   });
   return `<div class="ed-bar">
       <div class="ed-bar-l"><span class="ed-back" onclick="exitEditor()" title="채팅으로 돌아가기"><i class="ph ph-caret-left"></i></span><span class="ed-doc-name">${d.title}</span><span class="ed-saved">· 방금 저장됨</span></div>
