@@ -1788,17 +1788,20 @@ a { text-decoration: none; color: inherit; }
 .rp-bar-val { width:42px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:var(--text-primary); }
 
 /* ═══════════════════════════════════════════════
-   설문 편집 — 풀 프레임 3패널 화면으로 전환 (아티팩트처럼 슬라이드 인)
+   설문 편집 — 아티팩트 프레임이 1칼럼으로 확장되는 화면
+   (우측 아티팩트 영역에서 좌측으로 자라나는 grow 인터랙션)
 ═══════════════════════════════════════════════ */
 .ed-screen{
-  position:absolute; inset:0; z-index:50;
+  position:absolute; left:252px; top:12px; right:14px; bottom:14px; z-index:50;   /* rail+사이드바는 남기고 canvas+artifact 영역만 차지 (사이드바 접근 유지) */
   background:var(--bg-canvas);
   display:flex; flex-direction:column; overflow:hidden;
-  border-radius:14px; box-shadow:0 20px 56px rgba(15,23,42,.18), 0 0 0 1px var(--border);
-  transform:translateX(7%) scale(.9); transform-origin:center; opacity:0; pointer-events:none;
-  transition:transform .5s cubic-bezier(.32,.72,0,1), opacity .42s ease;
+  border:1px solid var(--border); border-radius:13px;   /* 아티팩트 프레임과 동일 */
+  clip-path:inset(0 0 0 56% round 13px); opacity:0; pointer-events:none;   /* 닫힘: 우측 아티팩트 폭만 노출 */
+  transition:clip-path .56s cubic-bezier(.32,.72,0,1), opacity .2s ease;
 }
-.ed-screen.open{ transform:scale(.9); opacity:1; pointer-events:auto; }
+.ed-screen.open{ clip-path:inset(0 0 0 0 round 13px); opacity:1; pointer-events:auto; }   /* 열림: 아티팩트가 칼럼으로 확장 */
+/* 편집 중: 시나리오 사이드바·rail은 유지(접근 가능) → 채팅↔편집 두 창 전환 */
+.app.editing, .app.editing:has(.rail:hover){ grid-template-columns:52px 200px 1fr 42%; }
 /* 상단 바 */
 .ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
 .ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
@@ -2993,10 +2996,11 @@ function editorHTML(){
 function openEditorScreen(myGen, done){
   const sc=$('ed-screen'); if(!sc){ done&&done(); return; }
   sc.innerHTML=editorHTML();
-  requestAnimationFrame(()=>sc.classList.add('open'));
+  document.querySelector('.app').classList.add('editing');   /* 사이드바 접힘 */
+  requestAnimationFrame(()=>sc.classList.add('open'));        /* 아티팩트 프레임이 1칼럼으로 확장 */
   setTimeout(()=>{ if(!playing||myGen!==gen) return; runEditDemo(myGen, done); }, 780);
 }
-function closeEditorScreen(){ const sc=$('ed-screen'); if(sc) sc.classList.remove('open'); }
+function closeEditorScreen(){ const sc=$('ed-screen'); if(sc) sc.classList.remove('open'); document.querySelector('.app').classList.remove('editing'); }
 /* 타입라이터 (한 글자씩 입력) */
 function edType(el, text, myGen, cb){
   el.classList.add('ed-caret'); let i=0;
@@ -3162,13 +3166,15 @@ function showScene(skipFirstTyping=false){
         }, pressed?450:0);
       }, 800);
     } else {
-      const d=Math.max(scene.dwell||DWELL_MS, revealMs+700);
+      /* 유저 프롬프트만 있는 씬은 AI 리빌 대기(revealMs+700)가 불필요 → 뜸들이지 않고 바로 다음 씬으로 */
+      const hasAI=scene.chat && scene.chat.some(m=>m.role==='ai');
+      const d=hasAI?Math.max(scene.dwell||DWELL_MS, revealMs+700):(scene.dwell||280);
       if(scene.chipAfter){
         const myGen=gen; const tapAt=Math.max(revealMs+700, 1300);
         setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
         timer=setTimeout(advance, tapAt+1700);
       } else {
-        timer=setTimeout(advance, d+400);
+        timer=setTimeout(advance, hasAI?d+400:d);
       }
     }
   }, skipFirstTyping);
