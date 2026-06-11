@@ -1557,7 +1557,7 @@ a { text-decoration: none; color: inherit; }
 .sd-end { font-size:12px; color:var(--text-secondary); padding:10px 0; }
 
 /* ── 수집 대상 선택 카드 (Figma CollectGroup/SelectOption) ── */
-.co-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:14px; width:100%; display:flex; flex-direction:column; gap:8px; margin:14px 0; }
+.co-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:16px; width:100%; display:flex; flex-direction:column; gap:14px; margin:14px 0; }
 .co-option { position:relative; background:#fff; border:1px solid var(--border); border-radius:13px; padding:14px 16px; display:flex; gap:13px; align-items:flex-start; }
 .co-option.selected { border:1.5px solid var(--blue); background:#FBFCFF; padding:13.5px 15.5px; }
 .co-ico { width:34px; height:34px; border-radius:9px; background:var(--bg-hover); color:var(--text-tertiary); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; transition:background var(--t-fast), color var(--t-fast); }
@@ -1792,7 +1792,7 @@ a { text-decoration: none; color: inherit; }
    (우측 아티팩트 영역에서 좌측으로 자라나는 grow 인터랙션)
 ═══════════════════════════════════════════════ */
 .ed-screen{
-  position:absolute; left:252px; top:12px; right:14px; bottom:14px; z-index:50;   /* rail+사이드바는 남기고 canvas+artifact 영역만 차지 (사이드바 접근 유지) */
+  position:absolute; left:52px; top:12px; right:14px; bottom:14px; z-index:50;   /* rail(52px)만 남기고 시나리오 패널+canvas+artifact 영역까지 확장 */
   background:var(--bg-canvas);
   display:flex; flex-direction:column; overflow:hidden;
   border:1px solid var(--border); border-radius:13px;   /* 아티팩트 프레임과 동일 */
@@ -1800,8 +1800,8 @@ a { text-decoration: none; color: inherit; }
   transition:clip-path .56s cubic-bezier(.32,.72,0,1), opacity .2s ease;
 }
 .ed-screen.open{ clip-path:inset(0 0 0 0 round 13px); opacity:1; pointer-events:auto; }   /* 열림: 아티팩트가 칼럼으로 확장 */
-/* 편집 중: 시나리오 사이드바·rail은 유지(접근 가능) → 채팅↔편집 두 창 전환 */
-.app.editing, .app.editing:has(.rail:hover){ grid-template-columns:52px 200px 1fr 42%; }
+/* 편집 중: rail(52px)만 남기고 시나리오 사이드바는 접음(편집창 위·아래 여백에서 안 비치게) — rail로 두 창 전환 */
+.app.editing, .app.editing:has(.rail:hover){ grid-template-columns:52px 0px 1fr 42%; }
 /* 상단 바 */
 .ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
 .ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
