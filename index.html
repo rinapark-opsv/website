@@ -1801,15 +1801,16 @@ a { text-decoration: none; color: inherit; }
 }
 .ed-screen.open{ clip-path:inset(0 0 0 0 round 13px); opacity:1; pointer-events:auto; }   /* 열림: 아티팩트가 칼럼으로 확장 */
 /* 편집 중: rail(52px)만 남기고 시나리오 사이드바는 접음(편집창 위·아래 여백에서 안 비치게) — rail로 두 창 전환 */
-.app.editing, .app.editing:has(.rail:hover){ grid-template-columns:52px 0px 1fr 42%; }
-/* 햄버거 클릭 → rail 펼침(sticky). 호버 확장과 달리 클릭으로 고정 */
+.app.editing{ grid-template-columns:52px 0px 1fr 42%; }
+/* 편집 중 rail 펼침 — 호버 또는 햄버거 클릭(sticky) 둘 다 */
+.app.editing:has(.rail:hover), .app.editing.rail-open, .app.editing.rail-open:has(.rail:hover){ grid-template-columns:200px 0px 1fr 42%; }
+/* 일반(챗) 모드 — 햄버거 클릭 sticky 펼침 (호버 펼침은 기존 .app:has(.rail:hover) 규칙이 처리) */
 .app.rail-open{ grid-template-columns:200px 200px 1fr 0px; }
 .app.rail-open.artifact-open{ grid-template-columns:200px 200px 1fr 42%; }
-.app.editing.rail-open, .app.editing.rail-open:has(.rail:hover){ grid-template-columns:200px 0px 1fr 42%; }
 .app.rail-open .rail-label, .app.rail-open .rail-side{ opacity:1; }
 .app.rail-open .rail-space{ height:44px; opacity:1; margin:0 12px 6px; }
-/* 편집 중 rail 펼치면 편집창이 우측으로 밀리며 반응형 축소 (.ed-screen은 .app의 형제) */
-.app.editing.rail-open ~ .ed-screen{ left:200px; }
+/* 편집 중 rail 펼치면(호버/클릭) 편집창이 우측으로 밀리며 반응형 축소 (.ed-screen은 .app의 형제) */
+.app.editing:has(.rail:hover) ~ .ed-screen, .app.editing.rail-open ~ .ed-screen{ left:200px; }
 /* 상단 바 */
 .ed-bar{ display:flex; align-items:center; gap:14px; height:48px; padding:0 14px; border-bottom:1px solid var(--border); background:var(--bg-sidebar); flex:none; }
 .ed-bar-l{ display:flex; align-items:center; gap:10px; min-width:0; flex:1; }
@@ -2433,7 +2434,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
         }
       }
       scrollChat();
-      setTimeout(next, m.role==='ai'?(scene.walk?0:Math.max(720, revealMs+150)):420);
+      setTimeout(next, m.role==='ai'?(scene.walk?0:(m.process?300:Math.max(720, revealMs+150))):420);
     }
   })();
 }
@@ -3196,7 +3197,7 @@ function showScene(skipFirstTyping=false){
         setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
         timer=setTimeout(advance, tapAt+1700);
       } else {
-        timer=setTimeout(advance, hasAI?d+400:d);
+        timer=setTimeout(advance, isProcess?d:(hasAI?d+400:d));   /* process(로딩) 씬은 dwell만큼만 머문 뒤 바로 결과로 */
       }
     }
   }, skipFirstTyping);
