@@ -1290,6 +1290,9 @@ a { text-decoration: none; color: inherit; }
 @keyframes docStream { from { opacity:0; transform: translateY(7px); } to { opacity:1; transform:none; } }
 .walk-hidden { display: none !important; }   /* walk: 등장 전 공간 차지 안 함 → 등장 시 챗이 위로 */
 @keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+/* 첫 챗 버블: 입력창 위치(아래)에서 상단으로 자연스럽게 올라옴 */
+@keyframes bubbleRise { 0% { opacity:0; transform: translateY(210px) scale(.97); } 100% { opacity:1; transform: none; } }
+.msg-rise { animation: bubbleRise .62s cubic-bezier(.22,.61,.36,1) both !important; }
 /* 파일 칩: 살짝 위에서 떨어져 자리잡는 드래그&드롭 업로드 느낌 */
 @keyframes fileDrop {
   0%   { opacity: 0; transform: translateY(-13px) scale(1.05) rotate(-1.4deg); }
@@ -1448,7 +1451,7 @@ a { text-decoration: none; color: inherit; }
 .cc-data-meta { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; margin-top:1px; }
 .cc-data-arrow { font-size:14px; color:var(--blue-deep); flex-shrink:0; }
 .cc-data:hover .cc-data-arrow { color:var(--blue-deep); }
-.cc-done-arrow { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:15px; color:#BDBDBD; }   /* 흰 카드 > 셰브론 — 보더 그레이(약간 진하게), 세로 중앙 정렬 */
+.cc-done-arrow { font-size:15px; color:#BDBDBD; flex:none; }   /* 흰 카드 > 셰브론 — 보더 그레이, flex 자식이라 세로 중앙 */
 
 /* ── 프로젝트 데이터 테이블 (아티팩트 — Figma 685:4833) ── */
 .pd-sec { display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--text-primary); margin-bottom:10px; }
@@ -1475,8 +1478,8 @@ a { text-decoration: none; color: inherit; }
 .pd-act { display:inline-flex; align-items:center; gap:4px; height:24px; padding:0 9px; border:1px solid #D3D7DF; border-radius:6px; font-size:11px; font-weight:500; color:var(--text-secondary); white-space:nowrap; flex-shrink:0; background:#fff; }
 
 /* ── 생성 완료 카드 (Figma 657:6556 — 문서 미리보기 + 더 보기) ── */
-.cc-done { position:relative; max-height:188px; overflow:hidden; padding-bottom:14px; }
-.cc-done.collapsed { max-height:none; padding-bottom:14px; }
+.cc-done { display:flex; align-items:center; gap:11px; padding:13px 16px; }   /* 아이콘 + (제목·부제목) + 화살표 한 줄 정렬 (데이터 카드와 동일) */
+.cc-done-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
 .cc-check { font-size:15px; color:var(--blue); flex-shrink:0; }
 .cc-hr { height:1px; background:var(--border); margin:14px 0; }
 .cc-doc-title { font-size:22px; font-weight:600; color:var(--text-primary); line-height:1.54; letter-spacing:-0.4px; margin-bottom:22px; }
@@ -1526,7 +1529,7 @@ a { text-decoration: none; color: inherit; }
 .cc-peek-sub { font-size:11.5px; color:var(--text-tertiary); letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cc-peek-arrow { font-size:13px; color:var(--text-tertiary); flex-shrink:0; }
 .cc-peek:hover .cc-peek-arrow { color:var(--blue); }
-.cc-doc-title-sm { font-size:12px; font-weight:500; color:var(--text-secondary); margin:6px 0 0; }   /* 헤더(14px) 아래 위계 — 작게 */
+.cc-doc-title-sm { font-size:12px; font-weight:500; color:var(--text-secondary); margin:0; }   /* 제목 아래 위계 — 작게 (info 블록 gap으로 간격) */
 
 /* 꼬리물기 라벨 + 추천 태그 */
 .cc-follow-label { display:flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--text-tertiary); margin:2px 0 7px; padding-left:2px; }
@@ -1566,7 +1569,7 @@ a { text-decoration: none; color: inherit; }
 .sd-meta { font-size:11.5px; font-weight:500; color:var(--text-tertiary); margin:5px 0 2px; }
 .sd-sec { font-size:13.5px; font-weight:600; color:var(--blue); letter-spacing:-0.3px; margin:24px 0 8px; }
 .sd-secnote { font-size:11px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:6px 9px; margin-bottom:6px; line-height:1.5; }
-.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:12px; background:transparent; transition:background .22s ease, border-color .22s ease; }
+.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:0; background:transparent; transition:background .22s ease, border-color .22s ease; }
 /* 클릭(편집 진입): 쉐도우 없이 블루 fill + 보더로 선택 강조 */
 .sd-q.sd-q-sel { background:var(--blue-soft); border:1px solid var(--blue); border-radius:6px; }   /* R값 반으로(12→6) */
 /* 선택 문항 아래 '설문 편집' CTA (가운데, gap 5px) */
@@ -2180,8 +2183,9 @@ function ccDone(items){
   return '<div class="cc-stack">'+items.map(it=>{
     if(it.collapsed) return `<div class="cc-card cc-done collapsed"><div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span></div></div>`;
     return `<div class="cc-card cc-done${it.open?' clickable':''}"${it.open?` role="button" onclick="openPanel('${it.open}')"`:''}>
-      <div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.t}</span>${it.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}</div>
-      ${it.title?`<div class="cc-doc-title cc-doc-title-sm">${it.title}</div>`:''}
+      <i class="ph-fill ph-check-circle cc-check"></i>
+      <div class="cc-done-info"><span class="cc-title">${it.t}</span>${it.title?`<span class="cc-doc-title cc-doc-title-sm">${it.title}</span>`:''}</div>
+      ${it.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}
     </div>`;
   }).join('')+'</div>';
 }
@@ -2471,7 +2475,10 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
       } else {
         /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
         clearInput();
-        inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
+        const firstMsg = inner.children.length===0;   /* 첫 메시지면 입력창 위치에서 위로 올라오는 느낌 */
+        inner.insertAdjacentHTML('beforeend', msgHTML(m));
+        if(firstMsg) inner.lastElementChild.classList.add('msg-rise');
+        scrollChat();
         setTimeout(next, 380);
       }
     } else {
@@ -3229,13 +3236,21 @@ function showScene(skipFirstTyping=false){
           if(q1){ q1.scrollIntoView({behavior:'smooth', block:'center'}); q1.classList.add('sd-q-sel'); }   /* 1번으로 복귀 + 선택 */
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
             openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-              timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1500);   /* 편집 완료 후 ~1.5초 홀드 → 다음 시나리오 */
+              /* 편집 완료 → 1.5초 홀드 → 다음 시나리오로. 목업은 유지하고 배경만 크로스페이드.
+                 편집창은 클립 애니메이션 없이 즉시 닫아 중간 글리치(닫히는 편집창+새 배경) 노출 방지 */
+              timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
+                const ed=$('ed-screen'); if(ed) ed.style.transition='none';
+                statuses[sIdx]='done';
+                const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
+                playScenario(nx, true);   /* 편집창 즉시 닫힘 + 배경 wavy 크로스페이드 + 다음 시나리오 콘텐츠 (목업 유지) */
+                requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
+              }, 1500);
             });
           }, 800);   /* 1번 선택 후 잠깐 뒤 편집 뷰 전환 */
         };
         if(ab && q4){
-          const start=ab.scrollTop, target=start + q4.getBoundingClientRect().top - ab.getBoundingClientRect().top - 60;
-          const steps=34, dt=1500/steps; let k=0;
+          const start=ab.scrollTop, target=start + 180;   /* 아주 살짝만 */
+          const steps=48, dt=1900/steps; let k=0;   /* 아주 천천히 */
           const iv=setInterval(()=>{ if(!playing||myGen!==gen){ clearInterval(iv); return; }
             k++; const p=k/steps, e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; ab.scrollTop=start+(target-start)*e;
             if(k>=steps){ clearInterval(iv); timer=setTimeout(goEdit, 300); }
@@ -3266,7 +3281,7 @@ function showScene(skipFirstTyping=false){
           timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
             if(it.done){
               card.classList.add('cc-done'); if(it.done.open){ card.classList.add('clickable'); card.setAttribute('role','button'); card.setAttribute('onclick',`openPanel('${it.done.open}')`); }
-              card.innerHTML=`<div class="cc-head"><i class="ph-fill ph-check-circle cc-check"></i><span class="cc-title">${it.done.t}</span>${it.done.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}</div>${it.done.title?`<div class="cc-doc-title cc-doc-title-sm">${it.done.title}</div>`:''}`;
+              card.innerHTML=`<i class="ph-fill ph-check-circle cc-check"></i><div class="cc-done-info"><span class="cc-title">${it.done.t}</span>${it.done.title?`<span class="cc-doc-title cc-doc-title-sm">${it.done.title}</span>`:''}</div>${it.done.open?'<i class="ph ph-caret-right cc-done-arrow"></i>':''}`;
               card.style.animation='docStream .34s cubic-bezier(.4,0,.2,1) forwards';
               /* 브리프·설계서 아티팩트는 자동으로 열지 않음 — 카드 클릭 시에만 (위 두 개) */
             } else {
@@ -3383,7 +3398,7 @@ function syncHeroTab(i){
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
   const stg=document.querySelector('.stage');
   const def=cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.png')":'none';
-  if(stg) setStageBg(stg, BG_OVERRIDE[cat] || def);
+  if(stg) setStageBg(stg, sc.bg?`url('${sc.bg}')`:(BG_OVERRIDE[cat] || def));   /* 시나리오별 배경 우선(있으면 크로스페이드) */
 }
 /* 배경 더블버퍼 크로스페이드: 들어오는 레이어를 위로 올려 페이드인 → 이전 레이어를 내림.
    researcher(none)는 버퍼를 모두 내려 .stage 기본 마블이 드러나게 함. */
