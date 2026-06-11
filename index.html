@@ -1481,7 +1481,7 @@ a { text-decoration: none; color: inherit; }
 .fig-src-ico.os { background:none; padding:0; }
 .fig-src-ico.os svg { width:18px; height:18px; display:block; }
 /* 인라인 아티팩트 느낌 — 챗 안에서 카드 위아래 분할 */
-.cc-card, .cc-stack, .co-card, .cc-data { margin:14px 0; }
+.cc-card, .cc-stack, .co-card, .cc-data { margin:14px 0; scroll-margin-top:18px; }
 .cc-stack > .cc-card { margin:0; }
 /* 카드는 메시지 컬럼을 채움(폭 제어는 .msg-ai 단위) */
 .msg-ai > .cc-card, .msg-ai > .cc-stack, .msg-ai > .cc-data, .msg-ai > .co-card, .msg-ai > .cc-briefcard { width:100%; }
@@ -3153,7 +3153,9 @@ function showScene(skipFirstTyping=false){
         reveal(units[k]);
         if(k===scene.walk.length-1) reveal(prose);   /* 설문 datarow + 본문 한번에 */
         showPanel(scene.walk[k]); const ab=$('artifact-body'); if(ab) ab.scrollTop=0;
-        scrollChat();
+        /* 첫 카드는 그대로, 이후 카드(설문 설계서 등)는 챗 뷰포트 상단으로 올려 이전 카드를 위로 밀어냄 */
+        if(k>0 && units[k]) units[k].scrollIntoView({behavior:'smooth', block:'start'});
+        else scrollChat();
         k++; timer=setTimeout(step, 1050);
       };
       step();
@@ -3184,9 +3186,11 @@ function showScene(skipFirstTyping=false){
         }, pressed?450:0);
       }, 800);
     } else {
-      /* 유저 프롬프트만 있는 씬은 AI 리빌 대기(revealMs+700)가 불필요 → 뜸들이지 않고 바로 다음 씬으로 */
+      /* 유저 프롬프트만 있는 씬, 또는 '생성 중' process(로딩) 씬은 AI 리빌 대기(revealMs+700)가 불필요
+         → 스켈레톤이 곧 결과로 넘어가도록 dwell만 적용 */
       const hasAI=scene.chat && scene.chat.some(m=>m.role==='ai');
-      const d=hasAI?Math.max(scene.dwell||DWELL_MS, revealMs+700):(scene.dwell||280);
+      const isProcess=scene.chat && scene.chat.some(m=>m.process);
+      const d=(hasAI&&!isProcess)?Math.max(scene.dwell||DWELL_MS, revealMs+700):(scene.dwell||280);
       if(scene.chipAfter){
         const myGen=gen; const tapAt=Math.max(revealMs+700, 1300);
         setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
