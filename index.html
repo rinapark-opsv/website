@@ -1824,6 +1824,26 @@ a { text-decoration: none; color: inherit; }
 .ed-toggle.off{ background:var(--border-strong); }
 .ed-toggle.off::after{ left:2px; right:auto; }
 .ed-logic-chip{ font-size:11px; color:var(--blue); background:var(--blue-soft); border-radius:6px; padding:3px 8px; line-height:1.4; text-align:right; }
+/* 설정 패널 — 유형별 구조 (응답 설정 / 문항 설정) */
+.ed-set-sec{ display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:var(--blue); letter-spacing:.02em; margin:16px 0 2px; }
+.ed-set-sec:first-of-type{ margin-top:10px; }
+.ed-set-sec i{ font-size:14px; }
+.ed-info{ font-size:12px; color:var(--text-tertiary); margin-left:3px; vertical-align:-1px; }
+.ed-set-btn{ font-size:11px; font-weight:600; color:var(--text-secondary); border:1px solid var(--border-strong); border-radius:6px; padding:3px 11px; }
+.ed-num{ font-size:11px; font-weight:600; color:var(--text-primary); border:1px solid var(--border-strong); border-radius:6px; padding:3px 8px; background:#fff; }
+.ed-set-row.col{ flex-direction:column; align-items:stretch; gap:9px; }
+.ed-set-rowtop{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.ed-set-rowtop .k{ color:var(--text-secondary); }
+.ed-set-acts{ display:flex; gap:8px; color:var(--text-tertiary); font-size:13px; }
+.ed-set-acts i:first-child{ color:var(--blue); }
+.ed-logic-box{ background:var(--blue-faint); border:1px solid var(--blue-soft); border-radius:8px; padding:9px 10px; }
+.ed-logic-cap{ font-size:10px; font-weight:700; color:var(--blue); margin-bottom:5px; }
+.ed-logic-cond{ font-size:11.5px; color:var(--text-primary); background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px 9px; line-height:1.45; }
+.ed-radio-grp{ display:flex; flex-direction:column; gap:7px; }
+.ed-radio-opt{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:7px 10px; }
+.ed-radio-opt.on{ color:var(--blue); background:var(--blue-faint); font-weight:600; }
+.ed-radio{ width:13px; height:13px; border-radius:50%; border:1.5px solid var(--border-strong); flex:none; }
+.ed-radio-opt.on .ed-radio{ border-color:var(--blue); background:radial-gradient(circle, var(--blue) 0 4px, #fff 4px); }
 /* 중앙: 문항 카드 — 전체 설문이 위아래로 이어지는 스택(스크롤 시 스크리닝 문항이 그 안에 있음을 인지) */
 .ed-canvas-col{ max-width:620px; margin:0 auto; display:flex; flex-direction:column; gap:12px; }
 .ed-canvas-sec{ font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:.04em; padding:6px 2px 0; }
@@ -2876,18 +2896,46 @@ function edFocusCard(step){
     <div class="ed-opts">${(q.opts||[]).map((t,i)=>edOptRow(t,i)).join('')}</div>
     <div class="ed-add-opt"><i class="ph ph-plus"></i>보기 추가</div></div>`;
 }
-/* 우측 설정 — 포커스 문항 기준 */
+/* 우측 설정 — 포커스 문항 유형에 따라 '응답 설정' 섹션 구조가 통째로 바뀜 (제품 충실) */
+function edSetRow(k, v, info){ return `<div class="ed-set-row"><span class="k">${k}${info?'<i class="ph ph-info ed-info"></i>':''}</span><span class="v">${v}</span></div>`; }
+function edToggle(on){ return `<span class="ed-toggle ${on?'':'off'}"></span>`; }
+/* 제시 로직이 설정돼 있으면 [설정] 버튼 대신 조건 칩 + 편집 아이콘으로 펼침 */
+function edLogicRow(label, cap, cond){
+  return `<div class="ed-set-row col"><div class="ed-set-rowtop"><span class="k">${label}<i class="ph ph-info ed-info"></i></span><span class="ed-set-acts"><i class="ph ph-pencil-simple"></i><i class="ph ph-trash"></i></span></div>
+    <div class="ed-logic-box"><div class="ed-logic-cap">${cap}</div><div class="ed-logic-cond">${cond}</div></div></div>`;
+}
 function edSettings(q){
-  const isScale=(q.type||'').includes('평가');
-  const third = q.ref ? `<div class="ed-set-row"><span class="k">보기 파이핑</span><span class="v"><span class="ed-logic-chip">${q.ref}</span></span></div>`
-    : (q.logic&&q.logic.length) ? `<div class="ed-set-row"><span class="k">표시 로직</span><span class="v"><span class="ed-logic-chip">${q.logic[0]}</span></span></div>`
-    : `<div class="ed-set-row"><span class="k">${isScale?'척도':'보기 정렬'}</span><span class="v">${isScale?'5점 (1~5)':'입력 순서'}</span></div>`;
-  return `<div class="ed-set-head">${q.n} 설정</div>
-    <div class="ed-set-row"><span class="k">문항 유형</span><span class="v">${q.type}</span></div>
-    <div class="ed-set-row"><span class="k">${isScale?'척도':'응답 개수'}</span><span class="v">${isScale?'5점 척도':(q.cons||'제한 없음')}</span></div>
-    ${third}
-    <div class="ed-set-row"><span class="k">보기 무작위 배치</span><span class="v"><span class="ed-toggle ${isScale?'off':''}"></span></span></div>
-    <div class="ed-set-row"><span class="k">필수 응답</span><span class="v"><span class="ed-toggle"></span></span></div>`;
+  const t=q.type||'';
+  const isScale=t.includes('평가'), isText=t.includes('주관'), isRank=t.includes('순위');
+  const isChoice=t.includes('객관')||isRank;
+  /* ── 응답 설정 ── */
+  let resp='';
+  if(isText){
+    resp=`<div class="ed-set-sec"><i class="ph ph-text-aa"></i>응답 설정</div>
+      ${edSetRow('글자 수 제한', `<span class="ed-num">최소 1</span><span class="ed-num">최대 500</span>`, true)}
+      ${edSetRow('응답 붙여넣기 제한', edToggle(false), true)}`;
+  } else if(isChoice){
+    const m=(q.cons||'').match(/최소\s*(\d+).*?최대\s*(\d+)/);
+    const countRow = isRank
+      ? edSetRow('순위 개수', `<span class="ed-num">${(q.cons||'TOP 3').replace(/[^0-9]/g,'').charAt(0)||'3'}개</span>`, true)
+      : m ? edSetRow('선택 가능한 보기 개수', `<span class="ed-num">최소 ${m[1]}</span><span class="ed-num">최대 ${m[2]}</span>`, true)
+      : edSetRow('선택 가능한 보기 개수', `<span class="ed-num">${t.includes('단일')?'1개':'제한 없음'}</span>`, true);
+    const optLogic = q.ref ? edLogicRow('보기 제시 로직','보기 파이핑',q.ref) : edSetRow('보기 제시 로직','<span class="ed-set-btn">설정</span>', true);
+    resp=`<div class="ed-set-sec"><i class="ph ph-list-checks"></i>응답 설정</div>
+      ${countRow}
+      ${optLogic}
+      <div class="ed-set-row col"><div class="ed-set-rowtop"><span class="k">보기 순서 랜덤화</span>${edToggle(true)}</div>
+        <div class="ed-radio-grp"><div class="ed-radio-opt on"><span class="ed-radio"></span>개별 보기 순서 랜덤화</div><div class="ed-radio-opt"><span class="ed-radio"></span>그룹별 보기 순서 랜덤화</div></div></div>
+      ${edSetRow('보기 이미지', edToggle(false))}`;
+  }
+  /* ── 문항 설정 (공통) ── */
+  const present = (q.logic&&q.logic.length) ? edLogicRow('문항 제시 로직','문항 제시 조건',q.logic[0]) : edSetRow('문항 제시 로직','<span class="ed-set-btn">설정</span>', true);
+  const ques=`<div class="ed-set-sec"><i class="ph ph-faders"></i>문항 설정</div>
+    ${present}
+    ${edSetRow('이동 로직','<span class="ed-set-btn">설정</span>', true)}
+    ${edSetRow('최소 제시 시간', edToggle(false), true)}
+    ${edSetRow('필수 응답', edToggle(true), true)}`;
+  return `<div class="ed-set-head">${q.n} 설정</div>${resp}${ques}`;
 }
 /* 풀 프레임 3패널 — 모든 문항을 컴팩트로 렌더하고, 데모가 문항별로 편집 카드로 전환 */
 function editorHTML(){
