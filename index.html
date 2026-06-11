@@ -2412,11 +2412,23 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
     const m=scene.chat[idx++];
     if(m.done||m.briefcard||m.datarow){ const prev=[...inner.querySelectorAll('.msg-ai')].reverse().find(e=>e.querySelector('.cc-stack')); if(prev) prev.remove(); }
     if(m.role==='user' && !m.name){
-      /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
       isFirstUserMsg=false;
-      clearInput();
-      inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
-      setTimeout(next, 380);
+      if(m.typed){
+        /* 입력창에 한 글자씩 타이핑 → 버블로 올려보냄 */
+        const li=$('live-input');
+        typeInto(li, m.text, ()=>{ if(!playing||myGen!==gen) return;
+          setTimeout(()=>{ if(!playing||myGen!==gen) return;
+            clearInput();
+            inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
+            setTimeout(next, 380);
+          }, 240);
+        });
+      } else {
+        /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
+        clearInput();
+        inner.insertAdjacentHTML('beforeend', msgHTML(m)); scrollChat();
+        setTimeout(next, 380);
+      }
     } else {
       inner.insertAdjacentHTML('beforeend', msgHTML(m));
       if(m.role==='ai'){
@@ -2626,14 +2638,7 @@ function previewHTML(type){
       <div class="av-doc-li">③ Brand concept acceptance</div>
       <div class="av-doc-li">④ Product evaluation</div></div>`;
     case 'collectdoc': return `<div class="av">
-      <div class="cc-doc-sec" style="margin-top:0">스크리닝</div>
-      <ul class="cc-doc-ul">
-        <li><strong>성별</strong>: 남녀 전체</li>
-        <li><strong>연령</strong>: 만 19–34세 (MZ세대)</li>
-        <li><strong>거주지</strong>: 전국</li>
-      </ul>
-      <div class="sv-divider"></div>
-      <div class="cc-doc-sec">조건별 목표</div>
+      <div class="cc-doc-sec" style="margin-top:0">조건별 목표</div>
       <div class="sv-opts">아래 표와 같이 조건별 목표를 채워드릴 거예요.</div>
       <table class="sv-table"><thead><tr><th>조건</th><th>목표 응답</th><th>비율</th></tr></thead><tbody>
       <tr><td>남성 · 19–24세</td><td>100</td><td>12.5%</td></tr>
@@ -2914,7 +2919,6 @@ function edTypeIcon(t){ t=t||''; return t.includes('평가')?'ph-sliders-horizon
 const ED_STEPS=[
   {n:'Q1',  kind:'addopt', add:'Personal care / wellness'},
   {n:'Q6',  kind:'scale',  relabel:'Neutral (3)'},
-  {n:'Q11', kind:'piping', from:'Q10', items:['COSRX','Beauty of Joseon','Laneige','Innisfree','Dr. Jart+']},
 ];
 function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-opt-num">${i+1}</span><span class="ed-opt-txt">${t}</span></div>`; }
 /* 컴팩트 카드 — 전체 설문을 위아래로 채워 맥락을 보여줌 */
@@ -2923,7 +2927,7 @@ function edCompactCard(q){
   if(q.scale) body=`<div class="ed-copts">${q.scale.map(o=>`<span class="ed-copt">${o}</span>`).join('')}</div>`;
   else if(q.opts){ const shown=q.opts.slice(0,5).map(o=>`<span class="ed-copt">${o}</span>`); if(q.opts.length>5) shown.push(`<span class="ed-copt ed-copt-more">+${q.opts.length-5}</span>`); body=`<div class="ed-copts">${shown.join('')}</div>`; }
   else if(q.text) body=`<div class="ed-copts"><span class="ed-copt">자유 응답 (long text)</span></div>`;
-  else if(q.ref) body=`<div class="ed-copts"><span class="ed-copt ed-copt-more">↑ 보기 파이핑</span></div>`;
+  else if(q.ref) body=`<div class="ed-copts"><span class="ed-copt ed-copt-more">↑ 이전 문항 보기 활용</span></div>`;
   return `<div class="ed-card compact"><div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype">${q.type}</span></div><div class="ed-qtitle">${q.q}</div>${body}</div>`;
 }
 /* 포커스(편집) 카드 — 유형별 */
@@ -2934,9 +2938,6 @@ function edFocusCard(step){
     return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">문항 유형과 척도 라벨을 바꿀 수 있어요</div>
       <div class="ed-typebar"><span class="ed-typebtn">객관식</span><span class="ed-typebtn">주관식</span><span class="ed-typebtn active">평가형 5점</span></div>
       <div class="ed-scale">${(q.scale||[]).map((s,i)=>`<div class="ed-scale-pt"><span class="ed-scale-dot">${i+1}</span><span class="ed-scale-lab">${s}</span></div>`).join('')}</div></div>`;
-  }
-  if(step.kind==='piping'){
-    return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">이전 문항 응답에서 보기를 가져옵니다 (파이핑)</div><div class="ed-pipe" id="ed-pipe"></div></div>`;
   }
   return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">보기를 추가할 수 있어요</div>
     <div class="ed-opts">${(q.opts||[]).map((t,i)=>edOptRow(t,i)).join('')}</div>
@@ -2966,7 +2967,7 @@ function edSettings(q){
       ? edSetRow('순위 개수', `<span class="ed-num">${(q.cons||'TOP 3').replace(/[^0-9]/g,'').charAt(0)||'3'}개</span>`, true)
       : m ? edSetRow('선택 가능한 보기 개수', `<span class="ed-num">최소 ${m[1]}</span><span class="ed-num">최대 ${m[2]}</span>`, true)
       : edSetRow('선택 가능한 보기 개수', `<span class="ed-num">${t.includes('단일')?'1개':'제한 없음'}</span>`, true);
-    const optLogic = q.ref ? edLogicRow('보기 제시 로직','보기 파이핑',q.ref) : edSetRow('보기 제시 로직','<span class="ed-set-btn">설정</span>', true);
+    const optLogic = q.ref ? edLogicRow('보기 제시 로직','이전 문항 기반 보기',q.ref.replace(/\s*\(보기 파이핑\)/,'')) : edSetRow('보기 제시 로직','<span class="ed-set-btn">설정</span>', true);
     resp=`<div class="ed-set-sec">응답 설정</div>
       ${countRow}
       ${optLogic}
@@ -3042,7 +3043,9 @@ function edRunAddOpt(step, myGen, cb){
   const row=document.createElement('div'); row.className='ed-opt adding';
   row.innerHTML=`<span class="ed-opt-num">${idx+1}</span><span class="ed-opt-txt"></span>`;
   opts.appendChild(row);
+  row.scrollIntoView({behavior:'smooth', block:'center'});   /* 추가되는 보기를 화면 중앙으로 팔로우 */
   setTimeout(()=>{ if(!playing||myGen!==gen) return;
+    row.scrollIntoView({behavior:'smooth', block:'center'});
     edType(row.querySelector('.ed-opt-txt'), step.add, myGen, ()=>{ row.classList.remove('adding'); row.classList.add('just-moved'); setTimeout(()=>row.classList.remove('just-moved'),1200); cb&&cb(); });
   }, 340);
 }
@@ -3051,6 +3054,7 @@ function edRunScale(step, myGen, cb){
   const mid=labs[Math.floor(labs.length/2)]; if(!mid){ cb&&cb(); return; }
   const pt=mid.closest('.ed-scale-pt');
   setTimeout(()=>{ if(!playing||myGen!==gen) return;
+    if(pt) pt.scrollIntoView({behavior:'smooth', block:'center'});   /* 편집되는 척도 지점을 화면 중앙으로 팔로우 */
     mid.textContent=''; if(pt) pt.classList.add('ed-edited-pt');
     edType(mid, step.relabel, myGen, ()=>{ setTimeout(()=>{ if(pt) pt.classList.remove('ed-edited-pt'); },1100); cb&&cb(); });
   }, 320);
@@ -3129,6 +3133,20 @@ function showScene(skipFirstTyping=false){
   else if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
   else if(scene.press){ closeArtifact(); }    // 더보기/클릭으로 여는 흐름 → 완료 카드까진 패널 닫힘, press 때 오픈
   else updateArtifact(scene);
+  /* 스켈레톤 → 실제 미리보기 모핑 (설문이 연동·생성되는 느낌) */
+  if(scene.skelTo){
+    const myGen=gen;
+    setTimeout(()=>{ if(!playing||myGen!==gen) return;
+      const ab=$('artifact-body'); if(!ab) return;
+      ab.style.transition='opacity .24s ease'; ab.style.opacity='0';
+      setTimeout(()=>{ if(!playing||myGen!==gen) return;
+        lastArtifact=scene.skelTo;
+        $('artifact-title').textContent=PANEL_TITLES[scene.skelTo]||scene.hl;
+        ab.innerHTML=previewHTML(scene.skelTo); ab.scrollTop=0;
+        requestAnimationFrame(()=>{ ab.style.opacity='1'; });
+      }, 250);
+    }, scene.skelMs||1000);
+  }
   playSceneMessages(scene, ()=>{ if(!playing) return; clearTimeout(timer);
     if(scene.editor){
       const myGen=gen;
