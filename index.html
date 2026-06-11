@@ -123,11 +123,16 @@ a { text-decoration: none; color: inherit; }
   content: '';
   position: absolute; inset: 0;
   background: rgba(10, 15, 40, 0.16);
-  pointer-events: none; z-index: 0;
+  pointer-events: none; z-index: 1;
 }
-/* 탭별 배경 이미지 (researcher=기본 마블, analyst=신규) */
-.stage.bg-analyst { background-image: url('bg-analyst.png'); }
-.stage.bg-consumer { background-image: url('bg-consumer.png'); }
+/* 탭별 배경 크로스페이드 레이어 (researcher=기본 마블 .stage 위에 겹침, analyst/consumer는 버퍼로 교차) */
+.stage-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity .55s ease;
+  z-index: 0; pointer-events: none;
+}
+.stage-bg.show { opacity: 1; }
 /* 목업 뒤 4px 글라스 이펙트 보더 */
 .frame-wrap {
   position: relative; z-index: 2;
@@ -1838,6 +1843,30 @@ a { text-decoration: none; color: inherit; }
 .ed-qhint{ font-size:11px; color:#9A9A9A; margin-bottom:13px; }
 .ed-copts{ display:flex; flex-wrap:wrap; gap:6px; }
 .ed-copt{ font-size:11.5px; color:var(--text-secondary); background:var(--bg-hover); border-radius:7px; padding:5px 10px; }
+.ed-copt-more{ color:var(--blue); background:var(--blue-soft); font-weight:600; }
+/* 편집 액션 — 보기 추가(타이핑) */
+.ed-opt.adding{ border-color:var(--blue); box-shadow:0 0 0 3px rgba(71,129,255,.12); }
+.ed-caret{ border-right:1.5px solid var(--blue); animation:edBlink 1s steps(1) infinite; padding-right:1px; }
+@keyframes edBlink{ 50%{ border-color:transparent; } }
+/* 편집 액션 — 척도·문항유형 */
+.ed-typebar{ display:inline-flex; gap:3px; background:#EEE; border-radius:8px; padding:3px; margin-bottom:14px; }
+.ed-typebtn{ font-size:11.5px; font-weight:600; color:var(--text-secondary); padding:4px 11px; border-radius:6px; }
+.ed-typebtn.active{ background:#fff; color:var(--blue); box-shadow:0 1px 2px rgba(0,0,0,.07); }
+.ed-scale{ display:flex; flex-direction:column; gap:8px; }
+.ed-scale-pt{ display:flex; align-items:center; gap:11px; background:#fff; border:1px solid var(--border); border-radius:9px; padding:9px 12px; font-size:13px; transition:border-color .2s, background .2s; }
+.ed-scale-pt.ed-edited-pt{ border-color:var(--blue); background:var(--blue-faint); }
+.ed-scale-dot{ width:20px; height:20px; border-radius:50%; background:var(--blue-soft); color:var(--blue); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none; }
+.ed-scale-lab{ color:var(--text-primary); }
+/* 편집 액션 — 표시로직·파이핑 */
+.ed-pipe-rule{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--blue); background:var(--blue-faint); border:1px dashed #BBD0FF; border-radius:9px; padding:9px 12px; opacity:0; transform:translateY(-5px); transition:opacity .35s ease, transform .35s ease; }
+.ed-pipe-rule.show{ opacity:1; transform:none; }
+.ed-pipe-rule i{ font-size:14px; }
+.ed-pipe-badge{ margin-left:auto; font-size:10.5px; font-weight:700; background:var(--blue); color:#fff; border-radius:5px; padding:2px 7px; }
+.ed-pipe-rows{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.ed-pipe-row{ display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:13px; color:var(--text-primary); opacity:0; transform:translateY(7px); transition:opacity .3s ease, transform .3s ease; }
+.ed-pipe-row.show{ opacity:1; transform:none; }
+.ed-pipe-row .ed-opt-txt{ flex:1; }
+.ed-pipe-tag{ margin-left:auto; font-size:10.5px; color:var(--blue); background:var(--blue-soft); border-radius:5px; padding:2px 7px; flex:none; }
 .ed-opts{ display:flex; flex-direction:column; }
 .ed-opt{ display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--border); border-radius:9px; padding:9px 11px; font-size:13px; color:var(--text-primary);
   transition:transform .42s cubic-bezier(.32,.72,0,1), box-shadow .2s ease, border-color .2s ease, background .2s ease; }
@@ -1869,6 +1898,8 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <div class="stage">
+<div class="stage-bg" data-buf="a"></div>
+<div class="stage-bg" data-buf="b"></div>
 <div class="frame-wrap">
 <div class="frame">
 <div class="app">
@@ -2196,7 +2227,7 @@ function renderSidebar(){
     const s=SCENARIOS[i]; if(!s) return;
     const st=statuses[i], on=i===sIdx;
     const right=st==='active'?'<span class="sc-status"><span class="sc-spinner"></span></span>':st==='done'?'<span class="sc-status"><i class="ph-bold ph-check sc-done"></i></span>':'';
-    const sub=on?`<span class="chat-item-sub">${s.scenes[scIdx].hl}</span>`:'';
+    const sub='';   /* 현재 단계 라벨(hl) 미노출 */
     h+=`<div class="chat-item${on?' active':''}" onclick="playScenario(${i})">
       <span class="chat-item-main"><span class="chat-item-label">${s.label}</span>${sub}</span>
       ${right}
@@ -2810,123 +2841,148 @@ function openArtifact(){ document.querySelector('.app').classList.add('artifact-
 function closeArtifact(){ document.querySelector('.app').classList.remove('artifact-open'); }
 function toggleArtifact(){ document.querySelector('.app').classList.toggle('artifact-open'); }
 
-/* ── 설문 편집 플로팅 창 ──
-   designsurvey(미리보기)가 뜬 뒤, 앞으로 한 겹 떠오르는 편집 창.
-   스크리닝 문항의 보기를 끌어서 재정렬하는 모션으로 '실제 에디팅'을 전달. */
-const ED_OPTS=['스킨케어','메이크업','헤어/바디','기타','향수'];   /* 초기 순서 — '향수'를 '기타' 위로 끌어 올려 '기타'를 맨 끝으로 */
-function editorOptHTML(){
-  return ED_OPTS.map((t,i)=>`<div class="ed-opt">
-      <span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span>
-      <span class="ed-opt-num">${i+1}</span>
-      <span class="ed-opt-txt">${t}</span>
-      <span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span>
-    </div>`).join('');
+/* ── 설문 편집 화면 (SURVEY_C에서 직접 생성) — 문항마다 포커스를 옮겨가며 다양한 편집을 연속 시연 ── */
+function edQ(n){ for(const s of SURVEY_C.sections){ for(const q of (s.qs||[])){ if(q.n===n) return q; } } return null; }
+function edTypeIcon(t){ t=t||''; return t.includes('평가')?'ph-sliders-horizontal':t.includes('다중')||t.includes('순위')?'ph-list-checks':t.includes('주관')?'ph-text-aa':'ph-radio-button'; }
+/* 연속 편집 시나리오: 보기 추가(타이핑) → 척도·문항유형 편집 → 표시로직·파이핑 */
+const ED_STEPS=[
+  {n:'Q1',  kind:'addopt', add:'Personal care / wellness'},
+  {n:'Q6',  kind:'scale',  relabel:'Neutral (3)'},
+  {n:'Q11', kind:'piping', from:'Q10', items:['COSRX','Beauty of Joseon','Laneige','Innisfree','Dr. Jart+']},
+];
+function edOptRow(t,i){ return `<div class="ed-opt"><span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span><span class="ed-opt-num">${i+1}</span><span class="ed-opt-txt">${t}</span><span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span></div>`; }
+/* 컴팩트 카드 — 전체 설문을 위아래로 채워 맥락을 보여줌 */
+function edCompactCard(q){
+  let body='';
+  if(q.scale) body=`<div class="ed-copts">${q.scale.map(o=>`<span class="ed-copt">${o}</span>`).join('')}</div>`;
+  else if(q.opts){ const shown=q.opts.slice(0,5).map(o=>`<span class="ed-copt">${o}</span>`); if(q.opts.length>5) shown.push(`<span class="ed-copt ed-copt-more">+${q.opts.length-5}</span>`); body=`<div class="ed-copts">${shown.join('')}</div>`; }
+  else if(q.text) body=`<div class="ed-copts"><span class="ed-copt">자유 응답 (long text)</span></div>`;
+  else if(q.ref) body=`<div class="ed-copts"><span class="ed-copt ed-copt-more">↑ 보기 파이핑</span></div>`;
+  return `<div class="ed-card compact"><div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype"><i class="ph ${edTypeIcon(q.type)}"></i>${q.type}</span><span class="ed-card-tools"><i class="ph ph-dots-three"></i></span></div><div class="ed-qtitle">${q.q}</div>${body}</div>`;
 }
-/* 포커스 외 문항 — 위아래로 전체 설문을 채워 '스크리닝이 그 안에 있음'을 인지시키는 컴팩트 카드 */
-function edCompactCard(qn,type,title,opts){
-  const tIcon=type==='평가형'?'ph-sliders-horizontal':(type==='단수 선택'?'ph-radio-button':'ph-list-checks');
-  return `<div class="ed-card compact">
-      <div class="ed-card-top">
-        <span class="ed-qn">${qn}</span>
-        <span class="ed-qtype"><i class="ph ${tIcon}"></i>${type}</span>
-        <span class="ed-card-tools"><i class="ph ph-dots-three"></i></span>
-      </div>
-      <div class="ed-qtitle">${title}</div>
-      <div class="ed-copts">${opts.map(o=>`<span class="ed-copt">${o}</span>`).join('')}</div>
-    </div>`;
+/* 포커스(편집) 카드 — 유형별 */
+function edCardHead(q){ return `<div class="ed-card-top"><span class="ed-qn">${q.n}</span><span class="ed-qtype"><i class="ph ${edTypeIcon(q.type)}"></i>${q.type}</span><span class="ed-card-tools"><i class="ph ph-copy"></i><i class="ph ph-trash"></i><i class="ph ph-dots-three"></i></span></div>`; }
+function edFocusCard(step){
+  const q=edQ(step.n);
+  if(step.kind==='scale'){
+    return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">문항 유형과 척도 라벨을 바꿀 수 있어요</div>
+      <div class="ed-typebar"><span class="ed-typebtn">객관식</span><span class="ed-typebtn">주관식</span><span class="ed-typebtn active">평가형 5점</span></div>
+      <div class="ed-scale">${(q.scale||[]).map((s,i)=>`<div class="ed-scale-pt"><span class="ed-scale-dot">${i+1}</span><span class="ed-scale-lab">${s}</span></div>`).join('')}</div></div>`;
+  }
+  if(step.kind==='piping'){
+    return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">이전 문항 응답에서 보기를 가져옵니다 (파이핑)</div><div class="ed-pipe" id="ed-pipe"></div></div>`;
+  }
+  return `<div class="ed-card focus">${edCardHead(q)}<div class="ed-qtitle">${q.q}</div><div class="ed-qhint">보기를 추가하거나 끌어 정렬할 수 있어요</div>
+    <div class="ed-opts">${(q.opts||[]).map((t,i)=>edOptRow(t,i)).join('')}</div>
+    <div class="ed-add-opt"><i class="ph ph-plus"></i>보기 추가</div></div>`;
 }
-/* 풀 프레임 3패널 설문 편집 화면 (목록 · 캔버스 · 설정) */
+/* 우측 설정 — 포커스 문항 기준 */
+function edSettings(q){
+  const isScale=(q.type||'').includes('평가');
+  const third = q.ref ? `<div class="ed-set-row"><span class="k">보기 파이핑</span><span class="v"><span class="ed-logic-chip">${q.ref}</span></span></div>`
+    : (q.logic&&q.logic.length) ? `<div class="ed-set-row"><span class="k">표시 로직</span><span class="v"><span class="ed-logic-chip">${q.logic[0]}</span></span></div>`
+    : `<div class="ed-set-row"><span class="k">${isScale?'척도':'보기 정렬'}</span><span class="v">${isScale?'5점 (1~5)':'입력 순서'}</span></div>`;
+  return `<div class="ed-set-head">${q.n} 설정</div>
+    <div class="ed-set-row"><span class="k">문항 유형</span><span class="v">${q.type}</span></div>
+    <div class="ed-set-row"><span class="k">${isScale?'척도':'응답 개수'}</span><span class="v">${isScale?'5점 척도':(q.cons||'제한 없음')}</span></div>
+    ${third}
+    <div class="ed-set-row"><span class="k">보기 무작위 배치</span><span class="v"><span class="ed-toggle ${isScale?'off':''}"></span></span></div>
+    <div class="ed-set-row"><span class="k">필수 응답</span><span class="v"><span class="ed-toggle"></span></span></div>`;
+}
+/* 풀 프레임 3패널 — 모든 문항을 컴팩트로 렌더하고, 데모가 문항별로 편집 카드로 전환 */
 function editorHTML(){
+  const d=SURVEY_C;
+  let list='<div class="ed-list-head">문항 목록<span class="a">전체 편집</span></div>', canvas='';
+  d.sections.forEach(sec=>{ if(sec.end) return;
+    list+=`<div class="ed-sec-label">${sec.name}</div>`;
+    canvas+=`<div class="ed-canvas-sec">${sec.name}</div>`;
+    (sec.qs||[]).forEach(q=>{
+      list+=`<div class="ed-li" id="ed-li-${q.n}"><span class="ed-li-tag">${q.n}</span><span class="ed-li-txt">${q.q}</span></div>`;
+      canvas+=`<div class="ed-qslot" id="ed-q-${q.n}">${edCompactCard(q)}</div>`;
+    });
+  });
   return `<div class="ed-bar">
-      <div class="ed-bar-l">
-        <span class="ed-back"><i class="ph ph-caret-left"></i></span>
-        <span class="ed-doc-name">K-beauty 미국 MZ 여성 U&amp;A 설문</span>
-        <span class="ed-saved">· 방금 저장됨</span>
-      </div>
+      <div class="ed-bar-l"><span class="ed-back"><i class="ph ph-caret-left"></i></span><span class="ed-doc-name">${d.title}</span><span class="ed-saved">· 방금 저장됨</span></div>
       <div class="ed-tabs"><span class="active">편집</span><span>수집</span><span>레포트</span></div>
       <div class="ed-bar-r"><span class="ed-prev"><i class="ph ph-eye"></i>설문 미리보기</span></div>
     </div>
     <div class="ed-grid">
-      <div class="ed-list">
-        <div class="ed-list-head">문항 목록<span class="a">전체 편집</span></div>
-        <div class="ed-sec-label">스크리닝</div>
-        <div class="ed-li"><span class="ed-li-tag">SQ1</span><span class="ed-li-txt">카테고리 구매 경험</span></div>
-        <div class="ed-li active"><span class="ed-li-tag">SQ2</span><span class="ed-li-txt">구매 카테고리</span></div>
-        <div class="ed-sec-label">본 문항</div>
-        <div class="ed-li"><span class="ed-li-tag">Q1</span><span class="ed-li-txt">브랜드 인지도</span></div>
-        <div class="ed-li"><span class="ed-li-tag">Q2</span><span class="ed-li-txt">브랜드 선호도</span></div>
-        <div class="ed-li"><span class="ed-li-tag">Q3</span><span class="ed-li-txt">비구매 이유</span></div>
-        <div class="ed-li"><span class="ed-li-tag">Q4</span><span class="ed-li-txt">브랜드 이미지 평가</span></div>
-        <div class="ed-li"><span class="ed-li-tag">Q11</span><span class="ed-li-txt">추천 의향 (NPS)</span></div>
-      </div>
-      <div class="ed-canvas">
-        <div class="ed-canvas-col">
-          <div class="ed-canvas-sec">스크리닝</div>
-          ${edCompactCard('SQ1','단수 선택','최근 3개월 내 해당 카테고리 제품을 구매한 경험이 있으신가요?',['① 있다','② 없다'])}
-          <div class="ed-card focus" id="ed-focus-card">
-            <div class="ed-card-top">
-              <span class="ed-qn">SQ2</span>
-              <span class="ed-qtype"><i class="ph ph-list-checks"></i>복수 선택</span>
-              <span class="ed-card-tools"><i class="ph ph-copy"></i><i class="ph ph-trash"></i><i class="ph ph-dots-three"></i></span>
-            </div>
-            <div class="ed-qtitle">최근 3개월 내 구매하신 뷰티 카테고리를 모두 선택해 주세요.</div>
-            <div class="ed-qhint">스크리닝 · 보기를 끌어 순서를 바꿀 수 있어요</div>
-            <div class="ed-opts">${editorOptHTML()}</div>
-            <div class="ed-add-opt"><i class="ph ph-plus"></i>보기 추가</div>
-            <div class="ed-quote">'기타'는 항상 맨 끝에 두는 게 응답 편향을 줄여요 — 보기를 끌어 정리했어요.</div>
-          </div>
-          <div class="ed-canvas-sec">본 문항</div>
-          ${edCompactCard('Q1','복수 선택','다음 중 알고 계신 브랜드를 모두 선택해 주세요.',['브랜드 A','브랜드 B','브랜드 C','브랜드 D','모두 모름'])}
-          ${edCompactCard('Q2','단수 선택','가장 선호하는 브랜드 하나를 골라 주세요.',['브랜드 A','브랜드 B','브랜드 C','브랜드 D'])}
-          ${edCompactCard('Q3','복수 선택','이 브랜드를 구매하지 않은 이유는 무엇인가요?',['품질이 낮아 보여서','디자인이 별로라서','익숙하지 않아서','가격이 비싸서','기타'])}
-          ${edCompactCard('Q4','평가형','이 브랜드에 대한 인상을 평가해 주세요.',['트렌디하다','신뢰감 있다','가성비 있다'])}
-          ${edCompactCard('Q11','평가형','이 브랜드를 지인에게 추천할 의향이 얼마나 있으신가요?',['0 — 전혀 추천 안 함','···','10 — 적극 추천'])}
-        </div>
-      </div>
-      <div class="ed-set">
-        <div class="ed-set-head">SQ2 설정</div>
-        <div class="ed-set-row"><span class="k">응답 설정</span><span class="v">복수 응답</span></div>
-        <div class="ed-set-row"><span class="k">보기 정렬</span><span class="v">입력 순서</span></div>
-        <div class="ed-set-row"><span class="k">보기 무작위 배치</span><span class="v"><span class="ed-toggle off"></span></span></div>
-        <div class="ed-set-row"><span class="k">문항 표시 로직</span><span class="v"><span class="ed-logic-chip">SQ1 '있다' 응답 시</span></span></div>
-        <div class="ed-set-row"><span class="k">이동 설정</span><span class="v">다음 문항</span></div>
-        <div class="ed-set-row"><span class="k">필수 응답</span><span class="v"><span class="ed-toggle"></span></span></div>
-      </div>
+      <div class="ed-list">${list}</div>
+      <div class="ed-canvas"><div class="ed-canvas-col">${canvas}</div></div>
+      <div class="ed-set" id="ed-set">${edSettings(edQ(ED_STEPS[0].n))}</div>
     </div>`;
 }
 function openEditorScreen(myGen, done){
   const sc=$('ed-screen'); if(!sc){ done&&done(); return; }
-  ED_OPTS.splice(0, ED_OPTS.length, '스킨케어','메이크업','헤어/바디','기타','향수');  /* 매번 초기 순서로 리셋 */
   sc.innerHTML=editorHTML();
   requestAnimationFrame(()=>sc.classList.add('open'));
-  /* 스크리닝(SQ2) 카드를 가운데로 들여놓고(위/아래 문항이 살짝 보이게) → 보기 재정렬 */
-  setTimeout(()=>{ if(!playing||myGen!==gen) return; const fc=$('ed-focus-card'); if(fc) fc.scrollIntoView({behavior:'smooth',block:'center'}); }, 700);
-  setTimeout(()=>{ if(!playing||myGen!==gen) return; runReorder(myGen, done); }, 1200);
+  setTimeout(()=>{ if(!playing||myGen!==gen) return; runEditDemo(myGen, done); }, 780);
 }
 function closeEditorScreen(){ const sc=$('ed-screen'); if(sc) sc.classList.remove('open'); }
-/* 보기 재정렬 모션: '향수'(맨 끝)를 '기타'(위) 위로 한 칸 끌어 올려 '기타'를 맨 끝으로 */
-function runReorder(myGen, done){
-  const list=document.querySelector('#ed-screen .ed-opts');
-  if(!list){ done&&done(); return; }
-  const opts=[...list.querySelectorAll('.ed-opt')];
-  const moving=opts[opts.length-1], over=opts[opts.length-2];   /* 향수 ↔ 기타 */
-  if(!moving||!over){ done&&done(); return; }
-  const rowH=moving.offsetHeight+8;
-  moving.classList.add('dragging');
-  setTimeout(()=>{ if(myGen!==gen) return;
-    moving.style.transform=`translateY(${-rowH}px)`;
-    over.style.transform=`translateY(${rowH}px)`;
-  }, 360);
-  setTimeout(()=>{ if(myGen!==gen) return;
-    moving.style.transition='none'; over.style.transition='none';
-    moving.style.transform=''; over.style.transform='';
-    list.insertBefore(moving, over);                 /* 향수를 기타 앞으로 */
-    moving.classList.remove('dragging'); moving.classList.add('just-moved');
-    [...list.querySelectorAll('.ed-opt')].forEach((o,i)=>{ const n=o.querySelector('.ed-opt-num'); if(n) n.textContent=i+1; });
-    requestAnimationFrame(()=>{ moving.style.transition=''; over.style.transition=''; });
-    setTimeout(()=>moving.classList.remove('just-moved'), 1000);
-  }, 360+560);
-  setTimeout(()=>{ if(myGen===gen) done&&done(); }, 360+560+760);
+/* 타입라이터 (한 글자씩 입력) */
+function edType(el, text, myGen, cb){
+  el.classList.add('ed-caret'); let i=0;
+  (function tick(){ if(!playing||myGen!==gen) return;
+    if(i>=text.length){ el.classList.remove('ed-caret'); cb&&cb(); return; }
+    el.textContent+=text[i++]; setTimeout(tick, 52);
+  })();
+}
+/* 한 문항에 포커스: 좌측 active + 설정 갱신 + 슬롯을 편집 카드로 전환 + 스크롤 */
+function edFocusQuestion(step){
+  document.querySelectorAll('#ed-screen .ed-li.active').forEach(e=>e.classList.remove('active'));
+  const li=$('ed-li-'+step.n); if(li) li.classList.add('active');
+  const setEl=$('ed-set'); if(setEl) setEl.innerHTML=edSettings(edQ(step.n));
+  const slot=$('ed-q-'+step.n); if(slot){ slot.innerHTML=edFocusCard(step); slot.scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function edDefocus(n){ const slot=$('ed-q-'+n); if(slot) slot.innerHTML=edCompactCard(edQ(n)); }
+/* 액션별 애니메이션 */
+function edRunAddOpt(step, myGen, cb){
+  const opts=document.querySelector('#ed-q-'+step.n+' .ed-opts'); if(!opts){ cb&&cb(); return; }
+  const idx=opts.querySelectorAll('.ed-opt').length;
+  const row=document.createElement('div'); row.className='ed-opt adding';
+  row.innerHTML=`<span class="ed-grip"><i class="ph ph-dots-six-vertical"></i></span><span class="ed-opt-num">${idx+1}</span><span class="ed-opt-txt"></span><span class="ed-opt-act"><i class="ph ph-eye"></i><i class="ph ph-trash"></i></span>`;
+  opts.appendChild(row);
+  setTimeout(()=>{ if(!playing||myGen!==gen) return;
+    edType(row.querySelector('.ed-opt-txt'), step.add, myGen, ()=>{ row.classList.remove('adding'); row.classList.add('just-moved'); setTimeout(()=>row.classList.remove('just-moved'),1200); cb&&cb(); });
+  }, 340);
+}
+function edRunScale(step, myGen, cb){
+  const labs=document.querySelectorAll('#ed-q-'+step.n+' .ed-scale-lab');
+  const mid=labs[Math.floor(labs.length/2)]; if(!mid){ cb&&cb(); return; }
+  const pt=mid.closest('.ed-scale-pt');
+  setTimeout(()=>{ if(!playing||myGen!==gen) return;
+    mid.textContent=''; if(pt) pt.classList.add('ed-edited-pt');
+    edType(mid, step.relabel, myGen, ()=>{ setTimeout(()=>{ if(pt) pt.classList.remove('ed-edited-pt'); },1100); cb&&cb(); });
+  }, 320);
+}
+function edRunPiping(step, myGen, cb){
+  const pipe=$('ed-pipe'); if(!pipe){ cb&&cb(); return; }
+  pipe.innerHTML=`<div class="ed-pipe-rule"><i class="ph ph-arrow-bend-down-right"></i><span>${step.from}에서 선택한 보기만 제시</span><span class="ed-pipe-badge">파이핑</span></div><div class="ed-pipe-rows"></div>`;
+  const rule=pipe.querySelector('.ed-pipe-rule'), rows=pipe.querySelector('.ed-pipe-rows');
+  requestAnimationFrame(()=>rule.classList.add('show'));
+  let k=0; const items=step.items||[];
+  setTimeout(function add(){ if(!playing||myGen!==gen) return;
+    if(k>=items.length){ setTimeout(cb, 240); return; }
+    const r=document.createElement('div'); r.className='ed-pipe-row';
+    r.innerHTML=`<span class="ed-opt-num">${k+1}</span><span class="ed-opt-txt">${items[k]}</span><span class="ed-pipe-tag">↑ ${step.from}</span>`;
+    rows.appendChild(r); requestAnimationFrame(()=>r.classList.add('show'));
+    k++; setTimeout(add, 250);
+  }, 460);
+}
+/* 연속 편집 데모 오케스트레이터 */
+function runEditDemo(myGen, done){
+  let k=0;
+  (function step(){ if(!playing||myGen!==gen) return;
+    if(k>=ED_STEPS.length){ done&&done(); return; }
+    const st=ED_STEPS[k++];
+    edFocusQuestion(st);
+    setTimeout(()=>{ if(!playing||myGen!==gen) return;
+      const run = st.kind==='scale'?edRunScale : st.kind==='piping'?edRunPiping : edRunAddOpt;
+      run(st, myGen, ()=>{ if(!playing||myGen!==gen) return;
+        setTimeout(()=>{ if(!playing||myGen!==gen) return; edDefocus(st.n); setTimeout(step, 280); }, 1300);
+      });
+    }, 820);
+  })();
 }
 
 /* ── playback ── */
@@ -2977,9 +3033,9 @@ function showScene(skipFirstTyping=false){
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        /* 화면이 풀 프레임 편집 뷰로 전환(아티팩트처럼 슬라이드 인) → 보기 재정렬 → 홀드 → 닫고 다음 */
+        /* 화면이 풀 프레임 편집 뷰로 전환(아티팩트처럼 슬라이드 인) → 문항별 편집 연속 시연 → 홀드 → 닫고 다음 */
         openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 2600);
+          timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
         });
       }, 700);
       return;
@@ -3067,7 +3123,21 @@ function syncHeroTab(i){
   activeTab=cat;
   document.querySelectorAll('.hero-tab').forEach(t=>t.classList.toggle('active', t.dataset.cat===cat));
   const stg=document.querySelector('.stage');
-  if(stg){ stg.classList.remove('bg-analyst','bg-consumer'); if(cat==='analyst') stg.classList.add('bg-analyst'); else if(cat==='consumer') stg.classList.add('bg-consumer'); }
+  if(stg) setStageBg(stg, cat==='analyst'?"url('bg-analyst.png')":cat==='consumer'?"url('bg-consumer.png')":'none');
+}
+/* 배경 더블버퍼 크로스페이드: 들어오는 레이어를 위로 올려 페이드인 → 이전 레이어를 내림.
+   researcher(none)는 버퍼를 모두 내려 .stage 기본 마블이 드러나게 함. */
+function setStageBg(stg, img){
+  if(stg._bgImg===img) return;
+  const bufs=[...stg.querySelectorAll('.stage-bg')];
+  const cur=bufs.find(b=>b.classList.contains('show'));
+  if(img==='none'){ if(cur) cur.classList.remove('show'); stg._bgImg='none'; return; }
+  const next=bufs.find(b=>b!==cur)||bufs[0];
+  next.style.backgroundImage=img;
+  bufs.forEach(b=>b.style.zIndex='0'); next.style.zIndex='1';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('show')));
+  if(cur) setTimeout(()=>cur.classList.remove('show'), 560);
+  stg._bgImg=img;
 }
 function playScenario(i, skipFirstTyping=false){
   gen++; clearTimeout(timer); clearInterval(typingTimer); userTyping=false; hideCTA();
