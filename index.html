@@ -1006,7 +1006,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ── File attach ── */
 .file-attach-row {
-  padding: 20px 24px 26px;
+  padding: 20px 24px 36px;
 }
 .file-chip {
   display: flex; align-items: center; gap: 11px;
@@ -1292,7 +1292,7 @@ a { text-decoration: none; color: inherit; }
 @keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
 /* 첫 챗 버블: 입력창 위치(아래)에서 상단으로 자연스럽게 올라옴 */
 @keyframes bubbleRise { 0% { opacity:0; transform: translateY(210px) scale(.97); } 100% { opacity:1; transform: none; } }
-.msg-rise { animation: bubbleRise .62s cubic-bezier(.22,.61,.36,1) both !important; }
+.msg-rise { animation: bubbleRise 1.05s cubic-bezier(.22,.61,.36,1) both !important; }
 /* 파일 칩: 살짝 위에서 떨어져 자리잡는 드래그&드롭 업로드 느낌 */
 @keyframes fileDrop {
   0%   { opacity: 0; transform: translateY(-13px) scale(1.05) rotate(-1.4deg); }
@@ -1559,9 +1559,7 @@ a { text-decoration: none; color: inherit; }
 .file-chip.clickable:hover { box-shadow:0 4px 14px rgba(0,0,0,.11); }   /* 블루 대신 은은한 드롭섀도우 */
 .choice-btn { cursor:pointer; transition:border-color var(--t-fast), background var(--t-fast); }
 .choice-btn:hover { border-color:var(--blue); background:var(--bg-active); }
-.co-option { cursor:pointer; transition:border-color var(--t-fast), box-shadow var(--t-fast); }
-.co-option:hover { border-color:var(--blue-light); background:#FAFBFF; }
-.co-option.selected:hover { background:#FBFCFF; }
+.co-option:hover:not(.selected) { background:#FAFBFC; }
 
 /* 풀 설문 문서 (메인 뷰) */
 .bd-p { font-size:13px; color:var(--text-secondary); line-height:1.75; letter-spacing:-0.2px; margin:4px 0 10px; }
@@ -2153,33 +2151,20 @@ function ccData(d){
   </div>`;
 }
 function ccCollect(){
-  const pill=(t,m)=>`<span class="co-pill${m?' mint':''}">${t}</span>`;
+  const opt=(sel,ico,title,meta,rec,desc)=>`<div class="co-option${sel?' selected':''}" onclick="openPanel('collectdoc')">
+      <i class="ph ${ico} co-ico"></i>
+      <div class="co-body">
+        <div class="co-head"><span class="co-title">${title}</span>${meta?`<span class="co-meta">${meta}</span>`:''}${rec?'<span class="co-rec">추천</span>':''}</div>
+        <div class="co-desc">${desc}</div>
+      </div>
+      <span class="co-radio${sel?' on':''}"></span>
+    </div>`;
   return `<div class="co-card">
-    <div class="co-option selected" onclick="openPanel('collectdoc')">
-<span class="co-ico"><i class="ph ph-sparkle"></i></span>
-      <span class="co-body">
-        <span class="co-head"><span class="co-title">합성패널</span>${pill('약 5만원',1)}${pill('10분 내외',1)}</span>
-        <div class="co-desc">AI가 타겟 페르소나를 시뮬레이션해서 빠르게 인사이트를 얻어요.</div>
-        <div class="co-tags">${pill('탐색적 조사에 적합')}${pill('가설 검증')}${pill('빠른 시장 확인')}</div>
-      </span>
-    </div>
-    <div class="co-option" onclick="openPanel('collectdoc')">
-      <span class="co-ico"><i class="ph ph-users-three"></i></span>
-      <span class="co-body">
-        <span class="co-head"><span class="co-title">소비자 패널</span>${pill('약 120만원')}${pill('2~3일')}</span>
-        <div class="co-desc">실제 응답자에게 설문을 진행하고 확신을 얻으세요. AI가 꼭 맞는 응답자를 추천해 드려요.</div>
-        <div class="co-tags">${pill('정량적 검증 필요시')}${pill('의사결정용')}${pill('신중하고 확실한')}</div>
-      </span>
-    </div>
-    <div class="co-option" onclick="openPanel('collectdoc')">
-      <span class="co-ico"><i class="ph ph-envelope"></i></span>
-      <span class="co-body">
-        <span class="co-head"><span class="co-title">내 고객한테 보내기</span></span>
-        <div class="co-desc">이미 응답할 대상자가 있다면 바로 수집해 보세요.<br>URL 링크, 이메일, SMS, 알림톡, QR 코드 등 다양한 방법이 준비되어 있어요.</div>
-      </span>
-    </div>
-    <div class="co-start" onclick="openPanel('collectdoc')">수집 시작</div>
-  </div>`;
+    ${opt(true,'ph-sparkle','합성패널','약 5만원 · 10분 내외',true,'AI가 타겟 페르소나를 시뮬레이션해 빠르게 인사이트를 얻어요.')}
+    ${opt(false,'ph-users-three','소비자 패널','약 120만원 · 2~3일',false,'실제 응답자에게 설문을 진행해 확신을 얻어요. AI가 꼭 맞는 응답자를 추천해 드려요.')}
+    ${opt(false,'ph-envelope','내 고객한테 보내기','',false,'이미 대상자가 있다면 URL·이메일·SMS·알림톡·QR로 바로 수집해요.')}
+  </div>
+  <div class="co-start" onclick="openPanel('collectdoc')">수집 시작</div>`;
 }
 function ccDone(items){
   return '<div class="cc-stack">'+items.map(it=>{
@@ -3584,6 +3569,9 @@ document.querySelectorAll('.hero-tab').forEach(t=>t.addEventListener('click',()=
   // (채팅·아티팩트 내부 스크롤 컨테이너는 그대로 동작)
   s.textContent='html,body{overflow:hidden!important;background:transparent!important;}.page-nav,.page-headline{display:none!important;}';
   document.head.appendChild(s);
+  // 자동 스크롤 따라가기 무력화: scrollIntoView 가 임베드 뷰를 밀어올리는 현상 방지
+  // (채팅 패널 내부 scrollChat 은 element.scrollTo 라 영향 없음)
+  try { Element.prototype.scrollIntoView = function(){}; } catch(e) {}
 })();
 </script>
 </body>
