@@ -1564,11 +1564,11 @@ a { text-decoration: none; color: inherit; }
 
 /* 순차 리빌 (생성되는 듯) */
 @keyframes itemUp { from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
-.rv-hide { opacity:0 !important; }
+.rv-hide { display:none !important; }   /* 자리 차지 없이 숨김 — 생성 전 빈(하얀) 공간 방지 */
 .rv-defer { display:none !important; }
-.rv-in { animation: itemUp .34s ease both; }
+.rv-in { animation: itemUp .38s ease both; }
 /* 생성 중 라인 끝 깜빡이는 커서 (Claude처럼 한 줄씩 생성되는 느낌) */
-.rv-typing::after { content:''; display:inline-block; width:6px; height:0.98em; background:var(--blue); margin-left:3px; vertical-align:-1px; border-radius:1px; animation: caretBlink .85s steps(1) infinite; }
+.rv-typing::after { content:none; }   /* 스트리밍 커서 깜박임 제거 */
 @keyframes caretBlink { 0%,49%{opacity:.9;} 50%,100%{opacity:0;} }
 
 /* 클릭 affordance — 모든 인터랙티브 요소 */
@@ -2229,28 +2229,35 @@ function streamReveal(el, deferFollow){
   }
   revealStaged(units);
 }
-/* 본문(문단·리스트·표·출처)은 한 번에 스르륵, 카드/칩 버블은 하나씩 */
+/* 챗 인라인 생성 모션 = 아티팩트 패널 docStream(.5s/140ms 스태거)과 동일, 속도 0.8배 */
+const STREAM_DUR=625, STREAM_STAGGER=175;
+function rowsOf(block){ return block.matches&&block.matches('.chat-block') ? [...block.querySelectorAll('.cb-table tbody tr, .cb-bar-row')] : []; }
+/* 답변 본문·표·차트를 패널과 같은 부드러운 캐스케이드(겹침)로 — 뚝뚝 끊기지 않게 */
 function revealStaged(units){
   if(!units.length) return;
-  /* 텍스트 라인 = 답변 본문(한 줄씩 생성되는 느낌). 표·카드·출처·칩은 블록 단위로 빠르게 */
-  const isText=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li');
+  const myGen=gen;
   units.forEach(u=>u.classList.remove('rv-defer'));
-  units.forEach(u=>u.classList.add('rv-hide'));
-  /* 라인 길이에 비례해 머무름(타이핑 생성 느낌) */
-  const delayOf=u=> isText(u) ? Math.min(900, 280 + (u.textContent||'').trim().length*9) : 200;
-  revealMs = units.reduce((a,u)=>a+delayOf(u),0) + 220;
-  let s=0;
-  (function tick(){
-    if(s>=units.length){ if(units[units.length-1]) units[units.length-1].classList.remove('rv-typing'); return; }
-    if(s>0) units[s-1].classList.remove('rv-typing');
-    const u=units[s];
-    u.classList.remove('rv-hide'); u.classList.add('rv-in');
-    if(isText(u)) u.classList.add('rv-typing');   /* 현재 생성 중인 라인에 깜빡이는 커서 */
-    if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
-    scrollChat();
-    const d=delayOf(u); s++;
-    setTimeout(tick, d);
-  })();
+  /* atom = 실제로 하나씩 흘러나오는 단위(텍스트 라인 / 표·차트의 각 행 / 출처·칩 …) */
+  const atoms=[];
+  units.forEach(u=>{
+    const rows=rowsOf(u);
+    if(rows.length){ atoms.push({el:u}); rows.forEach(r=>atoms.push({el:r, fill:(r.querySelector?r.querySelector('.cb-bar-fill'):null)})); }
+    else atoms.push({el:u});
+  });
+  atoms.forEach(a=>a.el.classList.add('rv-hide'));
+  /* 패널 streamPanel과 동일: 고정 스태거로 예약 → 각 애니메이션(625ms)이 겹쳐 흐름 */
+  atoms.forEach((a,i)=>{
+    setTimeout(()=>{
+      if(myGen!==gen) return;
+      a.el.classList.remove('rv-hide');
+      a.el.style.opacity='0';
+      a.el.style.animation=`docStream ${STREAM_DUR}ms cubic-bezier(.4,0,.2,1) forwards`;
+      if(a.fill&&a.fill.dataset.w) setTimeout(()=>{ if(myGen===gen) a.fill.style.width=a.fill.dataset.w+'%'; }, 60);   /* 막대 등장과 동시에 0%→실값 */
+      if(a.el.classList.contains('cc-follow-chip')){ const f=a.el.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
+      scrollChat();
+    }, i*STREAM_STAGGER);
+  });
+  revealMs = atoms.length*STREAM_STAGGER + STREAM_DUR + 200;
 }
 /* 패널이 열린 뒤 꼬리질문(본문 한 번에 → 칩 하나씩)을 드러냄 */
 function revealDeferred(){
@@ -2323,7 +2330,18 @@ function renderSurveyDoc(){
   return h+`</div>`;
 }
 function $(id){ return document.getElementById(id); }
-function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(s) s.scrollTo({top:99999,behavior:'smooth'}); }
+function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(!s) return;
+  /* 긴 메시지는 상단에 고정해 위→아래로 채워지게(꽉 차면 자연 스크롤), 짧은 메시지는 하단 추적 */
+  const last=document.querySelector('#live-chat > *:last-child');
+  if(last){
+    const lastH=last.getBoundingClientRect().height;
+    if(lastH > s.clientHeight*0.6){
+      const top=s.scrollTop + (last.getBoundingClientRect().top - s.getBoundingClientRect().top) - 16;
+      s.scrollTo({top:Math.max(0,top), behavior:'smooth'}); return;
+    }
+  }
+  s.scrollTo({top:99999,behavior:'smooth'});
+}
 /* 생성 완료 → 메시지 아바타를 애니메이션(STAR)에서 솔리드 로고(STATIC_HEX)로 고정 */
 function settleAvatar(el){
   if(!el) return;
@@ -2529,8 +2547,7 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           streamReveal(aiEl, !!(m.followups && scene.open));
           const myG=gen, settleAt=Math.max(1150, revealMs+750);
           setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
-          /* 인라인 막대 차트: 블록이 드러난 뒤 0%→실제값으로 채워지는 모션 */
-          if(aiEl.querySelector('.cb-bar-fill')){ const myB=gen; setTimeout(()=>{ if(myB!==gen) return; aiEl.querySelectorAll('.cb-bar-fill').forEach(bb=>{ bb.style.width=bb.dataset.w+'%'; }); }, revealMs+220); }
+          /* 막대 채우기 모션은 streamRows()가 행 등장과 동시에 처리 */
         }
       }
       /* 파일(설문) 연동 모션: 네모 박스 스켈레톤 → 완성될 때 연동 메시지가 카드와 함께 등장 */
