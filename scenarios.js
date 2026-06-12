@@ -41,12 +41,11 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'ai',collect:true,text:'**누구에게 물어볼까요?** 브랜드 인식 조사는 탐색적 조사이기 때문에 빠르게 인사이트를 얻을 수 있는 **합성 패널**을 추천해요.'}],preview:'collectdoc',hl:'수집 대상 선택',open:'collectdoc',press:'.co-start'},
  ]},
  /* ② 분석 — 박준호 PM(결과 활용자) · media2 · 디폴트 */
- {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'교차분석·세그먼트 유의차까지, 리서처처럼 답합니다',hook:'내 컨셉 테스트 결과로 직접 비교해 보려면',scenes:[
-   {chat:[{role:'system',text:'컨셉 테스트 결과가 연동되었습니다.'},{role:'file',name:'2026 K뷰티 신제품 컨셉 테스트',sub:'컨셉 평가 · 15개 컨셉',badge:'n=1,164',open:'concepts',ftype:'survey'}],preview:'conceptds',hl:'데이터셋 연동'},
-   {chat:[{role:'user',text:'15개 컨셉의 구매 의향을 TOP2 기준으로 비교해줘'}],preview:'prompt',hl:'컨셉 비교 질문'},
-   {chat:[{role:'ai',text:'**컨셉 구매 의향 TOP2 비교** (5점 척도, 전체 BASE n=1,164)\n- 상위: **VT Reedle Shot 앰플 57.6%**, AESTURA 크림 55.9%, Primera 클렌징 54.7%[[1]]\n- 하위: Medicube Age-R 33.8%, Whoo 쿠션 28.9%\n\n핵심 인사이트 3개를 함께 정리했습니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'concepts',hl:'컨셉 TOP2 비교'},
-   {chat:[{role:'user',text:'TOP2가 60% 이상인 제품 3개를 연령대별 구매의향으로 비교해줘'}],preview:'prompt',hl:'세그먼트 질문'},
-   {chat:[{role:'ai',text:'**TOP2 60%+ 컨셉 3개 · 연령대별 구매의향(TOP2)**\n3개 컨셉 모두 **30–39세가 가장 높고(약 70%)**, 40–49세가 가장 낮은 패턴이 공통으로 나타납니다.[[1]]\n색상은 신뢰수준 80%에서 통계적으로 유의한 차이입니다.',block:'agecross',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],preview:'agecross',hl:'세그먼트 유의차 검정'},
+ {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'올린 데이터를 근거로, 시각화 비교까지 바로 뽑아냅니다',hook:'내 컨셉 테스트 결과로 직접 비교해 보려면',scenes:[
+   {chat:[{role:'user',text:'이 데이터에서 15개 컨셉 중 뭐가 제일 잘 나왔는지 바로 볼 수 있어?',attach:{name:'2026 K뷰티 신제품 컨셉 테스트',ftype:'survey',sub:'컨셉 평가 · 15개 컨셉 · n=1,164'}}],hl:'컨셉 데이터 업로드',dwell:1100},
+   {chat:[{role:'ai',text:'**컨셉별 구매 의향 비교 (TOP2, 평균)**\n올려주신 데이터의 15개 컨셉을 구매 의향 5점 척도로 한 번에 집계했어요. TOP2(4~5점) 기준 **VT Reedle Shot 앰플 57.6%**가 1위, AESTURA 크림(55.9%)·Primera 클렌징(54.7%)이 뒤를 잇습니다.[[1]] 전체 BASE n=1,164 응답 기준입니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],hl:'TOP2 구매의향 자동 산출'},
+   {chat:[{role:'user',text:'상위 3개만 비교해줘'}],preview:'prompt',hl:'상위 3개 비교'},
+   {chat:[{role:'ai',text:'**구매 의향 TOP3 — 막대 비교**\n상위 3개 컨셉의 TOP2 구매 의향을 막대로 비교했어요. 1위 **VT Reedle Shot 앰플(57.6%)**과 3위 Primera(54.7%)의 격차는 **2.9%p**로 접전입니다.[[1]] 모두 같은 n=1,164 응답을 집계한 값이라 순위 비교가 그대로 유효해요.',block:'conceptbar',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],hl:'바차트 · 순위 출력'},
  ]},
  /* ③ 탐색·트래킹 — 이수민 마케터(예산·시간 없이 근거) · media3 */
  {id:'explore',label:'2026 건강기능식품 뜨는 카테고리 트렌드 탐색',persona:'이수민 마케터 · 근거 필요',panel:false,tagline:'보유 데이터가 없어도, 마켓플레이스 데이터로 근거를 만듭니다',hook:'우리 카테고리 트렌드를 직접 찾아보려면',scenes:[
@@ -57,12 +56,9 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
    {chat:[{role:'ai',text:'**30대 핵심 인사이트**\n- **속성**: 효능·성분·후기를 최우선 (효능 48.8%)[[1]]\n- **제형**: 알약/캡슐 79.8%, ‘먹기 편함’으로 소형 캡슐·스틱 보조\n- **채널**: 네이버 46.2% · 쿠팡 44.9% + 약국/대형마트(신뢰)\n- **가격**: 5~10만원 25%가 최다',source:'출처 1',sources:[{n:1,title:'2026 건강기능식품 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈',open:'library'}]}],preview:'trendins',hl:'세그먼트 인사이트'},
  ]},
  /* ⑦ Proof Seeker — 소형 K뷰티 브랜드 마케터 · 미국 진출 (가설→근거→보고서) */
- {id:'proof',label:'미국 진출 가설 근거 탐색 → 투자자용 기회 보고서',persona:'이서연 · 소형 K뷰티 브랜드 마케터',tagline:'내가 세운 가설을, 출처 있는 근거로 백업합니다',hook:'내 가설을 데이터 근거로 백업하려면',panel:false,scenes:[
-   {chat:[{role:'user',text:'미국 진출 덱 쓰는 중인데, K뷰티 루틴이 미국에서 뜰 거고 그 중에 토너패드나 스팟케어가 유망하단 근거 있어?'}],preview:'prompt',hl:'가설 + 근거 요청',dwell:200},
-   {chat:[{role:'ai',text:'네, 출처에 바로 있어요. **2025 미국 K-뷰티 트렌드 데이터** 기준이에요.[[1,2]]\n- **토너패드는 ‘쓸 의향’이 35.2%인데 지금 쓰는 사람은 21.0%** — 14%p가 비어 있어요. 부스팅 에센스는 의향 35.5% vs 현재 18.4%로 격차가 더 큽니다.\n- ‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위가 딱 부스팅 에센스·토너패드라, 가설이 숫자로 그대로 맞아요.',block:'proofgap',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}],followups:['‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘','경쟁 K뷰티 브랜드 인지도도 같이 볼게요','이 근거로 투자자 덱용 보고서 만들어줘']}],preview:'prompt',hl:'인접 근거 확인 (의향-보급 Gap)',chipAfter:'.cc-follow-chip'},
-   {chat:[{role:'user',text:'‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘'},{role:'ai',text:'**핵심 타깃은 30대**예요. 토너패드 포함 확장 카테고리 4개 전부에서 향후·신규 사용 의향이 제일 높아요.[[1]]\n- **40대는 ‘필요하면 쓴다’는 잠재층** — 지금은 덜 쓰지만, 토너패드·기초에서 ‘쓸 의향’과의 격차가 특히 큽니다.\n- 30대 코어·40대 잠재 패턴이 또렷합니다.',block:'proofcross',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}],followups:['이 근거로 투자자 덱용 보고서 만들어줘','첫 구매로 넘어오는 지점도 짚어줘']}],preview:'prompt',hl:'연령대별 교차 (30대 코어·40대 Gap)',chipAfter:'.cc-follow-chip'},
-   {chat:[{role:'user',text:'이 근거로 투자자 덱용 보고서 만들어줘'},{role:'ai',process:[{t:'보고서 작성 중...',b:['근거와 차트를 헤드라인 중심으로 묶고, 숫자마다 출처를 붙이고 있어요.','투자자·바이어가 그대로 인용할 수 있는 형태로 맞추는 중이에요.']}]}],preview:'prompt',hl:'보고서 작성 중',dwell:1600},
-   {chat:[{role:'ai',datarow:{name:'미국 스킨케어 기회 지도 — 성장 카테고리·연령 타깃·진입 우선순위',meta:'보고서 · 방금 생성됨',open:'report'},text:'**투자자용 기회 보고서 나왔어요.** 헤드라인 인사이트 5개에 차트랑 출처(데이터 2개·표본/표본오차)까지 다 붙였어요. 우측에서 전체 확인해보세요.',followups:['슬라이드용 한 줄로 요약해줘','바이어용 1페이저로 만들어줘']}],hl:'기회 보고서 완성',open:'report',press:'.cc-data'},
+ {id:'proof',label:'토너패드 미국 진출 가설 근거 보고서',persona:'이서연 · 소형 K뷰티 브랜드 마케터',tagline:'가설을 데이터 근거로, 그래프 보고서까지',hook:'내 가설을 데이터 근거로 백업하려면',panel:false,scenes:[
+   {chat:[{role:'user',text:'K뷰티 루틴이 미국에서 뜰 거라 토너패드 진출에 대한 가설을 뒷받침하고 싶어. 데이터 근거를 찾고 보고서까지 만들어줘'}],preview:'prompt',hl:'가설 + 근거 요청',dwell:200},
+   {chat:[{role:'ai',datarow:{name:'토너패드 미국 진출 기회 보고서',meta:'보고서 · 방금 생성됨',open:'report'},text:'**데이터 근거를 찾아 보고서로 정리했어요.** 미국 K-뷰티·뷰티 트렌드 데이터 기준이에요.[[1,2]] 근거를 하나씩 정리하고 차트로 시각화했어요 — 우측에서 확인하세요.',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}]}],hl:'데이터 근거 → 그래프 보고서',open:'report',press:'.cc-data'},
  ]},
  /* ⑧ 타겟 페르소나 탐색 — 검색→세그먼트→가상 소비자 인터뷰 (Figma 신규 UI) */
  {id:'persona',label:'제로 탄산음료 타깃 탐색 → 가상 소비자 인터뷰',persona:'정우진 마케터 · 신제품 검토',tagline:'가설이 없어도, 데이터가 타깃을 찾아 대화로 잇습니다',hook:'우리 신제품 타깃을 찾아 가상 인터뷰까지 해보려면',scenes:[

@@ -678,6 +678,20 @@ a { text-decoration: none; color: inherit; }
   max-width: 72%;
   letter-spacing: -0.4px;
 }
+/* 유저 메시지에 첨부된 파일(질문과 함께 올라온 데이터) — 우측 정렬 */
+.user-stack { display:flex; flex-direction:column; align-items:flex-end; gap:9px; max-width:72%; }
+.user-stack .user-bubble { max-width:100%; }
+.user-attach {
+  display:inline-flex; align-items:center; gap:9px;
+  background:#fff; border:1px solid var(--border); border-radius:11px;
+  padding:8px 13px 8px 9px; box-shadow:0 1px 3px rgba(0,0,0,0.05); max-width:100%;
+  animation: fileDrop .52s cubic-bezier(.34,1.4,.5,1) both; transform-origin:100% 0;
+}
+.user-attach-ico { width:28px; height:28px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.user-attach-ico .ftype-ic { width:28px; height:28px; display:block; }
+.user-attach-info { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.user-attach-name { font-size:12.5px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-attach-sub { font-size:11px; color:var(--text-tertiary); letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* AI message */
 .msg-ai { margin-bottom: 10px; padding-left: 24px; width: 80%; }
@@ -1553,6 +1567,9 @@ a { text-decoration: none; color: inherit; }
 .rv-hide { opacity:0 !important; }
 .rv-defer { display:none !important; }
 .rv-in { animation: itemUp .34s ease both; }
+/* 생성 중 라인 끝 깜빡이는 커서 (Claude처럼 한 줄씩 생성되는 느낌) */
+.rv-typing::after { content:''; display:inline-block; width:6px; height:0.98em; background:var(--blue); margin-left:3px; vertical-align:-1px; border-radius:1px; animation: caretBlink .85s steps(1) infinite; }
+@keyframes caretBlink { 0%,49%{opacity:.9;} 50%,100%{opacity:0;} }
 
 /* 클릭 affordance — 모든 인터랙티브 요소 */
 .file-chip.clickable { cursor:pointer; transition:box-shadow var(--t-fast), opacity var(--t-fast); }
@@ -1742,6 +1759,19 @@ a { text-decoration: none; color: inherit; }
 .cb-mk.up { color:#EC7669; } .cb-mk.dn { color:#4893FF; }
 .cb-table tr.cb-grp td { border-top:1px solid var(--border); }
 .cb-table td.cb-gap { color:var(--text-secondary); }
+/* TOP3 순위 행 강조 + 랭크 배지 */
+.cb-table tr.cb-rank td { background:rgba(71,129,255,0.04); }
+.cb-table tr.cb-rank:hover td { background:rgba(71,129,255,0.08); }
+.cb-rk { display:inline-flex; align-items:center; justify-content:center; width:17px; height:17px; border-radius:50%; background:var(--blue); color:#fff; font-size:10px; font-weight:700; margin-right:8px; vertical-align:middle; }
+/* ── 인라인 막대 차트 (제품: 답변 안 시각화) ── */
+.cb-chart { margin:4px 0 2px; }
+.cb-bar-row { display:flex; align-items:center; gap:10px; padding:7px 0; }
+.cb-bar-rank { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--blue); color:#fff; font-size:10.5px; font-weight:700; flex-shrink:0; }
+.cb-bar-label { width:128px; flex-shrink:0; font-size:12.5px; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cb-bar-track { flex:1; height:16px; background:#F1F3F6; border-radius:4px; overflow:hidden; }
+.cb-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#4781FF,#22C0E0); transition:width 680ms cubic-bezier(.4,0,.2,1); }
+.cb-bar-row:first-child .cb-bar-fill { background:linear-gradient(90deg,#3A6BFF,#4781FF); }
+.cb-bar-val { width:46px; flex-shrink:0; text-align:right; font-size:13px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
 
 /* ── 클릭형 파일칩 → 사이드 패널 오픈 (제품 미리보기 동작) ── */
 .file-chip.clickable { cursor:pointer; }
@@ -2202,23 +2232,24 @@ function streamReveal(el, deferFollow){
 /* 본문(문단·리스트·표·출처)은 한 번에 스르륵, 카드/칩 버블은 하나씩 */
 function revealStaged(units){
   if(!units.length) return;
-  const isBody=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li, .chat-block');
+  /* 텍스트 라인 = 답변 본문(한 줄씩 생성되는 느낌). 표·카드·출처·칩은 블록 단위로 빠르게 */
+  const isText=u=>u.matches('.ai-prose > p, .ai-prose > .md-ul > li');
   units.forEach(u=>u.classList.remove('rv-defer'));
   units.forEach(u=>u.classList.add('rv-hide'));
-  /* DOM 순서(위→아래) 유지: 연속된 본문은 한 번에, 카드/칩/출처는 하나씩 */
-  const steps=[]; let k=0;
-  while(k<units.length){
-    if(isBody(units[k])){ const grp=[]; while(k<units.length && isBody(units[k])) grp.push(units[k++]); steps.push(grp); }
-    else { steps.push([units[k++]]); }
-  }
-  revealMs = steps.length*150 + 300;
+  /* 라인 길이에 비례해 머무름(타이핑 생성 느낌) */
+  const delayOf=u=> isText(u) ? Math.min(900, 280 + (u.textContent||'').trim().length*9) : 200;
+  revealMs = units.reduce((a,u)=>a+delayOf(u),0) + 220;
   let s=0;
   (function tick(){
-    if(s>=steps.length) return;
-    steps[s++].forEach(u=>{ u.classList.remove('rv-hide'); u.classList.add('rv-in');
-      if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); } });
+    if(s>=units.length){ if(units[units.length-1]) units[units.length-1].classList.remove('rv-typing'); return; }
+    if(s>0) units[s-1].classList.remove('rv-typing');
+    const u=units[s];
+    u.classList.remove('rv-hide'); u.classList.add('rv-in');
+    if(isText(u)) u.classList.add('rv-typing');   /* 현재 생성 중인 라인에 깜빡이는 커서 */
+    if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
     scrollChat();
-    setTimeout(tick, 150);
+    const d=delayOf(u); s++;
+    setTimeout(tick, d);
   })();
 }
 /* 패널이 열린 뒤 꼬리질문(본문 한 번에 → 칩 하나씩)을 드러냄 */
@@ -2321,9 +2352,19 @@ function renderSidebar(){
 /* ── 채팅 인라인 분석 블록 (제품: 답변 안 테이블/유의차) ── */
 function chatBlock(type){
   if(type==='concepts'){
-    const rows=[['VT Reedle Shot 앰플','57.6%','20.5%','3.54'],['AESTURA 크림','55.9%','19.1%','3.50'],['Primera 클렌징(오일→폼)','54.7%','17.9%','3.52'],['Medicube 나이트 마스크','52.5%','17.1%','3.52'],['Beauty of Joseon 선스크린','48.2%','23.1%','3.38'],['Whoo 쿠션','28.9%','48.7%','2.71']];
-    return `<div class="chat-block"><div class="cb-meta">구매 의향 5점 척도 · 전체 BASE <strong>n=1,164</strong> · 15개 컨셉 중 상·하위</div>
-      <table class="cb-table"><thead><tr><th>컨셉</th><th>TOP2(4~5점)</th><th>BOTTOM2</th><th>평균</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${r[0]}</td><td>${i<3?`<strong>${r[1]}</strong>`:r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+    const rows=[['VT Reedle Shot 앰플','57.6%','20.5%','3.54'],['AESTURA 크림','55.9%','19.1%','3.50'],['Primera 클렌징(오일→폼)','54.7%','17.9%','3.52'],['Medicube 나이트 마스크','52.5%','17.1%','3.52'],['Beauty of Joseon 선스크린','48.2%','23.1%','3.38'],['COSRX 스네일 세럼','45.6%','22.0%','3.34'],['Aromatica 페미닌 워시','45.3%','26.5%','3.25'],['Dermarssance 콜라겐 필름','42.9%','30.8%','3.20'],['Menokin 비건 마스크','42.5%','27.7%','3.23'],['Petitfee 마스크','40.7%','32.0%','3.13'],['Ohora 젤네일 스트립','38.8%','39.1%','2.97'],['Round Lab 자작나무 토너','36.9%','34.5%','2.91'],['Isntree 히알루론 토너','34.2%','37.1%','2.84'],['Torriden 다이브인 세럼','31.5%','41.0%','2.77'],['Whoo 쿠션','28.9%','48.7%','2.71']];
+    return `<div class="chat-block"><div class="cb-meta">구매 의향 5점 척도 · 전체 BASE <strong>n=1,164</strong> · 15개 컨셉 전체 (TOP2 내림차순)</div>
+      <table class="cb-table"><thead><tr><th>컨셉</th><th>TOP2(4~5점)</th><th>BOTTOM2(1~2점)</th><th>평균(5점)</th></tr></thead><tbody>${rows.map((r,i)=>`<tr${i<3?' class="cb-rank"':''}><td>${i<3?`<span class="cb-rk">${i+1}</span>`:''}${r[0]}</td><td>${i<3?`<strong>${r[1]}</strong>`:r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table>
+      <div class="cb-note">TOP2 상위 3개 <strong>VT Reedle Shot 앰플·AESTURA 크림·Primera 클렌징</strong>이 구매 의향에서 앞섭니다.</div></div>`;
+  }
+  if(type==='conceptbar'){
+    const bars=[{r:1,label:'VT Reedle Shot 앰플',v:57.6},{r:2,label:'AESTURA 크림',v:55.9},{r:3,label:'Primera 클렌징',v:54.7}];
+    const max=70;   /* 트랙 기준 최대치 — 미세한 격차도 눈에 보이도록 */
+    return `<div class="chat-block"><div class="cb-meta">구매 의향 <strong>TOP2(4~5점)</strong> · 상위 3개 비교 · 전체 BASE <strong>n=1,164</strong></div>
+      <div class="cb-chart">${bars.map(b=>`<div class="cb-bar-row"><span class="cb-bar-rank">${b.r}</span><span class="cb-bar-label">${b.label}</span>
+        <div class="cb-bar-track"><div class="cb-bar-fill" data-w="${(b.v/max*100).toFixed(1)}" style="width:0%"></div></div>
+        <span class="cb-bar-val">${b.v}%</span></div>`).join('')}</div>
+      <div class="cb-note">1위 <strong>VT Reedle Shot 앰플(57.6%)</strong>과 3위 Primera(54.7%)의 격차는 <strong>2.9%p</strong>로 접전입니다.</div></div>`;
   }
   if(type==='agecross'){
     return `<div class="chat-block">
@@ -2403,6 +2444,7 @@ function msgHTML(m, skipBody=false){
   if(m.role==='persona'){ const p=PERSONAS[m.who]||{}; return `<div class="msg-persona msg-enter"><div class="pb-head"><span class="pc-av sm" style="background:${p.avc}">${p.av}</span><span class="pb-name">${p.name}</span></div><div class="pb-bubble">${m.text}</div></div>`; }
   if(m.role==='user'){
     if(m.name) return `<div class="msg-user teammate msg-enter"><div class="tm-wrap"><div class="tm-name"><span class="tm-avatar">${m.avatar}</span>${m.name}</div><div class="user-bubble teammate">${m.text}</div></div></div>`;
+    if(m.attach) return `<div class="msg-user msg-enter"><div class="user-stack"><div class="user-attach"><span class="user-attach-ico ftype">${fileIcon(m.attach.ftype)}</span><span class="user-attach-info"><span class="user-attach-name">${m.attach.name}</span>${m.attach.sub?`<span class="user-attach-sub">${m.attach.sub}</span>`:''}</span></div><div class="user-bubble">${m.text}</div></div></div>`;
     return `<div class="msg-user msg-enter"><div class="user-bubble">${m.text}</div></div>`;
   }
   // ai
@@ -2487,6 +2529,8 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           streamReveal(aiEl, !!(m.followups && scene.open));
           const myG=gen, settleAt=Math.max(1150, revealMs+750);
           setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
+          /* 인라인 막대 차트: 블록이 드러난 뒤 0%→실제값으로 채워지는 모션 */
+          if(aiEl.querySelector('.cb-bar-fill')){ const myB=gen; setTimeout(()=>{ if(myB!==gen) return; aiEl.querySelectorAll('.cb-bar-fill').forEach(bb=>{ bb.style.width=bb.dataset.w+'%'; }); }, revealMs+220); }
         }
       }
       /* 파일(설문) 연동 모션: 네모 박스 스켈레톤 → 완성될 때 연동 메시지가 카드와 함께 등장 */
@@ -3392,7 +3436,7 @@ function advance(){
 }
 /* 상단 탭 ↔ 시나리오 동기화 (v2: 3탭 매핑) */
 /* 탭별 노출 시나리오 — Researcher=C / Analyst=design·analyze·explore·proof / Consumer=persona (A·B 비노출) */
-const TAB_SCENARIOS={researcher:[0,3], analyst:[4,5,6], consumer:[7]};
+const TAB_SCENARIOS={researcher:[0,3], analyst:[6,4,5], consumer:[7]};
 let activeTab='researcher';
 /* 카테고리별 배경 오버라이드: Framer 임베드가 ?rbg=/?abg=/?cbg= 로 이미지 URL 전달.
    값이 있으면 해당 카테고리 배경을 그 이미지로, 없으면 번들 기본값 사용. */
