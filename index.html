@@ -680,7 +680,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* AI message */
-.msg-ai { margin-bottom: 10px; padding-left: 24px; width: 80%; }
+.msg-ai { margin-bottom: 18px; padding-left: 24px; width: 80%; }
 .app.artifact-open .msg-ai { width: 100%; }
 
 .ai-header {
@@ -1303,7 +1303,7 @@ a { text-decoration: none; color: inherit; }
   0%   { box-shadow: 0 0 0 3px rgba(71,129,255,0.20), 0 1px 3px rgba(0,0,0,0.05); }
   100% { box-shadow: 0 0 0 0 rgba(71,129,255,0),    0 1px 3px rgba(0,0,0,0.05); }
 }
-.msg-system { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-tertiary); font-weight: 500; margin: 14px 0 4px; }
+.msg-system { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-tertiary); font-weight: 500; margin: 20px 0 14px; }
 .msg-system .system-dot { display: none; }
 .msg-user.teammate { justify-content: flex-start; }
 .tm-wrap { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; max-width: 72%; }
@@ -1593,22 +1593,24 @@ a { text-decoration: none; color: inherit; }
 .sd-end { font-size:12px; color:var(--text-secondary); padding:10px 0; }
 
 /* ── 수집 대상 선택 카드 (Figma CollectGroup/SelectOption) ── */
-.co-card { background:#fff; border:1px solid var(--border); border-radius:13px; padding:16px; width:100%; display:flex; flex-direction:column; gap:14px; margin:14px 0; }
-.co-option { position:relative; background:#fff; border:1px solid var(--border); border-radius:13px; padding:14px 16px; display:flex; gap:13px; align-items:flex-start; }
-.co-option.selected { border:1.5px solid var(--blue); background:#FBFCFF; padding:13.5px 15.5px; }
-.co-ico { width:34px; height:34px; border-radius:9px; background:var(--bg-hover); color:var(--text-tertiary); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; transition:background var(--t-fast), color var(--t-fast); }
-.co-option.selected .co-ico { background:var(--blue-soft); color:var(--blue-deep); }
+/* 수집 채널 — 보더없는 리스트 (슬릭) */
+.co-card { background:#fff; border:1px solid var(--border); border-radius:14px; width:100%; overflow:hidden; margin:14px 0 8px; }
+.co-option { display:flex; gap:12px; align-items:center; padding:15px 16px; cursor:pointer; transition:background var(--t-fast); }
+.co-option + .co-option { border-top:1px solid var(--border); }
+.co-option.selected { background:var(--blue-soft); }
+.co-ico { font-size:19px; color:var(--text-tertiary); flex:none; transition:color var(--t-fast); }
+.co-option.selected .co-ico { color:var(--blue-deep); }
 .co-body { flex:1; min-width:0; }
-.co-head { display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:5px; }
-.co-title { font-size:15px; font-weight:700; color:var(--text-primary); letter-spacing:-0.4px; margin-right:1px; }
-.co-pill { display:inline-flex; align-items:center; height:22px; padding:0 9px; border-radius:999px; font-size:11px; font-weight:500; background:var(--bg-hover); color:var(--text-tertiary); white-space:nowrap; }
-.co-head .co-pill { height:20px; padding:0 8px; border-radius:6px; font-weight:600; background:var(--blue-soft); color:var(--blue); }
-.co-head .co-pill.mint { background:var(--blue-soft); color:var(--blue); }
-.co-desc { font-size:13px; color:var(--text-secondary); line-height:1.6; letter-spacing:-0.3px; }
-.co-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
-.co-rec { position:absolute; top:-10px; right:12px; background:var(--blue); color:#fff; font-size:11px; font-weight:600; height:22px; padding:0 11px; border-radius:999px; display:flex; align-items:center; letter-spacing:-0.2px; }
-.co-start { width:100%; height:40px; border-radius:10px; background:#0050FF; color:#fff; font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:opacity var(--t-fast); margin-top:2px; }
-.co-start:hover, .co-start:active { opacity:0.9; color:#fff; }   /* 호버/클릭: 오퍼시티 −10%만 */
+.co-head { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:3px; }
+.co-title { font-size:14px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; }
+.co-meta { font-size:12px; font-weight:500; color:var(--text-tertiary); letter-spacing:-0.2px; }
+.co-rec { font-size:10.5px; font-weight:700; color:var(--blue-deep); background:#fff; border:1px solid #BBD0FF; border-radius:5px; padding:1px 6px; letter-spacing:-0.2px; }
+.co-desc { font-size:12.5px; color:var(--text-secondary); line-height:1.55; letter-spacing:-0.2px; }
+.co-radio { width:17px; height:17px; border-radius:50%; border:1.5px solid var(--border-strong); flex:none; }
+.co-radio.on { border-color:var(--blue-deep); background:radial-gradient(circle, var(--blue-deep) 0 4.5px, #fff 4.5px); }
+.co-start { width:100%; height:42px; border-radius:12px; background:var(--blue-soft); color:var(--blue-deep); border:1px solid var(--blue-light); font-size:14px; font-weight:600; display:flex; align-items:center; justify-content:center; letter-spacing:-0.3px; cursor:pointer; transition:opacity var(--t-fast); margin:0 0 2px; }
+.msg-ai > .co-start { width:100%; }
+.co-start:hover, .co-start:active { background:var(--blue-light); }   /* 호버: 살짝 진한 연블루 */
 
 /* ── 설문 미리보기 문서 (아티팩트) ── */
 .sv-sec { font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:.04em; margin:16px 0 8px; }
