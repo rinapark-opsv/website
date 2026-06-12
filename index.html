@@ -1499,11 +1499,6 @@ a { text-decoration: none; color: inherit; }
 
 /* 자동 시연 버튼 눌림 효과 */
 .pressing { background: rgba(0,0,0,0.06) !important; border-radius: 8px; transition: background 160ms ease; }
-/* 블루 상태값 디자인 시스템 — 블루 솔리드 버튼의 호버/클릭은 회색이 아니라 블루 오퍼시티 −10% */
-.co-start.pressing, .co-start:active { background:#0050FF !important; opacity:.9 !important; color:#fff; }
-.cta-btn.pressing { background:var(--blue) !important; opacity:.9 !important; }
-.pc-talk.pressing { background:var(--blue) !important; opacity:.9 !important; }
-.send-btn.pressing { background:#0050FF !important; opacity:.9 !important; }
 
 /* 브리프 완료 카드 — 미리보기 버튼 우측 */
 .cc-briefcard .cc-head { width:100%; }
@@ -1572,8 +1567,7 @@ a { text-decoration: none; color: inherit; }
 .sd-meta { font-size:11.5px; font-weight:500; color:var(--text-tertiary); margin:5px 0 2px; }
 .sd-sec { font-size:13.5px; font-weight:600; color:var(--blue); letter-spacing:-0.3px; margin:24px 0 8px; }
 .sd-secnote { font-size:11px; color:#717D98; background:#F9F9F9; border-left:2px solid #CCDCFF; border-radius:0 6px 6px 0; padding:6px 9px; margin-bottom:6px; line-height:1.5; }
-.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; margin:0 -14px; cursor:pointer; border-radius:0; background:transparent; transition:background .22s ease, border-color .22s ease, opacity .15s ease; }   /* 텍스트는 정렬 유지, 클릭/호버 하이라이트만 좌우로 14px 바깥까지 */
-.sd-q:hover { opacity:.9; }   /* 호버 = 오퍼시티 −10% (클릭 가능 느낌) */
+.sd-q { border-top:1px solid var(--border); padding:20px 14px 18px; cursor:pointer; border-radius:0; background:transparent; transition:background .22s ease, border-color .22s ease; }
 /* 클릭(편집 진입): 쉐도우 없이 블루 fill + 보더로 선택 강조 */
 .sd-q.sd-q-sel { background:var(--blue-soft); border:1px solid var(--blue); border-radius:6px; }   /* R값 반으로(12→6) */
 .sd-q.sd-q-tap { animation: sdTap .22s cubic-bezier(.4,0,.2,1); }
@@ -1635,10 +1629,6 @@ a { text-decoration: none; color: inherit; }
 .sv-table th { color:var(--text-secondary); font-weight:600; border-bottom:1px solid var(--border); padding:5px 4px; text-align:center; white-space:nowrap; }
 .sv-table th:first-child, .sv-table td:first-child { text-align:left; }
 .sv-table td { padding:6px 4px; text-align:center; color:var(--text-secondary); border-bottom:1px solid #F3F3F3; }
-/* 수집 조건 등 문서(.bd) 안의 표 — 프로젝트 브리프와 동일한 가독성(또렷한 본문) */
-.bd .sv-table { font-size:13px; margin:10px 0 4px; }
-.bd .sv-table th { font-size:12px; color:var(--text-secondary); padding:8px 6px; }
-.bd .sv-table td { font-size:13px; color:#3D3D3D; padding:10px 6px; }
 .sv-radio { display:inline-block; width:9px; height:9px; border-radius:50%; border:1.5px solid var(--border-strong); }
 .sv-cap { font-size:10.5px; color:var(--text-tertiary); margin:2px 0 8px; }
 
@@ -1833,22 +1823,6 @@ a { text-decoration: none; color: inherit; }
 .rp-bar-track { flex:1; height:10px; background:#F0F2F6; border-radius:999px; overflow:hidden; }
 .rp-bar-fill { height:100%; border-radius:999px; background:var(--blue); transition:width 600ms cubic-bezier(.32,.72,0,1); }  /* 시퀀셜 색조는 인라인 */
 .rp-bar-val { width:42px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:var(--text-primary); }
-/* PDF 다운로드 버튼 (보고서 우상단) */
-.rp-dl { float:right; display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:var(--blue); background:var(--blue-soft); border:1px solid var(--blue-light); border-radius:8px; padding:5px 11px; cursor:pointer; transition:opacity var(--t-fast); }
-.rp-dl:hover, .rp-dl.pressing { opacity:.9; }
-.rp-dl i { font-size:14px; }
-/* 근거 강도별 분류 */
-.ev-band { border:1px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:10px; }
-.ev-head { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:8px; }
-.ev-bar { width:4px; height:14px; border-radius:2px; flex:none; }
-.ev-band.strong .ev-bar { background:#0050FF; } .ev-band.mid .ev-bar { background:#6E9BFF; } .ev-band.weak .ev-bar { background:#C2D2F5; }
-.ev-cnt { margin-left:auto; font-size:11px; font-weight:700; color:var(--text-tertiary); background:var(--bg-hover); border-radius:10px; padding:1px 8px; }
-.ev-it { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--text-secondary); line-height:1.5; padding:7px 0; border-top:1px solid var(--border); }
-.ev-it:first-of-type { border-top:none; padding-top:0; }
-.ev-tag { margin-left:auto; flex:none; font-size:9.5px; font-weight:600; color:var(--blue); background:var(--blue-soft); border-radius:5px; padding:2px 7px; white-space:nowrap; }
-/* PDF 다운로드 토스트 */
-.pdf-toast { position:absolute; left:50%; bottom:22px; transform:translateX(-50%) translateY(12px); display:flex; align-items:center; gap:8px; background:var(--text-primary); color:#fff; font-size:12px; font-weight:600; padding:9px 16px; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.18); opacity:0; transition:opacity .25s ease, transform .25s ease; pointer-events:none; z-index:60; }
-.pdf-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
 /* ═══════════════════════════════════════════════
    설문 편집 — 아티팩트 프레임이 1칼럼으로 확장되는 화면
@@ -2724,10 +2698,9 @@ function previewHTML(type){
       <div class="av-doc-li">② Source of business</div>
       <div class="av-doc-li">③ Brand concept acceptance</div>
       <div class="av-doc-li">④ Product evaluation</div></div>`;
-    case 'collectdoc': return `<div class="av bd">
-      <div class="cc-doc-title">조건별 응답 수집 목표</div>
-      <div class="sv-divider"></div>
-      <div class="bd-p">아래 표와 같이 조건별 목표를 채워드릴 거예요.</div>
+    case 'collectdoc': return `<div class="av">
+      <div class="cc-doc-sec" style="margin-top:0">조건별 목표</div>
+      <div class="sv-opts">아래 표와 같이 조건별 목표를 채워드릴 거예요.</div>
       <table class="sv-table"><thead><tr><th>조건</th><th>목표 응답</th><th>비율</th></tr></thead><tbody>
       <tr><td>남성 · 19–24세</td><td>100</td><td>12.5%</td></tr>
       <tr><td>남성 · 25–29세</td><td>100</td><td>12.5%</td></tr>
@@ -2886,29 +2859,7 @@ function previewHTML(type){
       <tr><td>스킨케어(기초)</td><td>31.9</td><td class="av-hi">33.9</td><td class="av-lo">28.8</td></tr></tbody></table>
       <div class="av-sig-note">🔴 30대 코어(전 카테고리 최고) · 🔵 40대는 현재 사용 낮으나 향후 의향 Gap 큰 잠재층</div>
       <div class="av-src"><span class="av-src-pill">출처 1</span><span class="av-src-text">2025 미국 K-뷰티 트렌드 데이터</span></div></div>`;
-    case 'proofdata': return `<div class="av">
-      <div class="cc-doc-title">관련 데이터 자동 탐색</div>
-      <div class="rp-meta">가설(토너패드 미국 진출)과 관련도 높은 데이터를 마켓플레이스·보유 데이터에서 자동 연결</div>
-      <div class="sv-divider"></div>
-      <div class="av-ds active"><span class="av-ds-dot"></span>[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터<span class="av-ds-badge">n=600</span></div>
-      <div class="av-ds active"><span class="av-ds-dot"></span>2023 미국 뷰티 트렌드 데이터<span class="av-ds-badge">n=1,000</span></div>
-      <div class="av-ds active"><span class="av-ds-dot"></span>미국 스킨케어 카테고리 사용·의향 데이터<span class="av-ds-badge">n=600</span></div>
-      <div class="sv-quote">관련 데이터 3건을 찾아 연결했어요.</div>
-      </div>`;
-    case 'proofevidence': return `<div class="av">
-      <div class="cc-doc-title">근거 강도별 분류</div>
-      <div class="rp-meta">탐색 데이터에서 가설을 뒷받침하는 근거를 강·중·약으로 분류했어요</div>
-      <div class="ev-band strong"><div class="ev-head"><span class="ev-bar"></span>강한 근거<span class="ev-cnt">2</span></div>
-        <div class="ev-it">토너패드 ‘쓸 의향’ 35.2% vs 현재 사용 21.0% — 14.2%p 미충족 수요<span class="ev-tag">2025 K뷰티</span></div>
-        <div class="ev-it">‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위 = 부스팅 에센스·토너패드<span class="ev-tag">2025 K뷰티</span></div></div>
-      <div class="ev-band mid"><div class="ev-head"><span class="ev-bar"></span>중간 근거<span class="ev-cnt">2</span></div>
-        <div class="ev-it">30대 향후/신규 의향이 확장 카테고리 전반에서 최고 — 코어 타깃<span class="ev-tag">교차분석</span></div>
-        <div class="ev-it">K-뷰티 트라이얼 의향 75% — 카테고리 확산 전제 충족<span class="ev-tag">2023 뷰티</span></div></div>
-      <div class="ev-band weak"><div class="ev-head"><span class="ev-bar"></span>약한 근거<span class="ev-cnt">1</span></div>
-        <div class="ev-it">40대 잠재 수요 — 현재 사용은 낮으나 의향 Gap 존재 (추가 검증 권장)<span class="ev-tag">교차분석</span></div></div>
-      </div>`;
     case 'report': return `<div class="av rp">
-      <div class="rp-dl" onclick="pdfToast()"><i class="ph ph-file-pdf"></i>PDF 다운로드</div>
       <div class="cc-doc-title">미국 스킨케어 기회 지도 — 성장 카테고리·연령 타깃·진입 우선순위</div>
       <div class="rp-meta">투자자·바이어용 기회 보고서 · 방금 생성됨</div>
       <div class="sv-divider"></div>
@@ -2975,7 +2926,7 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofdata:'관련 데이터 탐색',proofevidence:'근거 강도별 분류',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
+const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
 function showPanel(type){
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
@@ -2987,13 +2938,6 @@ function pressLast(sel){
   const els=document.querySelectorAll(sel); const el=els[els.length-1];
   if(el){ el.classList.add('pressing'); setTimeout(()=>el.classList.remove('pressing'), 500); }
   return !!el;
-}
-/* PDF 다운로드 완료 토스트 */
-function pdfToast(){
-  let t=document.querySelector('.pdf-toast');
-  if(!t){ t=document.createElement('div'); t.className='pdf-toast'; t.innerHTML='<i class="ph ph-check-circle"></i>PDF 다운로드 완료'; (document.querySelector('.stage')||document.body).appendChild(t); }
-  requestAnimationFrame(()=>t.classList.add('show'));
-  clearTimeout(t._tk); t._tk=setTimeout(()=>{ t.classList.remove('show'); }, 2200);
 }
 /* 프로젝트 데이터 행 클릭 → 프로젝트 선택으로 간주, 다음 대화 턴 진행 */
 function projectRowClick(){
@@ -3023,7 +2967,7 @@ function closeArtifact(){ document.querySelector('.app').classList.remove('artif
 function edBtnFor(type){ const b=$('artifact-edit-btn'); if(b) b.hidden=!(type==='surveydoc'||type==='designsurvey'); }
 /* 실제 클릭(또는 데모 누름)으로 편집창 오픈 */
 function manualOpenEditor(){
-  /* 설문/문항 클릭으로 편집창 진입 → 시연 후 그냥 끝 (닫지도, 다음으로 넘어가지도 않음) */
+  /* 설문/문항 클릭으로 편집창 진입 → 시연 후 엔터 없이 자동으로 다음 시나리오로 진행 */
   clearTimeout(timer); clearTimeout(resumeT); clearInterval(typingTimer); userTyping=false;
   const myGen=++gen; playing=true;
   const sc=$('ed-screen'); if(!sc) return;
@@ -3031,13 +2975,7 @@ function manualOpenEditor(){
   requestAnimationFrame(()=>sc.classList.add('open'));
   setTimeout(()=>{ if(!playing||myGen!==gen) return;
     runEditDemo(myGen, ()=>{ if(!playing||myGen!==gen) return;
-      timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        const ed=$('ed-screen'); if(ed) ed.style.transition='none';
-        statuses[sIdx]='done';
-        const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
-        playScenario(nx, true);
-        requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
-      }, 600);
+      timer=setTimeout(()=>{ if(!playing||myGen!==gen) return; closeEditorScreen(); setTimeout(advance, 560); }, 1100);
     });
   }, 780);
 }
@@ -3269,7 +3207,6 @@ function showScene(skipFirstTyping=false){
   renderSidebar();
   if(!scene.editor) closeEditorScreen();      // 편집 씬이 아니면 편집 화면 닫기
   if(scene.editor){ /* 편집 화면이 풀 프레임으로 슬라이드 인 — 패널 처리 불필요 */ }
-  else if(scene.pdf){ /* PDF 다운로드 씬: 직전 보고서 패널 유지 */ }
   else if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
   else if(scene.press){ closeArtifact(); }    // 더보기/클릭으로 여는 흐름 → 완료 카드까진 패널 닫힘, press 때 오픈
   else updateArtifact(scene);
@@ -3288,15 +3225,6 @@ function showScene(skipFirstTyping=false){
     }, scene.skelMs||1000);
   }
   playSceneMessages(scene, ()=>{ if(!playing) return; clearTimeout(timer);
-    if(scene.pdf){
-      /* PDF 다운로드: 보고서의 PDF 버튼 누름 → 다운로드 완료 토스트 → 다음으로 */
-      const myGen=gen;
-      timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
-        pressLast('.rp-dl'); pdfToast();
-        timer=setTimeout(advance, 2600);
-      }, 700);
-      return;
-    }
     if(scene.editor){
       const myGen=gen;
       setTimeout(()=>{ if(!playing||myGen!==gen) return;
@@ -3307,14 +3235,14 @@ function showScene(skipFirstTyping=false){
         const tap=()=>{ if(q1){ q1.classList.remove('sd-q-tap'); void q1.offsetWidth; q1.classList.add('sd-q-tap'); } };
         const enterEditor=()=>{ if(!playing||myGen!==gen) return;
           openEditorScreen(myGen, ()=>{ if(!playing||myGen!==gen) return;
-            /* 편집 시연(타이핑) 끝 → 멈추지 말고 다음 시나리오로. 편집창은 슬라이드 없이 즉시 교체(회색 복귀 방지) */
+            /* 편집 완료 → 1.5초 홀드 → 다음 시나리오로. 목업 유지·배경만 크로스페이드, 편집창 즉시 닫음 */
             timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
               const ed=$('ed-screen'); if(ed) ed.style.transition='none';
               statuses[sIdx]='done';
               const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
               playScenario(nx, true);
               requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
-            }, 600);
+            }, 1500);
           });
         };
         const goEdit=()=>{ if(!playing||myGen!==gen) return;
@@ -3464,7 +3392,7 @@ function advance(){
 }
 /* 상단 탭 ↔ 시나리오 동기화 (v2: 3탭 매핑) */
 /* 탭별 노출 시나리오 — Researcher=C / Analyst=design·analyze·explore·proof / Consumer=persona (A·B 비노출) */
-const TAB_SCENARIOS={researcher:[0,3], analyst:[6,4,5], consumer:[7]};
+const TAB_SCENARIOS={researcher:[0,3], analyst:[4,5,6], consumer:[7]};
 let activeTab='researcher';
 /* 카테고리별 배경 오버라이드: Framer 임베드가 ?rbg=/?abg=/?cbg= 로 이미지 URL 전달.
    값이 있으면 해당 카테고리 배경을 그 이미지로, 없으면 번들 기본값 사용. */
