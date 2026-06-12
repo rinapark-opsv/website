@@ -44,7 +44,7 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  {id:'analyze',label:'신제품 15개 컨셉 구매 의향 TOP2 비교 분석',persona:'박준호 PM · 결과 활용',panel:false,tagline:'올린 데이터를 근거로, 시각화 비교까지 바로 뽑아냅니다',hook:'내 컨셉 테스트 결과로 직접 비교해 보려면',scenes:[
    {chat:[{role:'user',text:'이 데이터에서 15개 컨셉 중 뭐가 제일 잘 나왔는지 바로 볼 수 있어?',attach:{name:'2026 K뷰티 신제품 컨셉 테스트',ftype:'survey',sub:'데이터'}}],hl:'컨셉 데이터 업로드',dwell:1100},
    {chat:[{role:'ai',text:'**컨셉별 구매 의향 비교 (TOP2, 평균)**\n올려주신 데이터의 15개 컨셉을 구매 의향 5점 척도로 한 번에 집계했어요. TOP2(4~5점) 기준 **VT Reedle Shot 앰플 57.6%**가 1위, AESTURA 크림(55.9%)·Primera 클렌징(54.7%)이 뒤를 잇습니다.[[1]] 전체 BASE n=1,164 응답 기준입니다.',block:'concepts',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],hl:'TOP2 구매의향 자동 산출'},
-   {chat:[{role:'user',text:'상위 3개만 비교해줘'}],preview:'prompt',hl:'상위 3개 비교'},
+   {chat:[{role:'user',text:'상위 3개만 비교해줘',typed:true}],preview:'prompt',hl:'상위 3개 비교'},
    {chat:[{role:'ai',text:'**구매 의향 TOP3 — 막대 비교**\n상위 3개 컨셉의 TOP2 구매 의향을 막대로 비교했어요. 1위 **VT Reedle Shot 앰플(57.6%)**과 3위 Primera(54.7%)의 격차는 **2.9%p**로 접전입니다.[[1]] 모두 같은 n=1,164 응답을 집계한 값이라 순위 비교가 그대로 유효해요.',block:'conceptbar',source:'Source 1',sources:[{n:1,title:'2026 K뷰티 신제품 컨셉 테스트',type:'설문',kind:'survey',emoji:'📊',open:'conceptds'}]}],hl:'바차트 · 순위 출력'},
  ]},
  /* ③ 탐색·트래킹 — 이수민 마케터(예산·시간 없이 근거) · media3 */
@@ -57,10 +57,16 @@ const SCENARIOS=[ /* ① 설계 (was C) — 리서치 흐름: 설계 */
  ]},
  /* ⑦ Proof Seeker — 소형 K뷰티 브랜드 마케터 · 미국 진출 (가설→근거→보고서) */
  {id:'proof',label:'토너패드 미국 진출 가설 근거 보고서',persona:'이서연 · 소형 K뷰티 브랜드 마케터',tagline:'가설을 데이터 근거로, 그래프 보고서까지',hook:'내 가설을 데이터 근거로 백업하려면',panel:false,scenes:[
-   {chat:[{role:'user',text:'K뷰티 루틴이 미국에서 뜰 거라 토너패드 진출에 대한 가설을 뒷받침하고 싶어. 데이터 근거를 찾고 보고서까지 만들어줘'}],preview:'prompt',hl:'가설 + 근거 요청',dwell:200},
-   {chat:[{role:'ai',text:'**2025 미국 K-뷰티 트렌드 데이터**를 확인해볼게요.[[1,2]]\n- **토너패드는 ‘쓸 의향’이 35.2%인데 지금 쓰는 사람은 21.0%** — 14%p가 비어 있어요. 부스팅 에센스는 의향 35.5% vs 현재 18.4%로 격차가 더 큽니다.\n- ‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위가 딱 부스팅 에센스·토너패드라, 가설이 숫자로 그대로 맞아요.',block:'proofgap',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}]}],preview:'prompt',hl:'데이터 근거 (의향-보급 Gap)',dwell:2800},
-   {chat:[{role:'ai',process:[{t:'보고서 작성 중...',b:['근거와 차트를 헤드라인 중심으로 묶고, 숫자마다 출처를 붙이고 있어요.','투자자·바이어가 그대로 인용할 수 있는 형태로 맞추는 중이에요.']}]}],preview:'prompt',hl:'보고서 작성 중',dwell:1800},
-   {chat:[{role:'ai',datarow:{name:'토너패드 미국 진출 기회 보고서',meta:'보고서 · 방금 생성됨',open:'report'},text:'**이 근거로 그래프 보고서까지 만들었어요.** 근거를 헤드라인·차트로 정리하고 출처를 붙였어요 — 우측에서 확인하세요.'}],hl:'그래프 보고서 완성',open:'report',press:'.cc-data'},
+   {prefill:true,chat:[
+     {role:'user',text:'토너패드 미국 진출 가설, 데이터로 근거 확인해줘'},
+     {role:'ai',text:'**2025 미국 K-뷰티 트렌드 데이터**를 확인해볼게요.[[1,2]]\n- **토너패드는 ‘쓸 의향’이 35.2%인데 지금 쓰는 사람은 21.0%** — 14%p가 비어 있어요. 부스팅 에센스는 의향 35.5% vs 현재 18.4%로 격차가 더 큽니다.\n- ‘쓰고 싶은데 아직 안 쓰는’ 카테고리 1·2위가 딱 부스팅 에센스·토너패드라, 가설이 숫자로 그대로 맞아요.',block:'proofgap',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'},{n:2,title:'2023 미국 뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}]},
+     {role:'user',text:'‘쓰고 싶은데 아직 안 쓰는’ 카테고리, 연령대로 쪼개서 보여줘'},
+     {role:'ai',text:'**핵심 타깃은 30대예요.** 토너패드 포함 확장 카테고리 4개 전부에서 향후·신규 사용 의향이 제일 높아요.[[1]]\n- **40대는 ‘필요하면 쓴다’는 잠재층** — 지금은 덜 쓰지만, 토너패드·기초에서 ‘쓸 의향’과의 격차가 특히 큽니다.\n- 30대 코어·40대 잠재 패턴이 또렷합니다.',block:'proofcross',sources:[{n:1,title:'[Eat Buy Play] 2025 미국 K-뷰티 트렌드 데이터',type:'트렌드 리포트',kind:'trend',emoji:'📈'}]},
+     {role:'user',text:'이 분석 내용에 대해서 시각화 된 보고서 작성해줘'}
+   ],preview:'prompt',hl:'분석 + 보고서 요청 (이미 생성됨)',dwell:600},
+   {chat:[{role:'ai',build:[
+     {proc:'보고서 생성 중...',procMs:3400,procPanel:'reportskel',artScroll:true,artScrollMs:5000,datarow:{name:'토너패드 미국 진출 기회 보고서',meta:'보고서 · 방금 생성됨',open:'report'},text:'**그래프 보고서가 완성됐어요.** 헤드라인·차트로 정리하고 숫자마다 출처를 붙였어요 — 우측에서 확인하세요.',open:'report'}
+   ]}],hl:'보고서 생성 → 완성 → 스크롤 (분할 아티팩트)',dwell:3600},
  ]},
  /* ⑧ 타겟 페르소나 탐색 — 검색→세그먼트→가상 소비자 인터뷰 (Figma 신규 UI) */
  {id:'persona',label:'제로 탄산음료 타깃 탐색 → 가상 소비자 인터뷰',persona:'정우진 마케터 · 신제품 검토',tagline:'가설이 없어도, 데이터가 타깃을 찾아 대화로 잇습니다',hook:'우리 신제품 타깃을 찾아 가상 인터뷰까지 해보려면',scenes:[

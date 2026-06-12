@@ -34,6 +34,9 @@
 | 유저 버블 | `bg #F1F6FF` · `text #003BDD` | 우측 사용자 발화 |
 | cc-data fill | `#F1F6FF` (=유저 버블색) · hover/press `#E7EFFF` | 데이터 카드 |
 | state | `--red #DD4040`(유의) · `--green #40B08E` · `--sky #0E9CAA` | 데이터 강조 |
+| 차트 팔레트(카테고리) | `--chart-1 #C1D7FF` · `--chart-2 #83ADFF` · `--chart-3 #0050FF` · `--chart-4 #C7AD83` · `--chart-5 #E67E22` · `--chart-6 #7B879B` | 다계열/스택 차트 카테고리 6색(계열 1~6) |
+| 막대 램프(랭킹) | `#003BDD` → `#4B80F3` → `#83ADFF` → `#C1D7FF` (→ `#C7AD83`·`#E67E22`·`#7B879B`) | **모든 단일지표 막대 공통**. 1위=가장 진한 블루→옅게, `BAR_PALETTE` 배열로 인덱스 적용. 비랭킹(연령 등)은 값 큰 순으로 진하게(`ageBarRows`). **막대:갭 ≈ 20:6(갭=바의 30%)** |
+| 차트 시그널 | `--sig-pos #0EC5D1` · `--sig-neg #F14448` | 차트 긍정/부정·높음/낮음 시그널 |
 
 ### 라운드 (황금비 스케일 8/13/21 — Apple식 중첩)
 `--r-sm 8`(칩·소형 버튼·탭 하이라이트) · `--r-md 13`(카드·버블·모달 요소) · `--r-lg 21`(입력창·프레임) · `--r-pill 9999`(pill).
@@ -112,7 +115,7 @@
 | **프로젝트 데이터(ProjectData)** | `.pd-*` — `projectdata` | 데이터 목록(아이콘·이름·메타·Dataspace AI 아웃라인 버튼·진행 배지) | design |
 | **수집 조건(Collect)** | `collectdoc` | 쿼터/대상 | design |
 | **데이터 인사이트(DataInsight)** *(신설)* | → `insights·insights2·filter·overview·crosstab·concepts·agecross·wave·trendins` 통합 | 헤더 + 표/요약 + 출처. 분석 시나리오 패널을 한 템플릿으로 | ②③⑤⑥ 리워크 대상 |
-| **기회 보고서(Report)** | `.av.rp` — `report` | 문서 위계 재사용(`.cc-doc-title`/`.cc-doc-sec`/`.cc-doc-ul`) + 출처 행(`.rp-src`) + 헤드라인(`.rp-head`, border-top) + 막대차트(`.rp-chart`/`.rp-bar-*`, hi=블루→시안 그라데). 투자자/바이어용 산출물 | ⑦ proof |
+| **기회 보고서(Report)** | `.av.rp` — `report` | 문서 위계 재사용(`.cc-doc-title`/`.cc-doc-sec`/`.cc-doc-ul`) + 출처 행(`.rp-src`) + 헤드라인(`.rp-head`, border-top) + 막대차트(`.rp-chart`/`.rp-bar-*` — 차트 시스템: 단색·직각 2px·그리드+축눈금). 투자자/바이어용 산출물 | ⑦ proof |
 | **연령 교차·Gap**(분석) | `proofgap`/`proofcross` | `.av-ct` 크로스탭 재사용(`.av-hi`/`.av-lo`/`.av-sig-badge`/`.av-src`). proof는 사이드 패널 사용(≠ analyze 인라인) | ⑦ proof |
 | **가상 소비자 상세(Persona)** | `.av.pp` — `personaHn`/`personaJh` | 이름(22/700) + 인용(`.pp-quote`) + 속성표(`.pp-attr`) + ‘생각’(`.pp-think`) + 생성 근거표(`.pp-ev`). 표 헤더=`--blue-faint` | ⑧ persona |
 
@@ -154,7 +157,8 @@
 
 ---
 
-## 7. 표 스타일 (canonical)
+## 7. 표·차트 스타일 (canonical)
+- **막대차트 시스템(ChatGPT식)** = `.cb-chart`(인라인 `conceptbar`) / `.rp-chart`(보고서 패널) 공통 규칙: **① 단색**(그라데이션·무지개 금지, `BAR_PALETTE` 인덱스색) **② 직각 막대**(radius 2px, pill 금지) **③ 그리드+축 눈금**(공통 스케일 — 막대 뒤 수직 그리드라인 `.cb-grid`/`.rp-grid`, 0 기준선만 진하게, 아래 축 `.cb-axis`/`.rp-axis`에 눈금%) **④ tabular-nums 값**. 행=grid 레이아웃(라벨·플롯·값 칼럼 고정폭), 인라인 차트 위아래 여유 마진. 색은 [차트 팔레트 토큰] 참조(랭킹 막대=역순 1위 진한 블루).
 - **인라인/패널 표 = `.cb-table` 스타일이 표준**: 13px, 숫자 우측정렬·첫 칼럼 좌측, padding 10~12, `tbody tr:hover=bg-page`, 강조 `.cb-hi=--red`·`.cb-lo=--blue-deep`. 구형 `.ai-prose table.mini`·`.av-ct`도 이 스타일로 정렬됨.
 - **제품형 크로스탭(모노톤)**: 실제 제품 analytics 화면처럼 값/배경은 모노톤(컬러·이모지 없음), 값 뒤 증감 마커만 색 — `▲`=#EC7669(`.cb-mk.up`)·`▼`=#4893FF(`.cb-mk.dn`)로 80% 유의 높음/낮음만 표시. n수 헤더(`Total(n=600)`), 격차 행(`.cb-gap`), 카테고리 그룹 구분선(`.cb-grp`), 하단 주석. 예: `chatBlock('proofcross')`·`chatBlock('proofgap')`. 분석 데이터는 **아티팩트 패널이 아닌 챗 인라인**(`block:`)으로 노출(proof는 `panel:false`).
 

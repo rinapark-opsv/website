@@ -48,6 +48,15 @@
   --blue-hover:      #2469FF;   /* Blue-08 */
   --blue-deep:       #0050FF;   /* Blue-09 */
   --navy:            #1E293B;
+  /* 차트 카테고리 팔레트 (계열 1~6) — 데이터 시각화 공통 색 시스템 */
+  --chart-1:         #C1D7FF;   /* 옅은 블루 */
+  --chart-2:         #83ADFF;
+  --chart-3:         #0050FF;   /* 진한 블루 */
+  --chart-4:         #C7AD83;   /* 탄 */
+  --chart-5:         #E67E22;   /* 오렌지 */
+  --chart-6:         #7B879B;   /* 슬레이트 */
+  --sig-pos:         #0EC5D1;   /* 시그널 — 긍정/높음 */
+  --sig-neg:         #F14448;   /* 시그널 — 부정/낮음 */
 
   /* State */
   --red:             #DD4040;   /* Red-06  — 유의 높음 */
@@ -655,7 +664,7 @@ a { text-decoration: none; color: inherit; }
 .chat-scroll {
   flex: 1; overflow-y: auto;
   padding: 20px 0;
-  scroll-behavior: smooth;
+  /* scroll-behavior smooth 제거 — 터미널식 즉시 한 줄 스크롤(스르륵 글라이드 방지) */
 }
 .chat-scroll::-webkit-scrollbar { width: 4px; }
 .chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -971,7 +980,7 @@ a { text-decoration: none; color: inherit; }
   position: relative;
 }
 .chat-input-area::before {
-  content: ''; position: absolute; left: 0; right: 0; top: -28px; height: 28px;
+  content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px;
   background: linear-gradient(rgba(255,255,255,0), var(--bg-canvas));
   pointer-events: none;
 }
@@ -1251,7 +1260,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;   /* 막대 20 : 갭 6 ≈ 0.3 비율 */
   cursor: pointer;
 }
 .artifact-bar-row:hover .artifact-bar-fill { filter: brightness(0.9); }
@@ -1265,14 +1274,14 @@ a { text-decoration: none; color: inherit; }
 }
 .artifact-bar-track {
   flex: 1;
-  height: 14px;
-  background: #F3F4F6;
-  border-radius: 3px;
+  height: 20px;
+  background: transparent;
+  border-radius: 2px;
   overflow: hidden;
 }
 .artifact-bar-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 2px;
   transition: width 500ms cubic-bezier(.4,0,.2,1);
 }
 .artifact-bar-val {
@@ -1303,7 +1312,7 @@ a { text-decoration: none; color: inherit; }
 /* 패널 문서가 문단 단위로 순차 생성되는 느낌 (스트리밍) */
 @keyframes docStream { from { opacity:0; transform: translateY(7px); } to { opacity:1; transform:none; } }
 .walk-hidden { display: none !important; }   /* walk: 등장 전 공간 차지 안 함 → 등장 시 챗이 위로 */
-@keyframes msgUp { 0% { opacity: 0; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+@keyframes msgUp { 0% { opacity: 0; } 100% { opacity: 1; } }   /* 슬라이드 없이 페이드만 — 챗 인라인은 '스윽 올라옴' 금지 */
 /* 첫 챗 버블: 입력창 위치(아래)에서 상단으로 자연스럽게 올라옴 */
 @keyframes bubbleRise { 0% { opacity:0; transform: translateY(210px) scale(.97); } 100% { opacity:1; transform: none; } }
 .msg-rise { animation: bubbleRise 1.05s cubic-bezier(.22,.61,.36,1) both !important; }
@@ -1572,6 +1581,9 @@ a { text-decoration: none; color: inherit; }
 /* 생성 중 라인 끝 깜빡이는 커서 (Claude처럼 한 줄씩 생성되는 느낌) */
 .rv-typing::after { content:none; }   /* 스트리밍 커서 깜박임 제거 */
 @keyframes caretBlink { 0%,49%{opacity:.9;} 50%,100%{opacity:0;} }
+/* ChatGPT/Claude식 텍스트 생성: 숨긴 단어 토큰은 자리도 차지하지 않다가 하나씩 흘러나옴 */
+.tok-hide { display:none; }
+@keyframes streamFade { from{opacity:0;} to{opacity:1;} }
 
 /* 클릭 affordance — 모든 인터랙티브 요소 */
 .file-chip.clickable { cursor:pointer; transition:box-shadow var(--t-fast), opacity var(--t-fast); }
@@ -1737,7 +1749,7 @@ a { text-decoration: none; color: inherit; }
 .av-ds.active { box-shadow:0 0 0 1px var(--blue); }
 
 /* ── 채팅 인라인 분석 블록 (제품 답변 안 테이블) ── */
-.chat-block { margin:14px 0 6px; }
+.chat-block { margin:16px 0 6px; }
 .cb-meta { font-size:13px; color:var(--text-secondary); margin-bottom:12px; letter-spacing:-0.3px; line-height:20px; }
 .cb-meta strong { color:var(--text-primary); font-weight:600; }
 .cb-bullets { margin:2px 0 14px; padding-left:18px; }
@@ -1746,9 +1758,9 @@ a { text-decoration: none; color: inherit; }
 .cb-callout { background:#F9F9F9; border-radius:12px; padding:12px 16px; font-size:13px; color:var(--text-secondary); line-height:20px; margin-bottom:14px; letter-spacing:-0.3px; }
 .cb-callout strong { color:var(--text-primary); font-weight:600; }
 .cb-table { border-collapse:collapse; width:100%; font-size:13px; margin:4px 0; }
-.cb-table th { text-align:right; color:var(--text-secondary); font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; letter-spacing:-0.3px; line-height:1.35; vertical-align:bottom; }
+.cb-table th { text-align:right; color:var(--text-secondary); font-weight:600; padding:7px 12px; border-bottom:1px solid var(--border); white-space:nowrap; letter-spacing:-0.3px; line-height:1.35; vertical-align:bottom; }
 .cb-table th:first-child, .cb-table td:first-child { text-align:left; color:var(--text-primary); }
-.cb-table td { text-align:right; padding:11px 12px; border-bottom:1px solid var(--border); color:var(--gray-10); letter-spacing:-0.3px; }
+.cb-table td { text-align:right; padding:6px 12px; border-bottom:1px solid var(--border); color:var(--gray-10); letter-spacing:-0.3px; }
 .cb-table td strong { color:var(--text-primary); font-weight:700; }
 .cb-table tbody tr:hover { background:var(--bg-page); }
 .cb-hi { color:var(--red); font-weight:700; }
@@ -1761,19 +1773,27 @@ a { text-decoration: none; color: inherit; }
 .cb-mk.up { color:#EC7669; } .cb-mk.dn { color:#4893FF; }
 .cb-table tr.cb-grp td { border-top:1px solid var(--border); }
 .cb-table td.cb-gap { color:var(--text-secondary); }
-/* TOP3 순위 행 강조 + 랭크 배지 */
-.cb-table tr.cb-rank td { background:rgba(71,129,255,0.04); }
-.cb-table tr.cb-rank:hover td { background:rgba(71,129,255,0.08); }
+/* TOP3 순위 행 — 배경 하이라이트 없이 랭크 배지만 */
+.cb-table tr.cb-rank:hover td { background:var(--bg-page); }
 .cb-rk { display:inline-flex; align-items:center; justify-content:center; width:17px; height:17px; border-radius:50%; background:var(--blue); color:#fff; font-size:10px; font-weight:700; margin-right:8px; vertical-align:middle; }
-/* ── 인라인 막대 차트 (제품: 답변 안 시각화) ── */
-.cb-chart { margin:4px 0 2px; }
-.cb-bar-row { display:flex; align-items:center; gap:10px; padding:7px 0; }
-.cb-bar-rank { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:var(--blue); color:#fff; font-size:10.5px; font-weight:700; flex-shrink:0; }
-.cb-bar-label { width:128px; flex-shrink:0; font-size:12.5px; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.cb-bar-track { flex:1; height:16px; background:#F1F3F6; border-radius:4px; overflow:hidden; }
-.cb-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#4781FF,#22C0E0); transition:width 680ms cubic-bezier(.4,0,.2,1); }
-.cb-bar-row:first-child .cb-bar-fill { background:linear-gradient(90deg,#3A6BFF,#4781FF); }
-.cb-bar-val { width:46px; flex-shrink:0; text-align:right; font-size:13px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; }
+/* 챗 인라인 차트는 보더 박스(카드)로 — 메타+차트를 감싸고, 노트는 박스 밖 */
+.cb-card { border:1px solid var(--border); border-radius:var(--r-sm); padding:15px 18px 7px; background:transparent; margin:2px 0; }
+.cb-card .cb-meta { margin-bottom:4px; }
+.cb-card .cb-chart { margin:6px 0 12px; }
+/* ── 인라인 막대 차트 — 단색·직각·그리드 스케일(ChatGPT식 데이터 차트) ── */
+.cb-chart { position:relative; margin:24px 0 20px; padding:8px 0 30px; }
+.cb-grid { position:absolute; top:8px; bottom:30px; left:165px; right:56px; pointer-events:none; z-index:0; }
+.cb-grid i { position:absolute; top:0; bottom:0; width:1px; background:#EEF1F6; }
+.cb-grid i:first-child { background:#E2E6EC; }   /* 0 기준선 살짝 진하게 */
+.cb-axis { position:absolute; left:165px; right:56px; bottom:6px; height:14px; pointer-events:none; }
+.cb-axis span { position:absolute; transform:translateX(-50%); font-size:10px; color:var(--text-tertiary); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.cb-bar-row { display:grid; grid-template-columns:17px 128px 1fr 46px; align-items:center; gap:10px; padding:3px 0; position:relative; z-index:1; }   /* 막대 20 : 갭 6 ≈ 0.3 비율 */
+.cb-bar-rank { display:inline-flex; align-items:center; justify-content:center; width:17px; height:17px; border-radius:4px; background:#ECF1FA; color:var(--blue); font-size:10px; font-weight:700; }
+.cb-bar-row.is-top .cb-bar-rank { background:var(--blue); color:#fff; }
+.cb-bar-label { font-size:12.5px; color:var(--text-primary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cb-bar-track { height:20px; background:transparent; position:relative; }
+.cb-bar-fill { height:100%; border-radius:2px; background:var(--chart-3); transition:width 680ms cubic-bezier(.4,0,.2,1); }   /* 색은 카테고리 인덱스로 인라인 지정 */
+.cb-bar-val { text-align:right; font-size:13px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; font-variant-numeric:tabular-nums; }
 
 /* ── 클릭형 파일칩 → 사이드 패널 오픈 (제품 미리보기 동작) ── */
 .file-chip.clickable { cursor:pointer; }
@@ -1841,20 +1861,35 @@ a { text-decoration: none; color: inherit; }
 .pp-ev td { font-size:11.5px; color:var(--text-secondary); padding:8px 9px; border:1px solid var(--border); }
 
 /* ════ 신규: Proof Seeker 보고서 패널 ════ */
-.rp-meta { font-size:11.5px; color:var(--text-tertiary); margin:-14px 0 0; }
-.rp-src { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline; padding:7px 11px; background:var(--blue-faint); border:1px solid var(--border); border-radius:9px; margin-bottom:6px; }
-.rp-src-name { font-size:12px; font-weight:600; color:var(--text-primary); }
+.rp .cc-doc-title { font-size:26px; font-weight:700; line-height:1.36; letter-spacing:-0.6px; margin-bottom:5px; }
+.rp-meta { font-size:11.5px; color:var(--text-tertiary); margin:0 0 2px; }
+.rp .sv-divider { margin:14px 0 4px; }
+/* 섹션 라벨 — 블루 소형 라벨(에디토리얼 위계) */
+.rp .cc-doc-sec { font-size:18px; font-weight:600; color:var(--text-primary); letter-spacing:-0.3px; margin:38px 0 18px; padding-top:26px; border-top:1px solid var(--border); }
+.rp .cc-doc-sec-first { margin-top:16px; padding-top:0; border-top:none; }
+/* 인사이트 헤드라인 — 본문(13)보다 확실히 큰 16/700, 그룹 사이 큰 여백(구분선 없이 위계) */
+.rp-head { font-size:14px; font-weight:600; color:var(--text-primary); letter-spacing:-0.4px; line-height:1.5; margin:30px 0 10px; }
+.rp-head + .rp-chart { margin-top:8px; }
+/* 문항 넘버 — 회색 모노스페이스(출처 번호 UI와 동일) */
+.rp-tag { display:inline-block; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:10.5px; font-weight:500; color:var(--text-tertiary); background:rgba(0,0,0,0.05); opacity:0.85; padding:1px 6px; border-radius:6px; margin-left:5px; vertical-align:middle; }
+.rp-src { display:flex; align-items:center; gap:8px; padding:7px 11px; background:rgba(159,163,173,0.07); border-radius:9px; margin-bottom:6px; }
+.rp-src:hover { background:rgba(0,0,0,0.05); }
+.rp-src-name { font-size:11.5px; font-weight:600; color:var(--text-primary); }
 .rp-src-spec { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
-.rp-head { font-size:14px; font-weight:700; color:var(--text-primary); letter-spacing:-0.3px; line-height:1.5; margin:22px 0 8px; padding-top:18px; border-top:1px solid var(--border); }
-.rp-tag { display:inline-block; font-size:9.5px; font-weight:700; color:var(--blue); background:var(--blue-light); padding:1px 7px; border-radius:6px; margin-left:4px; vertical-align:middle; }
-.rp-chart { margin:10px 0 4px; padding:18px 18px 15px; background:#fff; border:1px solid var(--border); border-radius:var(--r-md); }
-.rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-secondary); margin-bottom:15px; letter-spacing:-0.2px; }
-.rp-bar-row { display:flex; align-items:center; gap:12px; margin-bottom:13px; }
-.rp-bar-row:last-child { margin-bottom:0; }
-.rp-bar-lab { width:84px; flex-shrink:0; font-size:11.5px; color:var(--text-secondary); letter-spacing:-0.3px; }
-.rp-bar-track { flex:1; height:10px; background:#F0F2F6; border-radius:999px; overflow:hidden; }
-.rp-bar-fill { height:100%; border-radius:999px; background:var(--blue); transition:width 600ms cubic-bezier(.32,.72,0,1); }  /* 시퀀셜 색조는 인라인 */
-.rp-bar-val { width:42px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; color:var(--text-primary); }
+.rp-src-go { font-size:13px; color:var(--text-tertiary); flex-shrink:0; }
+.rp-chart { margin:14px 0 6px; padding:16px 18px; background:transparent; border:1px solid var(--border); border-radius:var(--r-sm); }
+.rp-chart-cap { font-size:11px; font-weight:600; color:var(--text-tertiary); margin-bottom:16px; letter-spacing:-0.2px; }
+.rp-plot { position:relative; padding:4px 0 28px; }
+.rp-grid { position:absolute; top:4px; bottom:28px; left:108px; right:58px; pointer-events:none; z-index:0; }
+.rp-grid i { position:absolute; top:0; bottom:0; width:1px; background:#EEF1F6; }
+.rp-grid i:first-child { background:#E2E6EC; }
+.rp-axis { position:absolute; left:108px; right:58px; bottom:6px; height:14px; pointer-events:none; }
+.rp-axis span { position:absolute; transform:translateX(-50%); font-size:10px; color:var(--text-tertiary); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.rp-bar-row { display:grid; grid-template-columns:96px 1fr 46px; align-items:center; gap:12px; padding:3px 0; position:relative; z-index:1; }
+.rp-bar-lab { font-size:11.5px; color:var(--text-secondary); letter-spacing:-0.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rp-bar-track { height:20px; background:transparent; position:relative; }
+.rp-bar-fill { height:100%; border-radius:2px; background:var(--chart-3); transition:width 600ms cubic-bezier(.32,.72,0,1); }
+.rp-bar-val { text-align:right; font-size:12.5px; font-weight:700; color:var(--text-primary); font-variant-numeric:tabular-nums; }
 
 /* ═══════════════════════════════════════════════
    설문 편집 — 아티팩트 프레임이 1칼럼으로 확장되는 화면
@@ -2235,32 +2270,82 @@ function streamReveal(el, deferFollow){
 /* 챗 인라인 생성 모션 = 아티팩트 패널 docStream(.5s/140ms 스태거)과 동일, 속도 0.8배 */
 const STREAM_DUR=625, STREAM_STAGGER=175;
 function rowsOf(block){ return block.matches&&block.matches('.chat-block') ? [...block.querySelectorAll('.cb-table tbody tr, .cb-bar-row')] : []; }
-/* 답변 본문·표·차트를 패널과 같은 부드러운 캐스케이드(겹침)로 — 뚝뚝 끊기지 않게 */
+/* ── ChatGPT/Claude식 생성 모션 ──
+   텍스트 유닛은 단어 단위로 위→아래로 흘러나오고(자리도 같이 늘어남), 표·차트·출처 등 구조 블록은
+   그 다음에 페이드로 이어붙음. 스크롤은 생성에 밀착 추적. (예전 문단째 슬라이드-업 'docStream' 제거) */
+const WORD_MS=20, UNIT_GAP=70, BLOCK_FADE=240, ROW_MS=70;
+/* 텍스트 유닛을 단어 토큰으로 분해 — inline 요소(.cite, <strong> 등)는 보존 */
+function tokenizeUnit(el){
+  const toks=[];
+  (function walk(node){
+    [...node.childNodes].forEach(ch=>{
+      if(ch.nodeType===3){
+        const parts=ch.textContent.split(/(\s+)/);
+        const frag=document.createDocumentFragment();
+        parts.forEach(p=>{ if(p==='') return;
+          if(/^\s+$/.test(p)) frag.appendChild(document.createTextNode(p));
+          else { const sp=document.createElement('span'); sp.className='tok tok-hide'; sp.textContent=p; toks.push(sp); frag.appendChild(sp); } });
+        ch.replaceWith(frag);
+      } else if(ch.nodeType===1){
+        if(ch.classList && ch.classList.contains('cite')){ ch.classList.add('tok','tok-hide'); toks.push(ch); }
+        else walk(ch);
+      }
+    });
+  })(el);
+  return toks;
+}
+function streamUnitText(el, myGen, done){
+  el.classList.remove('rv-hide');
+  const toks=tokenizeUnit(el);
+  if(!toks.length){ el.style.animation=`streamFade 160ms ease forwards`; done&&done(); return; }
+  let i=0;
+  (function tick(){ if(myGen!==gen) return;
+    if(i>=toks.length){ done&&done(); return; }
+    toks[i++].classList.remove('tok-hide');
+    setTimeout(tick, WORD_MS);
+  })();
+}
+/* 표·차트 블록: 행을 하나씩 그대로 생성(페이드 없이) → 화면만 한 줄씩 올라감 */
+function streamBlock(el, myGen, done){
+  el.classList.remove('rv-hide');
+  const rows=rowsOf(el);
+  rows.forEach(r=>r.classList.add('rv-hide'));   /* display:none — 자리 차지 없이 숨김 */
+  let ri=0;
+  (function rowTick(){ if(myGen!==gen) return;
+    if(ri>=rows.length){ setTimeout(done, 120); return; }
+    const r=rows[ri++]; r.classList.remove('rv-hide');   /* 슬라이드·페이드 없이 그대로 등장 */
+    const fill=r.querySelector&&r.querySelector('.cb-bar-fill');
+    if(fill&&fill.dataset.w) setTimeout(()=>{ if(myGen===gen) fill.style.width=fill.dataset.w+'%'; }, 40);
+    setTimeout(rowTick, ROW_MS);
+  })();
+}
 function revealStaged(units){
   if(!units.length) return;
   const myGen=gen;
-  units.forEach(u=>u.classList.remove('rv-defer'));
-  /* atom = 실제로 하나씩 흘러나오는 단위(텍스트 라인 / 표·차트의 각 행 / 출처·칩 …) */
-  const atoms=[];
+  units.forEach(u=>{ u.classList.remove('rv-defer'); u.classList.add('rv-hide'); });
+  /* 총 소요시간 추정 → followScroll/세틀 타이밍 */
+  let est=0;
   units.forEach(u=>{
-    const rows=rowsOf(u);
-    if(rows.length){ atoms.push({el:u}); rows.forEach(r=>atoms.push({el:r, fill:(r.querySelector?r.querySelector('.cb-bar-fill'):null)})); }
-    else atoms.push({el:u});
+    if(u.matches('.ai-prose > p, .md-ul > li')) est += Math.max(1,u.textContent.trim().split(/\s+/).length)*WORD_MS + UNIT_GAP;
+    else if(u.matches('.chat-block')) est += rowsOf(u).length*ROW_MS + BLOCK_FADE;
+    else est += BLOCK_FADE;
   });
-  atoms.forEach(a=>a.el.classList.add('rv-hide'));
-  /* 패널 streamPanel과 동일: 고정 스태거로 예약 → 각 애니메이션(625ms)이 겹쳐 흐름 */
-  atoms.forEach((a,i)=>{
-    setTimeout(()=>{
-      if(myGen!==gen) return;
-      a.el.classList.remove('rv-hide');
-      a.el.style.opacity='0';
-      a.el.style.animation=`docStream ${STREAM_DUR}ms cubic-bezier(.4,0,.2,1) forwards`;
-      if(a.fill&&a.fill.dataset.w) setTimeout(()=>{ if(myGen===gen) a.fill.style.width=a.fill.dataset.w+'%'; }, 60);   /* 막대 등장과 동시에 0%→실값 */
-      if(a.el.classList.contains('cc-follow-chip')){ const f=a.el.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
-      scrollChat();
-    }, i*STREAM_STAGGER);
-  });
-  revealMs = atoms.length*STREAM_STAGGER + STREAM_DUR + 200;
+  revealMs = est + 200;
+  followScroll(units[0]&&units[0].closest('.msg-ai'), revealMs, myGen);
+  let qi=0;
+  (function nextUnit(){ if(myGen!==gen) return;
+    if(qi>=units.length) return;
+    const u=units[qi++];
+    if(u.matches('.ai-prose > p, .md-ul > li')){
+      streamUnitText(u, myGen, ()=>setTimeout(nextUnit, UNIT_GAP));
+    } else if(u.matches('.chat-block')){
+      streamBlock(u, myGen, nextUnit);
+    } else {
+      u.classList.remove('rv-hide'); u.style.opacity='0'; u.style.animation=`streamFade ${BLOCK_FADE}ms ease forwards`;
+      if(u.classList.contains('cc-follow-chip')){ const f=u.closest('.cc-follow'); if(f) f.classList.add('show-bar'); }
+      setTimeout(nextUnit, BLOCK_FADE*0.7);
+    }
+  })();
 }
 /* 패널이 열린 뒤 꼬리질문(본문 한 번에 → 칩 하나씩)을 드러냄 */
 function revealDeferred(){
@@ -2333,17 +2418,40 @@ function renderSurveyDoc(){
   return h+`</div>`;
 }
 function $(id){ return document.getElementById(id); }
-function scrollChat(){ hydrateInds(); const s=$('live-scroll'); if(!s) return;
-  /* 긴 메시지는 상단에 고정해 위→아래로 채워지게(꽉 차면 자연 스크롤), 짧은 메시지는 하단 추적 */
-  const last=document.querySelector('#live-chat > *:last-child');
-  if(last){
-    const lastH=last.getBoundingClientRect().height;
-    if(lastH > s.clientHeight*0.6){
-      const top=s.scrollTop + (last.getBoundingClientRect().top - s.getBoundingClientRect().top) - 16;
-      s.scrollTo({top:Math.max(0,top), behavior:'smooth'}); return;
-    }
-  }
-  s.scrollTo({top:99999,behavior:'smooth'});
+/* ── 터미널식 스크롤: 내용은 항상 바닥(입력창 바로 위)에 붙고, 새 줄이 생기면 한 줄씩 위로 ── */
+/* 단, 2분할(아티팩트 오픈)에선 챗 하단에 큰 여백 → 내용이 상단으로 올라가고 입력창과 60% 가까이 떨어짐 */
+function chatPad(){ const inner=$('live-chat'), s=$('live-scroll'); if(!inner||!s) return;
+  const open=document.querySelector('.app').classList.contains('artifact-open');
+  inner.style.paddingBottom = open ? Math.round(s.clientHeight*0.3)+'px' : ''; }
+function pinBottom(s){ s=s||$('live-scroll'); if(!s) return; chatPad(); s.scrollTop = s.scrollHeight - s.clientHeight; }
+function scrollChat(){ hydrateInds(); pinBottom(); }
+/* 답변 생성 중: 매 프레임 바닥에 고정 → 줄이 늘어나는 만큼 화면이 정확히 한 줄씩 따라 올라감(글라이드 없음) */
+let followRAF=0;
+function followScroll(aiEl, durationMs, gen0){
+  const s=$('live-scroll'); if(!s) return;
+  cancelAnimationFrame(followRAF);
+  const end=performance.now()+durationMs+400;
+  (function step(){
+    if(gen0!==gen){ cancelAnimationFrame(followRAF); return; }
+    s.scrollTop = s.scrollHeight - s.clientHeight;   /* 즉시 바닥 고정(이징 없음) */
+    if(performance.now()<end) followRAF=requestAnimationFrame(step);
+  })();
+}
+/* 아티팩트 패널을 위→아래로 천천히 스크롤(보고서 다 읽는 느낌) → 끝나면 done */
+let artScrollRAF=0;
+function autoScrollArtifact(durationMs, gen0, done){
+  const ab=$('artifact-body'); cancelAnimationFrame(artScrollRAF);
+  if(!ab){ done&&done(); return; }
+  const max=ab.scrollHeight - ab.clientHeight;
+  if(max<=4){ done&&done(); return; }
+  const start=performance.now();
+  (function step(){
+    if(gen0!==gen){ cancelAnimationFrame(artScrollRAF); return; }
+    const p=Math.min(1,(performance.now()-start)/durationMs);
+    const e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;   /* easeInOut */
+    ab.scrollTop=max*e;
+    if(p<1) artScrollRAF=requestAnimationFrame(step); else done&&done();
+  })();
 }
 /* 생성 완료 → 메시지 아바타를 애니메이션(STAR)에서 솔리드 로고(STATIC_HEX)로 고정 */
 function settleAvatar(el){
@@ -2371,6 +2479,16 @@ function renderSidebar(){
 }
 
 /* ── 채팅 인라인 분석 블록 (제품: 답변 안 테이블/유의차) ── */
+/* 차트 카테고리 색 — 랭킹 강조(역순): 1위=가장 진한 블루 → 옅게(탄·오렌지·슬레이트는 5색 이상일 때) */
+const BAR_PALETTE=['#003BDD','#4B80F3','#83ADFF','#C1D7FF','#C7AD83','#E67E22','#7B879B'];
+/* 연령대 차트('chart') — 값 큰 순으로 진한 색(시스템: 진할수록 높음) */
+function ageBarRows(){
+  const ranked=[...CHART_BARS].sort((a,b)=>b.value-a.value);
+  const colorOf=v=>BAR_PALETTE[Math.min(ranked.findIndex(x=>x.value===v), BAR_PALETTE.length-1)];
+  return CHART_BARS.map(b=>`<div class="artifact-bar-row"><span class="artifact-bar-label">${b.label}</span>
+    <div class="artifact-bar-track"><div class="artifact-bar-fill" style="width:0%;background:${colorOf(b.value)}" data-w="${b.value}"></div></div>
+    <span class="artifact-bar-val">${b.value}%</span></div>`).join('');
+}
 function chatBlock(type){
   if(type==='concepts'){
     const rows=[['VT Reedle Shot 앰플','57.6%','20.5%','3.54'],['AESTURA 크림','55.9%','19.1%','3.50'],['Primera 클렌징(오일→폼)','54.7%','17.9%','3.52'],['Medicube 나이트 마스크','52.5%','17.1%','3.52'],['Beauty of Joseon 선스크린','48.2%','23.1%','3.38'],['COSRX 스네일 세럼','45.6%','22.0%','3.34'],['Aromatica 페미닌 워시','45.3%','26.5%','3.25'],['Dermarssance 콜라겐 필름','42.9%','30.8%','3.20'],['Menokin 비건 마스크','42.5%','27.7%','3.23'],['Petitfee 마스크','40.7%','32.0%','3.13'],['Ohora 젤네일 스트립','38.8%','39.1%','2.97'],['Round Lab 자작나무 토너','36.9%','34.5%','2.91'],['Isntree 히알루론 토너','34.2%','37.1%','2.84'],['Torriden 다이브인 세럼','31.5%','41.0%','2.77'],['Whoo 쿠션','28.9%','48.7%','2.71']];
@@ -2380,11 +2498,15 @@ function chatBlock(type){
   }
   if(type==='conceptbar'){
     const bars=[{r:1,label:'VT Reedle Shot 앰플',v:57.6},{r:2,label:'AESTURA 크림',v:55.9},{r:3,label:'Primera 클렌징',v:54.7}];
-    const max=70;   /* 트랙 기준 최대치 — 미세한 격차도 눈에 보이도록 */
-    return `<div class="chat-block"><div class="cb-meta">구매 의향 <strong>TOP2(4~5점)</strong> · 상위 3개 비교 · 전체 BASE <strong>n=1,164</strong></div>
-      <div class="cb-chart">${bars.map(b=>`<div class="cb-bar-row"><span class="cb-bar-rank">${b.r}</span><span class="cb-bar-label">${b.label}</span>
-        <div class="cb-bar-track"><div class="cb-bar-fill" data-w="${(b.v/max*100).toFixed(1)}" style="width:0%"></div></div>
-        <span class="cb-bar-val">${b.v}%</span></div>`).join('')}</div>
+    const max=70, ticks=[0,20,40,60];   /* 공통 스케일(0~70%) + 눈금 */
+    return `<div class="chat-block"><div class="cb-card"><div class="cb-meta">구매 의향 <strong>TOP2(4~5점)</strong> · 상위 3개 비교 · 전체 BASE <strong>n=1,164</strong></div>
+      <div class="cb-chart">
+        <div class="cb-grid">${ticks.map(t=>`<i style="left:${(t/max*100).toFixed(2)}%"></i>`).join('')}</div>
+        ${bars.map((b,i)=>`<div class="cb-bar-row${i===0?' is-top':''}"><span class="cb-bar-rank">${b.r}</span><span class="cb-bar-label">${b.label}</span>
+        <div class="cb-bar-track"><div class="cb-bar-fill" data-w="${(b.v/max*100).toFixed(1)}" style="width:0%;background:${BAR_PALETTE[i]}"></div></div>
+        <span class="cb-bar-val">${b.v}%</span></div>`).join('')}
+        <div class="cb-axis">${ticks.map(t=>`<span style="left:${(t/max*100).toFixed(2)}%">${t}%</span>`).join('')}</div>
+      </div></div>
       <div class="cb-note">1위 <strong>VT Reedle Shot 앰플(57.6%)</strong>과 3위 Primera(54.7%)의 격차는 <strong>2.9%p</strong>로 접전입니다.</div></div>`;
   }
   if(type==='agecross'){
@@ -2506,6 +2628,17 @@ function clearInput(){ const el=$('live-input'); if(el && el===document.activeEl
 /* ── play a scene's messages in order (user prompts type into the input) ── */
 function playSceneMessages(scene, done, skipFirstTyping=false){
   const inner=$('live-chat'); let idx=0; const myGen=gen; let isFirstUserMsg=true;
+  /* prefill: 이미 생성된 대화를 모션 없이 즉시 깔아둠(여기서부터 다음 씬이 라이브 진행) */
+  if(scene.prefill){
+    scene.chat.forEach(m=>{
+      inner.insertAdjacentHTML('beforeend', msgHTML(m));
+      const el=inner.lastElementChild;
+      if(m.role==='ai') settleAvatar(el);   /* 완료 상태(정적 로고) */
+      if(m.rise) el.classList.add('msg-rise');   /* 이 입력은 아래에서 위로 올라와 붙음 */
+    });
+    pinBottom(); hydrateInds();
+    done&&done(); return;
+  }
   (function next(){
     if(!playing || myGen!==gen) return;   // 시나리오 전환 시 이전 타이머 차단
     if(idx>=scene.chat.length){ done&&done(); return; }
@@ -2523,16 +2656,29 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
             setTimeout(next, 380);
           }, 240);
         });
+      } else if(m.preset){
+        /* 입력창에 이미 다 쳐진 상태 → 잠깐 멈춤 → 엔터(전송)로 위로 올라옴 */
+        const li=$('live-input');
+        if(li){ li.value=m.text; li.style.height='auto'; li.style.height=Math.min(li.scrollHeight,96)+'px'; }
+        updateSendState();
+        setTimeout(()=>{ if(!playing||myGen!==gen) return;
+          clearInput();
+          inner.insertAdjacentHTML('beforeend', msgHTML(m));
+          inner.lastElementChild.classList.add('msg-rise');   /* 엔터 → 버블이 입력창에서 위로 */
+          scrollChat();
+          setTimeout(next, 420);
+        }, m.presetMs||1000);
       } else {
         /* 타이핑 시뮬레이션 없이 버블 즉시 표시 → 아래로 내용 진행 */
         clearInput();
-        const firstMsg = inner.children.length===0;   /* 첫 메시지면 입력창 위치에서 위로 올라오는 느낌 */
+        const firstMsg = inner.children.length===0;   /* 첫 메시지(또는 m.rise)면 입력창 위치에서 위로 올라오는 느낌 */
         inner.insertAdjacentHTML('beforeend', msgHTML(m));
-        if(firstMsg) inner.lastElementChild.classList.add('msg-rise');
+        if(firstMsg || m.rise) inner.lastElementChild.classList.add('msg-rise');
         scrollChat();
         setTimeout(next, 380);
       }
     } else {
+      let usedFollow=false;
       inner.insertAdjacentHTML('beforeend', msgHTML(m));
       if(m.role==='ai'){
         const aiEl=inner.lastElementChild;
@@ -2546,10 +2692,22 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           const cards=[...aiEl.querySelectorAll('.cc-card')];
           cards.forEach((c,i)=>{ c.style.opacity='0'; c.style.animation=`docStream .42s cubic-bezier(.4,0,.2,1) ${i*340}ms forwards`; });
           revealMs = cards.length*340 + 420;
+        } else if(m.gen){
+          /* 생성 중 비트: 콘텐츠 숨기고 아바타만 회전 → m.gen ms 후 답변 리빌 */
+          aiEl.querySelectorAll('.cc-card, .co-card, .cc-data, .ps-seg, .pc-card, .ai-prose > p, .ai-prose > .md-ul > li, .chat-block, .fig-sources, .ai-source-line, .cc-follow-chip').forEach(u=>u.classList.add('rv-hide'));
+          const myG=gen;
+          scrollChat();
+          setTimeout(()=>{ if(!playing||myG!==gen) return;
+            streamReveal(aiEl, !!(m.followups && scene.open));
+            setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, Math.max(1150, revealMs+750));
+            setTimeout(()=>{ if(playing&&myG===gen) next(); }, Math.max(720, revealMs+150));   /* gen 리빌 끝난 뒤 다음 메시지로 */
+          }, m.gen);
+          return;   /* 공통 next 스케줄 건너뜀(gen 리빌 후 직접 호출) */
         } else {
           streamReveal(aiEl, !!(m.followups && scene.open));
           const myG=gen, settleAt=Math.max(1150, revealMs+750);
           setTimeout(()=>{ if(myG===gen) settleAvatar(aiEl); }, settleAt);
+          usedFollow=true;   /* followScroll가 스크롤을 전담 — 아래 smooth scrollChat 글라이드 생략 */
           /* 막대 채우기 모션은 revealStaged()가 행 등장과 동시에 처리 */
         }
       }
@@ -2571,7 +2729,9 @@ function playSceneMessages(scene, done, skipFirstTyping=false){
           }, 950);
         }
       }
-      scrollChat();
+      /* 메시지와 동시에 스켈레톤을 실제 보고서로 모핑(생성 완료 느낌) */
+      if(m.openArt){ const myO=gen; setTimeout(()=>{ if(playing&&myO===gen) morphPanel(m.openArt); }, 240); }
+      if(!usedFollow) scrollChat();   /* 스트리밍 답변은 followScroll가 전담(글라이드 중복 방지) */
       setTimeout(next, m.role==='ai'?(scene.walk?0:(m.process?300:Math.max(720, revealMs+150))):420);
     }
   })();
@@ -2620,9 +2780,7 @@ function previewHTML(type){
       <div class="av-src"><span class="av-src-pill">Source 1</span><span class="av-src-text">브랜드 인지도 설문 (Google Forms)</span></div></div>`;
     case 'chart': return `<div class="av"><div class="artifact-chart-wrap">
       <div class="artifact-chart-title">연령대별 브랜드 인지도 (%)</div>
-      ${CHART_BARS.map(b=>`<div class="artifact-bar-row"><span class="artifact-bar-label">${b.label}</span>
-        <div class="artifact-bar-track"><div class="artifact-bar-fill" style="width:0%;background:linear-gradient(90deg,#4781FF,#22C0E0)" data-w="${b.value}"></div></div>
-        <span class="artifact-bar-val">${b.value}%</span></div>`).join('')}
+      ${ageBarRows()}
       </div></div>`;
     case 'overview': return `<div class="av"><div class="av-label">프로젝트 오버뷰</div>
       <div class="av-ov-cards">
@@ -2904,9 +3062,7 @@ function previewHTML(type){
       <div class="av-src"><span class="av-src-pill">출처 1</span><span class="av-src-text">건기식 트렌드 2026</span></div></div>`;
     case 'chart': return `<div class="av"><div class="artifact-chart-wrap">
       <div class="artifact-chart-title">연령대별 브랜드 인지도 (%)</div>
-      ${CHART_BARS.map(b=>`<div class="artifact-bar-row"><span class="artifact-bar-label">${b.label}</span>
-        <div class="artifact-bar-track"><div class="artifact-bar-fill" style="width:0%;background:linear-gradient(90deg,#4781FF,#22C0E0)" data-w="${b.value}"></div></div>
-        <span class="artifact-bar-val">${b.value}%</span></div>`).join('')}</div></div>`;
+      ${ageBarRows()}</div></div>`;
     case 'proofgap': return `<div class="av"><div class="av-label">향후 사용 의향 − 현재 사용 Gap <span class="av-sig-badge">미국 · n=600</span></div>
       <table class="av-ct"><thead><tr><th>카테고리</th><th>현재</th><th>향후 의향</th><th>Gap</th></tr></thead><tbody>
       <tr class="hl"><td>부스팅 에센스</td><td>18.4%</td><td>35.5%</td><td class="av-hi">+17.1</td></tr>
@@ -2923,27 +3079,50 @@ function previewHTML(type){
       <tr><td>스킨케어(기초)</td><td>31.9</td><td class="av-hi">33.9</td><td class="av-lo">28.8</td></tr></tbody></table>
       <div class="av-sig-note">🔴 30대 코어(전 카테고리 최고) · 🔵 40대는 현재 사용 낮으나 향후 의향 Gap 큰 잠재층</div>
       <div class="av-src"><span class="av-src-pill">출처 1</span><span class="av-src-text">2025 미국 K-뷰티 트렌드 데이터</span></div></div>`;
+    case 'reportskel': return `<div class="av rp">
+      <div class="skel-blk" style="width:82%;height:21px;border-radius:7px;margin-top:2px"></div>
+      <div class="skel-blk" style="width:50%;height:21px;border-radius:7px;margin-top:9px"></div>
+      <div class="skel-blk" style="width:40%;height:12px;border-radius:5px;margin-top:15px"></div>
+      <div class="sv-divider"></div>
+      <div class="skel-line skel-blk" style="width:30%;height:14px;border-radius:6px"></div>
+      <div class="rp-src"><span class="skel-blk" style="display:inline-block;width:48%;height:12px;border-radius:5px"></span></div>
+      <div class="rp-src"><span class="skel-blk" style="display:inline-block;width:54%;height:12px;border-radius:5px"></span></div>
+      <div class="skel-line skel-blk" style="width:88%;height:13px;border-radius:6px;margin-top:16px"></div>
+      <div class="rp-chart">
+        <div class="skel-line skel-blk" style="width:62%;height:11px;border-radius:5px;margin-bottom:13px"></div>
+        ${[80,63,45,30].map(w=>`<div class="rp-bar-row"><span class="skel-blk" style="width:78px;height:11px;border-radius:5px"></span><div class="rp-bar-track"><div class="skel-blk" style="width:${w}%;height:100%;border-radius:6px"></div></div><span class="skel-blk" style="width:26px;height:11px;border-radius:5px"></span></div>`).join('')}
+      </div>
+      <div class="skel-line skel-blk" style="width:82%;height:13px;border-radius:6px;margin-top:18px"></div>
+      <div class="skel-line skel-blk" style="width:94%"></div>
+      <div class="skel-line skel-blk" style="width:73%"></div>
+      <div class="skel-line skel-blk" style="width:86%;height:13px;border-radius:6px;margin-top:15px"></div>
+      <div class="skel-line skel-blk" style="width:68%"></div>
+      </div>`;
     case 'report': return `<div class="av rp">
-      <div class="cc-doc-title">미국 스킨케어 기회 지도 — 성장 카테고리·연령 타깃·진입 우선순위</div>
+      <div class="cc-doc-title">미국 스킨케어 기회 지도: 성장 카테고리·연령 타깃·진입 우선순위</div>
       <div class="rp-meta">투자자·바이어용 기회 보고서 · 방금 생성됨</div>
       <div class="sv-divider"></div>
       <div class="cc-doc-sec cc-doc-sec-first">리서치 개요</div>
-      <div class="rp-src"><span class="rp-src-name">2023 미국 뷰티 트렌드 데이터</span><span class="rp-src-spec">n=1,000 · 표본오차 ±2.03%p (95%)</span></div>
-      <div class="rp-src"><span class="rp-src-name">2025 Eat Buy Play 미국 K-뷰티</span><span class="rp-src-spec">n=600 · 표본오차 ±2.62%p (95%)</span></div>
-      <div class="rp-head">요약 — ‘의향 대비 보급이 낮은’ 부스팅 에센스·토너패드가 카테고리 확장 기회 1순위</div>
+      <div class="rp-src"><span class="fig-src-ico os">${OS_ICON}</span><span class="rp-src-name">2023 미국 뷰티 트렌드 데이터</span></div>
+      <div class="rp-src"><span class="fig-src-ico os">${OS_ICON}</span><span class="rp-src-name">2025 Eat Buy Play 미국 K-뷰티</span></div>
+      <div class="rp-head">요약: ‘의향 대비 보급이 낮은’ 부스팅 에센스·토너패드가 카테고리 확장 기회 1순위</div>
       <div class="rp-chart"><div class="rp-chart-cap">‘쓰고 싶은데 아직 안 쓰는’ 격차 — 향후 의향 − 현재 사용 (%p)</div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">부스팅 에센스</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:95%;background:#0050FF"></div></div><span class="rp-bar-val">+17.1</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">토너패드</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:79%;background:#2E6BFF"></div></div><span class="rp-bar-val">+14.2</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">스킨케어(기초)</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:50%;background:#6E9BFF"></div></div><span class="rp-bar-val">+9.0</span></div>
-        <div class="rp-bar-row"><span class="rp-bar-lab">마스크팩</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:29%;background:#A9C3FF"></div></div><span class="rp-bar-val">+5.2</span></div>
+        <div class="rp-plot">
+          <div class="rp-grid">${[0,5,10,15].map(t=>`<i style="left:${(t/18*100).toFixed(2)}%"></i>`).join('')}</div>
+          <div class="rp-bar-row"><span class="rp-bar-lab">부스팅 에센스</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:95%;background:#003BDD"></div></div><span class="rp-bar-val">+17.1</span></div>
+          <div class="rp-bar-row"><span class="rp-bar-lab">토너패드</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:79%;background:#4B80F3"></div></div><span class="rp-bar-val">+14.2</span></div>
+          <div class="rp-bar-row"><span class="rp-bar-lab">스킨케어(기초)</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:50%;background:#83ADFF"></div></div><span class="rp-bar-val">+9.0</span></div>
+          <div class="rp-bar-row"><span class="rp-bar-lab">마스크팩</span><div class="rp-bar-track"><div class="rp-bar-fill" style="width:29%;background:#C1D7FF"></div></div><span class="rp-bar-val">+5.2</span></div>
+          <div class="rp-axis">${[0,5,10,15].map(t=>`<span style="left:${(t/18*100).toFixed(2)}%">${t}</span>`).join('')}</div>
+        </div>
       </div>
-      <div class="rp-head">코어 타깃은 30대 — 4개 확장 카테고리 전반에서 향후/신규 의향이 가장 강함</div>
+      <div class="rp-head">코어 타깃은 30대: 4개 확장 카테고리 전반에서 향후/신규 의향이 가장 강함</div>
       <ul class="cc-doc-ul"><li>30대 향후/신규 의향이 부스팅·토너패드·마스크팩·스킨케어 모두에서 최고</li><li>커뮤니케이션·SKU 우선순위를 30대 코어에 정렬 <span class="rp-tag">Q16</span></li></ul>
-      <div class="rp-head">40대는 ‘필요할 때’ 잠재 타깃 — 토너패드·스킨케어에서 Gap 특히 큼</div>
+      <div class="rp-head">40대는 ‘필요할 때’ 잠재 타깃: 토너패드·스킨케어에서 Gap 특히 큼</div>
       <ul class="cc-doc-ul"><li>현재 사용은 낮으나 향후 의향과의 Gap이 커, 진입 시 추가 수요 여력 <span class="rp-tag">Q16</span></li></ul>
       <div class="rp-head">K-뷰티 경험층은 ‘루틴 확장형(부스팅·미스트·토너패드)’에서 반응이 더 강함</div>
       <ul class="cc-doc-ul"><li>경험층 향후 의향: 미스트 37.4% · 부스팅 32.7% · 토너패드 33.3% <span class="rp-tag">Q33×Q47</span></li></ul>
-      <div class="rp-head">K-뷰티 트라이얼 의향 75% — 확산 전제는 ‘첫 구매 경험 설계’</div>
+      <div class="rp-head">K-뷰티 트라이얼 의향 75%: 확산 전제는 ‘첫 구매 경험 설계’</div>
       <ul class="cc-doc-ul"><li>구매 의향 Top2(트라이/의향/실용) 합산 75%, 진입 관건은 첫 구매 전환 <span class="rp-tag">Q35</span></li></ul>
       <div class="cc-doc-sec">다음 단계 제안 (Next Steps)</div>
       <ul class="cc-doc-ul"><li><strong>제품/포트폴리오</strong> — 카테고리 확장 ‘루틴 확장’ 투트랙, SKU 우선순위</li><li><strong>마케팅/커뮤니케이션</strong> — 30대 코어 정조준 + 40대 ‘필요할 때’ 메시지</li><li><strong>채널/세일즈</strong> — K-뷰티 경험층 무관 향후 의향 높은 카테고리 우선 입점</li></ul>
@@ -2975,9 +3154,11 @@ function previewHTML(type){
 }
 /* 패널 문서를 문단 단위로 순차 등장(스트리밍 느낌) — 스크롤되는 긴 설문 문서는 제외 */
 function streamPanel(type){
-  if(type==='cskel') return;   /* 스켈레톤(생성중)만 제외 — 나머지 모든 아티팩트는 공통 스트리밍 */
+  if(type==='cskel'||type==='reportskel') return;   /* 스켈레톤(생성중)만 제외 — 나머지 모든 아티팩트는 공통 스트리밍 */
   const ab=$('artifact-body'); const doc=ab&&ab.querySelector('.av'); if(!doc) return;
-  [...doc.children].forEach((b,i)=>{ b.style.opacity='0'; b.style.animation=`docStream .5s cubic-bezier(.4,0,.2,1) ${Math.min(i,18)*140}ms forwards`; });
+  const slow = type==='report' ? 1.25 : 1;   /* 보고서 아티팩트는 0.8배 속도(=1.25배 시간) */
+  const dur=(0.5*slow).toFixed(3), stag=Math.round(140*slow);
+  [...doc.children].forEach((b,i)=>{ b.style.opacity='0'; b.style.animation=`docStream ${dur}s cubic-bezier(.4,0,.2,1) ${Math.min(i,18)*stag}ms forwards`; });
 }
 function updateArtifact(scene){
   if(!scene.preview){ closeArtifact(); return; }
@@ -2990,13 +3171,34 @@ function updateArtifact(scene){
     setTimeout(()=>document.querySelectorAll('#artifact-body .artifact-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';}),60);
   }
 }
-const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
+const PANEL_TITLES={cskel:'설문 생성 중…',concepts:'컨셉 구매의향 TOP2',agecross:'연령대별 구매의향',wave:'카테고리 트렌드',project:'프로젝트',survey:'설문 문항 미리보기',conceptds:'데이터셋',library:'마켓플레이스 데이터',chart:'연령대별 차트',brief:'리서치 기획서',briefdocC:'프로젝트 브리프',designsurvey:'설문 미리보기',designbriefdoc:'프로젝트 브리프',collectdoc:'수집 조건',designplandoc:'정량조사 설계서',plandocC:'정량조사 설계서',projectdata:'프로젝트 데이터',briefv2:'리서치 설계서',insights:'Summary',insights2:'Summary',filter:'세그먼트 인사이트',overview:'프로젝트 오버뷰',dataset:'데이터셋',crosstab:'크로스탭',trendins:'세그먼트 인사이트',proofgap:'의향-보급 Gap',proofcross:'연령대별 교차',reportskel:'보고서 생성 중…',report:'미국 스킨케어 기회 지도',personaHn:'김도윤 과장',personaJh:'박준영 대리'};
 /* 자동 시연: 버튼 눌림 효과 → 아티팩트 오픈 (일시정지 없음) */
+let openPanelType=null;
 function showPanel(type){
+  openPanelType=type;
   $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
   const ab=$('artifact-body'); ab.innerHTML=previewHTML(type); ab.scrollTop=0;   /* 항상 최상단부터 */
   document.querySelector('.app').classList.add('artifact-open'); edBtnFor(type); streamPanel(type);
   setTimeout(scrollChat, 200); setTimeout(scrollChat, 500);
+}
+/* 이미 같은 패널이 열려 있으면 재렌더(깜빡임) 없이 유지, 아니면 스르륵 오픈 */
+function ensurePanel(type){
+  if(document.querySelector('.app').classList.contains('artifact-open') && openPanelType===type) return;
+  showPanel(type);
+}
+/* 스켈레톤 → 실제 보고서로 부드럽게 모핑(페이드 교체) 후 스트리밍 */
+function morphPanel(type){
+  const ab=$('artifact-body');
+  if(!ab || !document.querySelector('.app').classList.contains('artifact-open')){ showPanel(type); return; }
+  const myGen=gen;
+  ab.style.transition='opacity .2s ease'; ab.style.opacity='0';
+  setTimeout(()=>{ if(myGen!==gen) return;
+    openPanelType=type;
+    $('artifact-title').textContent=PANEL_TITLES[type]||'미리보기';
+    ab.innerHTML=previewHTML(type); ab.scrollTop=0; edBtnFor(type);
+    requestAnimationFrame(()=>{ ab.style.opacity='1'; });
+    streamPanel(type);
+  }, 210);
 }
 function pressLast(sel){
   const els=document.querySelectorAll(sel); const el=els[els.length-1];
@@ -3271,7 +3473,7 @@ function showScene(skipFirstTyping=false){
   renderSidebar();
   if(!scene.editor) closeEditorScreen();      // 편집 씬이 아니면 편집 화면 닫기
   if(scene.editor){ /* 편집 화면이 풀 프레임으로 슬라이드 인 — 패널 처리 불필요 */ }
-  else if(sc.panel===false){ closeArtifact(); }   // 제품: 분석은 인라인, 패널 없음
+  else if(sc.panel===false){ if(scene.openArtStart){ ensurePanel(scene.openArtStart); } else closeArtifact(); }   // 제품: 분석은 인라인 / openArtStart면 시작부터 패널 오픈·유지
   else if(scene.press){ closeArtifact(); }    // 더보기/클릭으로 여는 흐름 → 완료 카드까진 패널 닫힘, press 때 오픈
   else updateArtifact(scene);
   /* 스켈레톤 → 실제 미리보기 모핑 (설문이 연동·생성되는 느낌) */
@@ -3303,7 +3505,7 @@ function showScene(skipFirstTyping=false){
             timer=setTimeout(()=>{ if(!playing||myGen!==gen) return;
               const ed=$('ed-screen'); if(ed) ed.style.transition='none';
               statuses[sIdx]='done';
-              const list=TAB_SCENARIOS[activeTab]||[0]; const pos=list.indexOf(sIdx); const nx=list[(pos+1)%list.length];
+              const nx=nextScenario(sIdx);
               playScenario(nx, true);
               requestAnimationFrame(()=>{ const e=$('ed-screen'); if(e) e.style.transition=''; });
             }, 1500);
@@ -3367,8 +3569,21 @@ function showScene(skipFirstTyping=false){
             }
             const ab=$('artifact-body'); if(ab) ab.scrollTop=0;
             scrollChat();
+            if(it.artScroll){   /* ① 생성 모션 완료 → ② 0.8초 멈춤 → ③ 스크롤 → ④ 2초 정지 → 다음 시나리오 */
+              const openT=it.open||(it.datarow&&it.datarow.open);
+              const slow=openT==='report'?1.25:1;
+              const n=ab?ab.querySelectorAll('.av > *').length:0;
+              const genMs=Math.min(Math.max(n-1,0),18)*Math.round(140*slow)+Math.round(500*slow);   /* streamPanel 생성 모션 총 시간 */
+              setTimeout(()=>{ if(!playing||myGen!==gen) return;   /* ② 생성 끝난 뒤 0.8초 멈춤 */
+                autoScrollArtifact(it.artScrollMs||5000, myGen, ()=>{ if(!playing||myGen!==gen) return;
+                  if(el) settleAvatar(el);
+                  timer=setTimeout(()=>{ if(playing&&myGen===gen) advance(); }, 2000);   /* ④ 2초 스테이 */
+                });
+              }, genMs+800);   /* ① 생성 모션 완료까지 대기 + ② 0.8초 */
+              return;
+            }
             k++; timer=setTimeout(step, 650);
-          }, 1200);   /* '정리 중' 표시 시간 */
+          }, it.procMs||1200);   /* '정리 중' 표시 시간 (procMs로 단계별 조정) */
         };
         step();
         return;
@@ -3425,13 +3640,14 @@ function showScene(skipFirstTyping=false){
          → 스켈레톤이 곧 결과로 넘어가도록 dwell만 적용 */
       const hasAI=scene.chat && scene.chat.some(m=>m.role==='ai');
       const isProcess=scene.chat && scene.chat.some(m=>m.process);
-      const d=(hasAI&&!isProcess)?Math.max(scene.dwell||DWELL_MS, revealMs+700):(scene.dwell||280);
+      const d=scene.prefill?(scene.dwell||500):((hasAI&&!isProcess)?Math.max(scene.dwell||DWELL_MS, revealMs+700):(scene.dwell||280));
       if(scene.chipAfter){
-        const myGen=gen; const tapAt=Math.max(revealMs+700, 1300);
+        const myGen=gen; const genDelay=(scene.chat.find(m=>m.gen)||{}).gen||0;
+        const tapAt=genDelay?genDelay+1700:Math.max(revealMs+700, 1300);   /* 생성 중(gen) 비트 후 답변 리빌까지 기다렸다 탭 */
         setTimeout(()=>{ if(playing&&myGen===gen) autoTapFollowup(myGen); }, tapAt);
         timer=setTimeout(advance, tapAt+1700);
       } else {
-        timer=setTimeout(advance, isProcess?d:(hasAI?d+400:d));   /* process(로딩) 씬은 dwell만큼만 머문 뒤 바로 결과로 */
+        timer=setTimeout(advance, scene.prefill?d:(isProcess?d:(hasAI?d+400:d)));   /* prefill·process는 dwell만큼만 머문 뒤 바로 다음 */
       }
     }
   }, skipFirstTyping);
@@ -3447,16 +3663,18 @@ function advance(){
       try { window.parent.postMessage({ type:'scenarioDone', idx:sIdx }, '*'); } catch(e){}
       return; // embed 모드에선 자동 다음 시나리오로 넘어가지 않음
     }
-    /* 활성 탭의 시나리오 목록 내에서만 순환 */
-    const list=TAB_SCENARIOS[activeTab]||[0];
-    const pos=list.indexOf(sIdx);
-    const nx=list[(pos+1)%list.length];
+    /* 탭 마지막이면 다음 탭으로, 아니면 같은 탭 다음 시나리오로 (전역 순서) */
+    const nx=nextScenario(sIdx);
     setTimeout(()=>{ if(playing) playScenario(nx, true); }, 450);
   }
 }
 /* 상단 탭 ↔ 시나리오 동기화 (v2: 3탭 매핑) */
 /* 탭별 노출 시나리오 — Researcher=C / Analyst=design·analyze·explore·proof / Consumer=persona (A·B 비노출) */
 const TAB_SCENARIOS={researcher:[0,3], analyst:[6,4,5], consumer:[7]};
+const TAB_ORDER=['researcher','analyst','consumer'];
+/* 전역 시나리오 순서 = 탭 순서대로 이어붙임. 탭 마지막 시나리오가 끝나면 다음 탭 첫 시나리오로 자연 연결 */
+function scenarioSequence(){ return TAB_ORDER.flatMap(t=>TAB_SCENARIOS[t]||[]); }
+function nextScenario(curIdx){ const seq=scenarioSequence(); const pos=seq.indexOf(curIdx); return pos<0?seq[0]:seq[(pos+1)%seq.length]; }
 let activeTab='researcher';
 /* 카테고리별 배경 오버라이드: Framer 임베드가 ?rbg=/?abg=/?cbg= 로 이미지 URL 전달.
    값이 있으면 해당 카테고리 배경을 그 이미지로, 없으면 번들 기본값 사용. */
